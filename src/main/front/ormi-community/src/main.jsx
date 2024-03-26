@@ -4,12 +4,14 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Document from './routes/Document.jsx';
 import Root from './routes/Root.jsx';
+import Menu from './components/Menu/Menu';
+import Menus from './components/Menu/Menus';
 
 const router = createBrowserRouter([
   {
       path: "",
       element: (
-        <Root />
+        <Menus></Menus>
       )
   },
   {
