@@ -1,6 +1,7 @@
-export default HomeIcon = function(){
+export default function HomeIcon(props){
     return (
     <svg
+        {...props}
         xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"
