@@ -1,8 +1,6 @@
 import CompleteIcon from "@/components/Icon/CompleteIcon";
 import LogoHeader from "@/components/Layout/LogoHeader";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
 
 export default function SignupComplete(){
     return (
