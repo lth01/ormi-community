@@ -1,0 +1,141 @@
+import LabelSection from "@/components/Layout/LabelSection";
+import LogoHeader from "@/components/Layout/LogoHeader";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { Select, SelectTrigger, SelectContent, SelectLabel, SelectItem, SelectGroup, SelectValue } from "@/components/ui/select";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom"
+
+export default function Signup(){
+    //변수 선언지역
+    const navigate = useNavigate();
+
+    const [ddl_gender_value, setGenderValue] = useState(null);
+    const [ddl_pwdhint_value, setPwdHintValue] = useState(null);
+    const [tBox_phoneNumber, setPhoneNumberValue] = useState("");
+    const doSignup = () =>{
+        const tBox_name = document.getElementById('tBox_name');
+        const tBox_nickname = document.getElementById('tBox_nickname');
+        const tBox_email = document.getElementById('tBox_email');
+        const tBox_password = document.getElementById('tBox_password');
+        const tBox_password_confirm = document.getElementById('tBox_password_confirm');
+
+        if(!tBox_name || !tBox_name.value){
+            alert("이름을 입력해주세요!");
+            return ;
+        }
+
+        if(!tBox_nickname || !tBox_name.value){
+            alert("닉네임을 입력해주세요!");
+            return ;
+        }
+
+        if(!tBox_email || !tBox_email.value){
+            alert("이메일을 입력해주세요!");
+            return ;
+        }
+
+        if(!tBox_phoneNumber){
+            alert("휴대전화 번호를 입력해주세요!");
+            return ;
+        }
+
+        if(!ddl_gender_value){
+            alert("성별을 선택해주세요!");
+            return ;
+        }
+
+        if(!ddl_pwdhint_value){
+            alert("비밀번호 힌트를 선택해주세요!");
+            return ;
+        }
+
+        if(!tBox_password.value){
+            alert("비밀번호를 입력해주세요!");
+            return ;
+        }
+
+        if(!tBox_password_confirm.value){
+            alert("비밀번호 확인란에 입력해주세요!");
+            return ;
+        }
+
+        if(tBox_password.value !== tBox_password_confirm){
+            alert("비밀번호가 일치하지 않습니다.");
+            return ;
+        }
+
+        //go to complete
+        navigate("/Signup/complete");
+    };
+
+    return (
+        <main className="flex flex-col bg-gray-100 min-h-screen items-center overflow-y-auto pb-20">
+            <section className="w-800 p-2 mt-10">
+                <LogoHeader>회원가입</LogoHeader>
+                <LabelSection asChild isRequire label="이름">
+                    <Input type="text" id="tBox_name" placeholder="이름을 입력해주세요."></Input>
+                </LabelSection>
+                <LabelSection asChild isRequire label="닉네임" className="mt-2">
+                    <Input type="text" id="tBox_nickname" placeholder="닉네임을 입력해주세요."></Input>
+                </LabelSection>
+                <LabelSection asChild isRequire label="이메일" className="mt-2">
+                    <Input type="email" id="tBox_email" placeholder="이메일을 입력해주세요."></Input>
+                </LabelSection>
+                <LabelSection asChild isRequire label="휴대폰번호" className="mt-2">
+                    <PhoneInput id="tBox_phonenumber" className="w-full" onChange={setPhoneNumberValue}></PhoneInput>
+                </LabelSection>
+                <LabelSection asChild isRequire label="비밀번호" className="mt-2">
+                    <Input type="password" id="tBox_password" placeholder="비밀번호를 입력해주세요."></Input>
+                </LabelSection>
+                <LabelSection asChild isRequire label="비밀번호확인" className="mt-2">
+                    <Input type="password" id="tBox_password_confirm" placeholder="비밀번호를 입력해주세요."></Input>
+                </LabelSection>
+                <LabelSection asChild isRequire label="성별" className="mt-2">
+                    <Select onValueChange={setGenderValue}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="성별"></SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>성별</SelectLabel>
+                                {/* value는 백엔드와 합의 필요 */}
+                                <SelectItem value="남">남성</SelectItem>
+                                <SelectItem value="여">여성</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </LabelSection>
+                <LabelSection asChild isRequire label="비밀번호 찾기 질문" className="mt-2">
+                    <Select onValueChange={setPwdHintValue}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="선택"></SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                {/* value는 백엔드와 합의 필요 */}
+                                <SelectItem value="1">질문1</SelectItem>
+                                <SelectItem value="2">질문2</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </LabelSection>
+                <LabelSection asChild isRequire label="비밀번호 찾기 응답" className="mt-2">
+                   <Input id="tBox_password_hint" placeholder="비밀번호 찾기 응답을 입력해주세요."></Input> 
+                </LabelSection>
+                <div className="flex justify-start gap-2 items-center mt-4">
+                    <Checkbox id="chk_term" />
+                    <label htmlFor="chk_term">
+                        <span className="font-bold underline-offset-0 underline">필수약관</span>에 동의합니다.
+                    </label>
+                </div>
+                {/* 버튼은 onClick 콜백 동작 불가 */}
+                <Button asChild className="bg-violet-800 mt-4 w-full hover:bg-violet-600">
+                    <div onClick={doSignup}>회원가입</div>
+                </Button>
+            </section>
+        </main>
+    );
+}

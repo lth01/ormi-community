@@ -6,12 +6,16 @@ import Document from './routes/Document.jsx';
 import Header from './components/Layout/Header';
 import LogoHeader from './components/Layout/LogoHeader';
 import Login from './routes/Login';
+import { Input } from './components/ui/input';
+import LabelSection from './components/Layout/LabelSection';
+import Signup from './routes/Signup/Signup';
+import SignupComplete from './routes/Signup/SignupComplete';
 
 const router = createBrowserRouter([
   {
       path: "",
       element: (
-        <Login></Login>
+        <SignupComplete></SignupComplete>
       )
   },
   {
