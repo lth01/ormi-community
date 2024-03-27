@@ -6,12 +6,11 @@ CREATE TABLE IF NOT EXISTS member (
     nickname	            VARCHAR(20) NOT NULL,
     email	                VARCHAR(100) NOT NULL UNIQUE,
     password	            VARCHAR(255) NOT NULL,
-    birthday	            VARCHAR(8),
     gender	                VARCHAR(1),
     phone	                VARCHAR(20) NOT NULL,
     password_question_id	VARCHAR(36) NOT NULL,
     find_password_answer	VARCHAR(100) NOT NULL, -- 수정
-    withdrawal              BOOLEAN NULL DEFAULT FALSE,
+    withdrawal              BOOLEAN NOT NULL DEFAULT FALSE,
     create_date             TIMESTAMP DEFAULT NOW(),
     mod_date                TIMESTAMP DEFAULT NOW()
 );
@@ -68,7 +67,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     review_content	        VARCHAR(200) NOT NULL,
     create_date	            TIMESTAMP   DEFAULT NOW(),
     mod_date	            TIMESTAMP   DEFAULT NOW(),
-    mod_check	            boolean DEFAULT FALSE,
+    mod_check	            boolean NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
     authority_id	        VARCHAR(36) NOT NULL
 );
 
@@ -112,7 +111,7 @@ CREATE TABLE IF NOT EXISTS Document (
     doc_creator	            VARCHAR(36)	NOT NULL, --작성자
     doc_mod_date	        TIMESTAMP	DEFAULT NOW(),
     doc_modifier	        VARCHAR(36)	,
-    doc_visible	            BOOLEAN	DEFAULT FALSE,
+    doc_visible	            BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
     report_key	            VARCHAR(36)
 );
 
@@ -128,7 +127,7 @@ CREATE TABLE IF NOT EXISTS comment (
     comment_creator	        VARCHAR(36)	NULL,
     comment_mod_date	    TIMESTAMP	DEFAULT NOW(),
     comment_modifier	    VARCHAR(36)	NULL,
-    comment_visible	        BOOLEAN	DEFAULT FALSE,
+    comment_visible	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
     report_id	            VARCHAR(36) ,
     industry_id	            VARCHAR(36) NOT NULL,
     com_id	                VARCHAR(36) NOT NULL
@@ -137,13 +136,13 @@ CREATE TABLE IF NOT EXISTS comment (
 -- 좋아요 테이블
 CREATE TABLE IF NOT EXISTS like_it (
     like_id	                VARCHAR(36)	PRIMARY KEY,
-    like_count	            BIGINT DEFAULT 0
+    like_count	            BIGINT  DEFAULT 0 -- NOT NULL 추가 해야 됨
 );
 
 -- 조회수 테이블
 CREATE TABLE IF NOT EXISTS viewership (
     view_id	                VARCHAR(36)	PRIMARY KEY,
-    view_count	            BIGINT DEFAULT 0
+    view_count	            BIGINT DEFAULT 0 -- NOT NULL 추가 해야 됨
 );
 
 -- 신고 테이블
@@ -152,7 +151,7 @@ CREATE TABLE IF NOT EXISTS report (
     member_id	            VARCHAR(36)	NOT NULL,
     reporter_ip	            CIDR NOT NULL,
     report_date	            TIMESTAMP DEFAULT NOW(),
-    report_judge	        BOOLEAN	DEFAULT FALSE,
-    report_visible	        BOOLEAN	DEFAULT FALSE,
+    report_judge	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
+    report_visible	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
     report_content	        VARCHAR(200) NOT NULL
 );

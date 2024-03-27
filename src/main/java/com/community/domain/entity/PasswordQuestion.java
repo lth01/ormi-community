@@ -22,7 +22,7 @@ public class PasswordQuestion {
     @Column(name = "password_question_id")
     private String passwordQuestionId;
 
-    @Column(name = "question", nullable = false)
+    @Column(name = "question", nullable = false, unique = true)
     private String question;
 
 }
