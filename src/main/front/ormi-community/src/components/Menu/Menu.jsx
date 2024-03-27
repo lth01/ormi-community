@@ -1,6 +1,6 @@
 import HeartIcon from "../Icon/HeartIcon";
 import { useEffect, useState } from "react";
-import { GenerateLiElUUID } from "../utils/keygenerator"
+import { GenerateLiElUUID } from "../../utils/keygenerator"
 
 // 게시판 목록 메뉴를 제외한 일반적인 메뉴를 표현
 function Menu({href, svg, children, beforeClicks, size}){

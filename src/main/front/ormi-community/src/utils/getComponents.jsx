@@ -5,8 +5,8 @@ import BellIcon from "@/components/Icon/BellIcon";
 import HomeIcon from "@/components/Icon/HomeIcon";
 import UserIcon from "@/components/Icon/UserIcon";
 import Menu from "@/components/Menu/Menu";
-import DonkeyLogo from "../Icon/DonkeyLogo";
-import Logout from "../Icon/Logout";
+import DonkeyLogo from "../components/Icon/DonkeyLogo";
+import Logout from "../components/Icon/Logout";
 
 export function getIcons(svgStr){
     switch(svgStr){

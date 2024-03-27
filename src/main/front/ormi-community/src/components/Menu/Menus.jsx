@@ -1,4 +1,4 @@
-import { getMenuComponents } from "../utils/getComponents";
+import { getMenuComponents } from "../../utils/getComponents";
 import BoardMenus from "./BoardMenus";
 
 export default function Menus(){

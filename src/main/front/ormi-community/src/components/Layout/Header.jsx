@@ -4,7 +4,7 @@ import { Input } from "../ui/input";
 import DonkeyLogo from "../Icon/DonkeyLogo";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Menu from "../Menu/Menu";
-import { getIcons } from "../utils/getComponents";
+import { getIcons } from "../../utils/getComponents";
 import { NavigationMenuLink, NavigationMenuList, NavigationMenu, NavigationMenuItem } from "../ui/navigation-menu";
 
 function Header(){
