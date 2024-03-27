@@ -5,7 +5,7 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger,
   } from "@/components/ui/navigation-menu"
-import { getMenuComponents } from "../utils/getComponents";
+import { getMenuComponents } from "../../utils/getComponents";
 
 export default function BoardMenus(){
     const fetchBoards = [

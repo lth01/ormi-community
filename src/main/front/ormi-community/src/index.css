@@ -2,6 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "NanumSquare";
+  src: url("./assets/NanumSquareNeoTTF-aLt.woff");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "NanumSquare";
+  src: url("./assets/NanumSquareNeoTTF-bRg.woff");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "NanumSquare";
+  src: url("./assets/NanumSquareNeoTTF-cBd.woff");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "NanumSquare";
+  src: url("./assets/NanumSquareNeoTTF-dEb.woff");
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: "NanumSquare";
+  src: url("./assets/NanumSquareNeoTTF-eHv.woff");
+  font-weight: 700;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -73,4 +103,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+html{
+  font-family: NanumSquare;
 }
