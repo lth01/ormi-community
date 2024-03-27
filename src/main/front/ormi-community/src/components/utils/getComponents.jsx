@@ -5,6 +5,8 @@ import BellIcon from "@/components/Icon/BellIcon";
 import HomeIcon from "@/components/Icon/HomeIcon";
 import UserIcon from "@/components/Icon/UserIcon";
 import Menu from "@/components/Menu/Menu";
+import DonkeyLogo from "../Icon/DonkeyLogo";
+import Logout from "../Icon/Logout";
 
 export function getIcons(svgStr){
     switch(svgStr){
@@ -20,6 +22,10 @@ export function getIcons(svgStr){
         return HomeIcon;
       case "User":
         return UserIcon;
+      case "DonkeyLogo":
+        return DonkeyLogo;
+      case "Logout":
+        return Logout;
       default:
         return null;
     }
