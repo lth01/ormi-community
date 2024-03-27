@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS member (
     gender	                VARCHAR(1),
     phone	                VARCHAR(20) NOT NULL,
     password_question_id	VARCHAR(36) NOT NULL,
-    find_password_answer	VARCHAR(100),
+    find_password_answer	VARCHAR(100) NOT NULL, -- 수정
     withdrawal              BOOLEAN NULL DEFAULT FALSE,
     create_date             TIMESTAMP DEFAULT NOW(),
     mod_date                TIMESTAMP DEFAULT NOW()
@@ -33,8 +33,7 @@ CREATE TABLE IF NOT EXISTS password_question (
 CREATE TABLE IF NOT EXISTS member_interests (
     interests_id	        VARCHAR(36)	PRIMARY KEY,
     industry_id	            VARCHAR(36) NOT NULL,
-    member_id	            VARCHAR(36) NOT NULL,
-    authority_id	        VARCHAR(36) NOT NULL
+    member_id	            VARCHAR(36) NOT NULL
 );
 
 -- 회원 인증 기업 테이블 (보류)
