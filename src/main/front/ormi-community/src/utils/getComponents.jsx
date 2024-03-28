@@ -9,6 +9,7 @@ import DonkeyLogo from "../components/Icon/DonkeyLogo";
 import Logout from "../components/Icon/Logout";
 import FileEditIcon from "@/components/Icon/FileEditIcon";
 import DeleteIcon from "@/components/Icon/DeleteIcon";
+import PlusIcon from "@/components/Icon/PlusIcon";
 
 export function getIcons(svgStr){
     switch(svgStr){
@@ -32,6 +33,8 @@ export function getIcons(svgStr){
         return FileEditIcon;
       case "Delete":
         return DeleteIcon;
+      case "Plus":
+        return PlusIcon;
       default:
         return null;
     }

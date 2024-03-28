@@ -12,7 +12,7 @@ function Header(){
 
     return <header className="flex items-center justify-between px-4 py-2 border-b dark:border-gray-800">
         <Link className="flex items-center gap-2 text-lg font-semibold" to="/">
-          <DonkeyLogo className="w-48 h-16"/>
+          <DonkeyLogo className="w-52 h-16"/>
         </Link>
         <div className="flex items-center gap-4">
           <Input className="w-64" id="search" placeholder="Search topics or communities" type="search" />
