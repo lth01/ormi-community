@@ -10,3 +10,14 @@ export function fetchBoardList(){
         {value: '3', title:'행복한가요?'},
     ];
 }
+
+/**
+ * 
+ * @returns { {nickName: String, userId: String, commentDate: "YYYY-MM-DD", comment: String, likeCount: number, likeAble: boolean}[] } API returns
+ */
+export function fetchDocComments(){
+    return [
+        {nickName: "thlee", userId: "130dfqi", commentDate: "2024-03-01", comment: "안녕하세요 저는 뚱이에요", likeCount: 3, likeAble: true},
+        {nickName: "afl", userId: "1123123i", commentDate: "2024-03-01", comment: "안녕하세요 저는 뚱이에요2", likeCount: 2, likeAble: true},
+    ];
+}
