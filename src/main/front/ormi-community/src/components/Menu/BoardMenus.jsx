@@ -16,16 +16,18 @@ export default function BoardMenus(){
 
     const MenuList = getMenuComponents(fetchBoards);
 
-    return (<NavigationMenu>
-                <NavigationMenuList>
-                    <NavigationMenuItem>
-                        <NavigationMenuTrigger>게시판목록</NavigationMenuTrigger>
-                        <NavigationMenuContent className="overflow-y-auto">
-                            <ul className="grid w-[200px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] max-h-[500px] overflow-y-auto">
-                                {...MenuList}
-                            </ul>
-                        </NavigationMenuContent>
-                    </NavigationMenuItem>
-                </NavigationMenuList>
-            </NavigationMenu>);
+    return (
+        <NavigationMenu>
+            <NavigationMenuList>
+                <NavigationMenuItem>
+                    <NavigationMenuTrigger className="p-0">게시판목록</NavigationMenuTrigger>
+                    <NavigationMenuContent className="overflow-y-auto">
+                        <ul className="flex flex-col w-[150px] gap-4 p-4 md:w-[200px] lg:w-[200px] max-h-[500px] overflow-y-auto">
+                            {...MenuList}
+                        </ul>
+                    </NavigationMenuContent>
+                </NavigationMenuItem>
+            </NavigationMenuList>
+        </NavigationMenu>
+        );
 }

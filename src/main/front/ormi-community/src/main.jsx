@@ -7,12 +7,13 @@ import DocumentWrite from './routes/Document/DocumentWrite';
 import { Comment } from './components/Comment/Comment';
 import { Document } from './components/Document/Document';
 import Header from './components/Layout/Header';
+import Main from './routes/Main/Main';
 
 const router = createBrowserRouter([
   {
       path: "",
       element: (
-        <Document></Document>
+        <Main></Main>
       )
   },
   {
