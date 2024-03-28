@@ -5,12 +5,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Document from './routes/Document.jsx';
 import EditPassword from './routes/Password/EditPassword';
 import DocumentWrite from './routes/Document/DocumentWrite';
+import { Comment } from './components/Comment/Comment';
 
 const router = createBrowserRouter([
   {
       path: "",
       element: (
-        <DocumentWrite></DocumentWrite>
+        <Comment></Comment>
       )
   },
   {
