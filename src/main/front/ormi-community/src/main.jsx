@@ -8,12 +8,13 @@ import { Comment } from './components/Comment/Comment';
 import { Document } from './components/Document/Document';
 import Header from './components/Layout/Header';
 import Main from './routes/Main/Main';
+import Signup from './routes/Signup/Signup';
 
 const router = createBrowserRouter([
   {
       path: "",
       element: (
-        <Main></Main>
+        <Signup></Signup>
       )
   },
   {

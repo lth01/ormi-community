@@ -15,6 +15,11 @@ export default function Signup(){
     const [ddl_gender_value, setGenderValue] = useState(null);
     const [ddl_pwdhint_value, setPwdHintValue] = useState(null);
     const [tBox_phoneNumber, setPhoneNumberValue] = useState("");
+    // 이거 어떻게...?
+    const [interestCareer1, setInterestCareers1] = useState([]);
+    const [interestCareer2, setInterestCareers2] = useState([]);
+    const [interestCareer3, setInterestCareers3] = useState([]);
+
     const doSignup = () =>{
         const tBox_name = document.getElementById('tBox_name');
         const tBox_nickname = document.getElementById('tBox_nickname');
@@ -105,6 +110,42 @@ export default function Signup(){
                                 <SelectItem value="남">남성</SelectItem>
                                 <SelectItem value="여">여성</SelectItem>
                             </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </LabelSection>
+                <LabelSection asChild label="관심업종1" className="mt-2">
+                    <Select onValueChange={setInterestCareers1}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="업종"></SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="IT">IT</SelectItem>
+                            <SelectItem value="조선">조선</SelectItem>
+                            <SelectItem value="의료">의료</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </LabelSection>
+                <LabelSection asChild label="관심업종2" className="mt-2">
+                    <Select onValueChange={setInterestCareers2}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="업종"></SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="IT">IT</SelectItem>
+                            <SelectItem value="조선">조선</SelectItem>
+                            <SelectItem value="의료">의료</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </LabelSection>
+                <LabelSection asChild label="관심업종3" className="mt-2">
+                    <Select onValueChange={setInterestCareers3}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="업종"></SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="IT">IT</SelectItem>
+                            <SelectItem value="조선">조선</SelectItem>
+                            <SelectItem value="의료">의료</SelectItem>
                         </SelectContent>
                     </Select>
                 </LabelSection>
