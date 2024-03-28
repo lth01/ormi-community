@@ -6,25 +6,19 @@ import { useState, useEffect } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 
-const Comment = (props) => {
-    const [usrInfoList, setUsrInfos] = useState([]);
+const Comment = ({userInfoList}) => {
     //현재는 Comment를 생성할 때 호출하도록 되어있음. 함수 호출 시점은 바뀔 수 있음.
-    useEffect(() =>{
-        const newUsers = fetchDocComments();
-        setUsrInfos([...newUsers]);
-    },[]);
-
     return (
-        <div className="p-4 border-l border-b border-r border-t-0 border-gray-300">
+        <div className="p-4 border-t">
             <ul className="flex flex-col gap-4">
                 {
-                    usrInfoList.map(userInfo =>{
+                    userInfoList.map(userInfo =>{
                         return (<CommentItem key={GenerateLiElUUID()} userInfo={userInfo}></CommentItem>);
                     })
                 }
             </ul>
             <Textarea className="mt-4 resize-none" placeholder="댓글을 입력해주세요"></Textarea>
-            <Button ahChild className="mt-2 bg-black text-white w-full">
+            <Button className="mt-2 bg-black text-white w-full">
                 <div onClick={() =>{}}>댓글 등록</div>
             </Button>
         </div>
