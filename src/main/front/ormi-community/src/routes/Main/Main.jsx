@@ -16,7 +16,6 @@ export default function Main(){
             <div className="flex justify-center bg-[#7a8cd1] rounded-lg">
                 <img src={mainCharacter} className="h-[380px]"></img>
             </div>
-
             <Document></Document>
             <Document></Document>
           </div>
