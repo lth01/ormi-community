@@ -1,4 +1,3 @@
-import CompleteIcon from "@/components/Icon/CompleteIcon";
 import LabelSection from "@/components/Layout/LabelSection";
 import LogoHeader from "@/components/Layout/LogoHeader";
 import { Select, SelectTrigger, SelectContent, SelectLabel, SelectItem, SelectGroup, SelectValue } from "@/components/ui/select";
@@ -9,6 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { GenerateLiElUUID } from "@/utils/keygenerator";
 
+/**
+ * @brief 게시글 작성, 수정이 일어나는 컴포넌트. 수정일 경우, fetch하여 데이터를 가지고 온 다음 여기에 붙여넣을임
+ * @returns 
+ */
 export default function DocumentWrite(){
     const [boardList, setBoardList] = useState([]);
     useEffect(() =>{

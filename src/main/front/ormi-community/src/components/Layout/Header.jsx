@@ -6,10 +6,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Menu from "../Menu/Menu";
 import { getIcons } from "../../utils/getComponents";
 import { NavigationMenuLink, NavigationMenuList, NavigationMenu, NavigationMenuItem } from "../ui/navigation-menu";
-
 function Header(){
     //테스트용
-    const isLogin = false;
+    const isLogin = true;
 
     return <header className="flex items-center justify-between px-4 py-2 border-b dark:border-gray-800">
         <Link className="flex items-center gap-2 text-lg font-semibold" to="/">

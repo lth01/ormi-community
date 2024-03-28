@@ -7,6 +7,8 @@ import UserIcon from "@/components/Icon/UserIcon";
 import Menu from "@/components/Menu/Menu";
 import DonkeyLogo from "../components/Icon/DonkeyLogo";
 import Logout from "../components/Icon/Logout";
+import FileEditIcon from "@/components/Icon/FileEditIcon";
+import DeleteIcon from "@/components/Icon/DeleteIcon";
 
 export function getIcons(svgStr){
     switch(svgStr){
@@ -26,6 +28,10 @@ export function getIcons(svgStr){
         return DonkeyLogo;
       case "Logout":
         return Logout;
+      case "FileEdit":
+        return FileEditIcon;
+      case "Delete":
+        return DeleteIcon;
       default:
         return null;
     }

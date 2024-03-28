@@ -1,14 +1,17 @@
 import HeartIcon from "../Icon/HeartIcon";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { GenerateLiElUUID } from "../../utils/keygenerator"
 
 // 게시판 목록 메뉴를 제외한 일반적인 메뉴를 표현
-function Menu({href, svg, children, beforeClicks, size}){
+const Menu = forwardRef((props, ref) => {
+    const {href, svg, children, beforeClicks, size} = props;
     const defaultIcon = HeartIcon(getSizeToSvgClassName(size));
     const [onclicks, setOnClick] = useState([]);
     const [svgIconEl, setSvgIcon] = useState(svg ? svg(getSizeToSvgClassName(size)) : defaultIcon);
     const moveToHref = () =>{
-        location.href = href;
+        href ? 
+        location.href = href :
+        "";
     };
 
     const changeSvgIcon = (newSvg) =>{
@@ -16,22 +19,24 @@ function Menu({href, svg, children, beforeClicks, size}){
     }
 
     useEffect(() => {
-        setOnClick(beforeClicks.length > 0 ? [...beforeClicks, moveToHref ] : [moveToHref]);
+        setOnClick(beforeClicks?.length > 0 ? [...beforeClicks, moveToHref ] : [moveToHref]);
     },[]);
    
     return (
-        <li key={GenerateLiElUUID()}
+        (<li 
+            ref={ref}
+            key={GenerateLiElUUID()}
             className="list-none flex items-center gap-2 text-sm font-medium truncate"
             onClick={() => {
                 onclicks.forEach(onclick => onclick.call());
-        }}>
-                {svgIconEl}
-                <span className="trunacte">
+            }}>
+            {svgIconEl}
+            <span className="trunacte">
                 {children}
             </span>
-        </li>
+        </li>)
     );
-}
+})
 
 function getSizeToSvgClassName(size){
     return size ?
