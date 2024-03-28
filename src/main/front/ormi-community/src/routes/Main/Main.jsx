@@ -13,7 +13,7 @@ export default function Main(){
         </aside>
         <section className="flex-1 overflow-auto">
           <div className="grid gap-4 p-4">
-            <div className="flex justify-center bg-indigo-300 rounded-lg">
+            <div className="flex justify-center bg-[#7a8cd1] rounded-lg">
                 <img src={mainCharacter} className="h-[380px]"></img>
             </div>
 
