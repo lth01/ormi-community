@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS companies (
 -- 업종 테이블(산업 테이블)
 CREATE TABLE IF NOT EXISTS industry (
     industry_id	            VARCHAR(36)	PRIMARY KEY,
-    industry_name	        VARCHAR(100) NOT NULL,
+    industry_name	        VARCHAR(100) NOT NULL, --유니크 추가
     industry_description	VARCHAR(255)
 );
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     create_date	            TIMESTAMP   DEFAULT NOW(),
     mod_date	            TIMESTAMP   DEFAULT NOW(),
     mod_check	            boolean NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
-    authority_id	        VARCHAR(36) NOT NULL
+    authority_id	        VARCHAR(36) NOT NULL  -- 칼럼 삭제
 );
 
 -- 리뷰 항목별 점수 테이블
@@ -76,35 +76,35 @@ CREATE TABLE IF NOT EXISTS review_score (
     score_id	            VARCHAR(36)	PRIMARY KEY,
     review_id	            VARCHAR(36) NOT NULL,
     review_Categories_id	VARCHAR(36) NOT NULL,
-    authority_id	        VARCHAR(36) NOT NULL,
+    authority_id	        VARCHAR(36) NOT NULL, --칼럼 삭제
     score	                INT NOT NULL CHECK (score > 0 AND score <= 5)
 );
 
 -- 리뷰 항목 테이블
 CREATE TABLE IF NOT EXISTS Review_Categories (
     review_Categories_id	VARCHAR(36)	PRIMARY KEY,
-    category_name	        VARCHAR(100) NOT NULL
+    category_name	        VARCHAR(100) NOT NULL -- UNIQUE 추가
     );
 
 -- 게시판 테이블
 CREATE TABLE IF NOT EXISTS board (
-    commu_board_id	        VARCHAR(36)	PRIMARY KEY,
+    board_id	            VARCHAR(36)	PRIMARY KEY, --"commu_" 삭제
     industry_id	            VARCHAR(36) NOT NULL,
-    com_id	                VARCHAR(36) NOT NULL,
-    commu_board_create_date	TIMESTAMP DEFAULT NOW(),
-    commu_board_creator	    VARCHAR(36) NOT NULL, -- 운영진
-    member_id	            VARCHAR(36) NOT NULL -- 생성요청자 회원ID
+    com_id	                VARCHAR(36) NOT NULL UNIQUE,
+    board_create_date	    TIMESTAMP DEFAULT NOW(), --"commu_" 삭제
+    board_creator	        VARCHAR(36) NOT NULL, -- 운영진, "commu_" 삭제, 이름변경
+    board_requester	        VARCHAR(36) NOT NULL -- 생성요청자 회원ID, 이름변경
 );
 
 -- 게시글 테이블
 CREATE TABLE IF NOT EXISTS Document (
     doc_id	                VARCHAR(36)	PRIMARY KEY,
-    commu_board_id	        VARCHAR(36) NOT NULL,
+    board_id	            VARCHAR(36) NOT NULL, --"commu_" 삭제
     industry_id	            VARCHAR(36) NOT NULL,
     com_id	                VARCHAR(36) NOT NULL,
-    doc_name	            VARCHAR(100) NOT NULL,
+    doc_title	            VARCHAR(100) NOT NULL, -- name -> title 변경
     doc_content	            TEXT NOT NULL,
-    doc_writer	            VARCHAR(20)	NOT NULL,
+    doc_writer	            VARCHAR(36)	NOT NULL, -- 삭제
     doc_like	            VARCHAR(36) ,
     doc_view_count	        VARCHAR(36)	,
     doc_create_date	        TIMESTAMP	DEFAULT NOW(),
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS Document (
     doc_mod_date	        TIMESTAMP	DEFAULT NOW(),
     doc_modifier	        VARCHAR(36)	,
     doc_visible	            BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
-    report_key	            VARCHAR(36)
+    report_key	            VARCHAR(36) -- id로 변경
 );
 
 -- 댓글 테이블
@@ -129,8 +129,8 @@ CREATE TABLE IF NOT EXISTS comment (
     comment_modifier	    VARCHAR(36)	NULL,
     comment_visible	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
     report_id	            VARCHAR(36) ,
-    industry_id	            VARCHAR(36) NOT NULL,
-    com_id	                VARCHAR(36) NOT NULL
+    industry_id	            VARCHAR(36) NOT NULL,--삭제
+    com_id	                VARCHAR(36) NOT NULL --삭제
 );
 
 -- 좋아요 테이블
@@ -148,10 +148,10 @@ CREATE TABLE IF NOT EXISTS viewership (
 -- 신고 테이블
 CREATE TABLE IF NOT EXISTS report (
     report_id	            VARCHAR(36)	PRIMARY KEY,
-    member_id	            VARCHAR(36)	NOT NULL,
-    reporter_ip	            CIDR NOT NULL,
+    member_id	            VARCHAR(20)	NOT NULL, -- NOT NULL 제거, 이름 변경
+    reporter_ip	            VARCHAR(36) NOT NULL, -- NOT NULL 제거
     report_date	            TIMESTAMP DEFAULT NOW(),
     report_judge	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
-    report_visible	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
+    report_visible	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨 -- 삭제해야할 듯
     report_content	        VARCHAR(200) NOT NULL
 );

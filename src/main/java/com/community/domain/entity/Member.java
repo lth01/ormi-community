@@ -57,12 +57,12 @@ public class Member {
     private LocalDateTime modDate;
 
     //relation with question
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "password_question_id", nullable = false)
     private PasswordQuestion passwordQuestion;
 
     //relation with authority
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "authority_id", nullable = false)
     private Authorities authorities;
 
