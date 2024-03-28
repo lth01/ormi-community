@@ -9,12 +9,13 @@ import { Document } from './components/Document/Document';
 import Header from './components/Layout/Header';
 import Main from './routes/Main/Main';
 import Signup from './routes/Signup/Signup';
+import BoardCreate from './routes/Board/BoardCreate';
 
 const router = createBrowserRouter([
   {
       path: "",
       element: (
-        <Signup></Signup>
+        <BoardCreate></BoardCreate>
       )
   },
   {
