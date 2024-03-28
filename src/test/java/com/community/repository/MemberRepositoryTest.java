@@ -30,10 +30,10 @@ class MemberRepositoryTest {
     public AuthoritiesRepository authoritiesRepository;
 
     //테스트 이후 모든 회원 테이블 삭제
-    @AfterEach
-    public void clearData() {
-        memberRepository.deleteAll();
-    }
+//    @AfterEach
+//    public void clearData() {
+//        memberRepository.deleteAll();
+//    }
 
     @Test
     public void save() {
@@ -73,5 +73,13 @@ class MemberRepositoryTest {
                 + "  " + member.getAuthorities()
                 + "  " + member.getAuthorities().getAuthorityName()
                 );
+    }
+
+    @Test
+    public void findByEmailTest() {
+        Member member = memberRepository.findAll().get(0);
+        Member test = memberRepository.findByEmail(member.getEmail()).orElseThrow();
+        Assertions.assertEquals(member.getEmail(),test.getEmail());
+        log.info(test.getEmail() + "  " + test.getPassword());
     }
 }

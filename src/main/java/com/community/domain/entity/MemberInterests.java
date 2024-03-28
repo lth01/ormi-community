@@ -20,12 +20,12 @@ public class MemberInterests {
     private String interestsId;
 
     //relation with industry
-//    @ManyToOne
-//    @JoinColumn(name = "industry_id", nullable = false)
-//    private Industry industry;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "industry_id", nullable = false)
+    private Industry industry;
 
     //relation with member
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
