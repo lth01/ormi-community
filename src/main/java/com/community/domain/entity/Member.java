@@ -1,13 +1,22 @@
 package com.community.domain.entity;
 
+import com.community.repository.MemberRepository;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Fetch;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -17,7 +26,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(value = AuditingEntityListener.class)
-public class Member {
+public class Member implements UserDetails  {
 
     @Id
     @Column(name = "member_id", nullable = false)
@@ -57,18 +66,62 @@ public class Member {
     private LocalDateTime modDate;
 
     //relation with question
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "password_question_id", nullable = false)
     private PasswordQuestion passwordQuestion;
 
-    //relation with authority
-    @ManyToOne(fetch = FetchType.LAZY)
+    //relation with MemberRole
+    @ManyToOne
     @JoinColumn(name = "authority_id", nullable = false)
-    private Authorities authorities;
+    private MemberRole memberRole;
 
     //탈퇴 여부 withdrawal 디폴트 값 설정
     @PrePersist
     public void prePersist() {
         withdrawal = withdrawal == null ? false : withdrawal;
+    }
+
+    /**
+     * 시큐리티 관련 설정
+     */
+
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Set.of(memberRole);
+    }
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    // 계정 만료 여부 반환 (true: 만료 안됨)
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    // 계정 잠금 여부 반환 (true: 잠금 안됨)
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    // 패스워드의 만료 여부 반환 (true: 만료 안됨)
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    // 계정 사용 여부 반환 (true: 사용 가능)
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

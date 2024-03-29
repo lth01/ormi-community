@@ -1,8 +1,6 @@
 package com.community.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,18 +13,24 @@ import org.springframework.security.core.GrantedAuthority;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Authorities implements GrantedAuthority {
+@Table(name = "member_role")
+public class MemberRole implements GrantedAuthority {
 
     @Id
     @Column(name = "authority_id")
-    private String authorityId;
+    private String memberRoleId;
 
     @Column(name = "authority_name", nullable = false)
-    private String authorityName;
+    private String memberRoleName;
+
+//    //relation with MemberRole
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "member_have", nullable = false)
+//    private Member memberHave;
 
     //권한 처리
     @Override
     public String getAuthority() {
-        return authorityName;
+        return memberRoleName;
     }
 }
