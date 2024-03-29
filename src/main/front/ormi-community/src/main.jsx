@@ -10,12 +10,13 @@ import Header from './components/Layout/Header';
 import Main from './routes/Main/Main';
 import Signup from './routes/Signup/Signup';
 import BoardCreate from './routes/Board/BoardCreate';
+import EditInformation from './routes/User/EditInformation';
 
 const router = createBrowserRouter([
   {
       path: "",
       element: (
-        <BoardCreate></BoardCreate>
+        <EditInformation></EditInformation>
       )
   },
   {
