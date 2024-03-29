@@ -76,7 +76,7 @@ export default function Signup(){
         navigate("/Signup/complete");
     };
 
-    return (
+    return ( 
         <main className="flex flex-col bg-gray-100 min-h-screen items-center overflow-y-auto pb-20">
             <section className="w-800 p-2 mt-10">
                 <LogoHeader>회원가입</LogoHeader>
