@@ -1,11 +1,9 @@
 package com.community.repository;
 
-import com.community.domain.entity.Authorities;
 import com.community.domain.entity.Member;
+import com.community.domain.entity.MemberRole;
 import com.community.domain.entity.PasswordQuestion;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
@@ -27,7 +23,7 @@ class MemberRepositoryTest {
     public PasswordQuestionRepository passwordQuestionRepository;
 
     @Autowired
-    public AuthoritiesRepository authoritiesRepository;
+    public MemberRoleRepository authoritiesRepository;
 
     //테스트 이후 모든 회원 테이블 삭제
 //    @AfterEach
@@ -40,8 +36,8 @@ class MemberRepositoryTest {
         List<PasswordQuestion> list = passwordQuestionRepository.findAll();
         PasswordQuestion question = list.get(0);
 
-        List<Authorities> list1 = authoritiesRepository.findAll();
-        Authorities authorities = list1.get(0);
+        List<MemberRole> list1 = authoritiesRepository.findAll();
+        MemberRole authorities = list1.get(0);
 
         Member member = Member.builder()
                 .memberId(UUID.randomUUID().toString())
@@ -53,7 +49,7 @@ class MemberRepositoryTest {
                 .phone("010-1234-5678")
                 .findPasswordAnswer("도도새")
                 .passwordQuestion(question)
-                .authorities(authorities)
+                .memberRole(authorities)
                 .build();
 
         memberRepository.save(member);
@@ -61,7 +57,6 @@ class MemberRepositoryTest {
         Assertions.assertEquals(member.getMemberId(), memberRepository.findById(member.getMemberId()).orElseThrow().getMemberId());
 
         log.info(member.getMemberId()
-                + "  " + member.getName()
                 + "  " + member.getNickname()
                 + "  " + member.getEmail()
                 + "  " + member.getPassword()
@@ -71,15 +66,19 @@ class MemberRepositoryTest {
                 + "  " + member.getPasswordQuestion()
                 + "  " + member.getPasswordQuestion().getQuestion()
                 + "  " + member.getAuthorities()
-                + "  " + member.getAuthorities().getAuthorityName()
                 );
     }
 
     @Test
     public void findByEmailTest() {
-        Member member = memberRepository.findAll().get(0);
-        Member test = memberRepository.findByEmail(member.getEmail()).orElseThrow();
-        Assertions.assertEquals(member.getEmail(),test.getEmail());
+        Member test = memberRepository.findByEmail("test@test.com").orElseThrow();
+        Assertions.assertEquals("test@test.com",test.getEmail());
         log.info(test.getEmail() + "  " + test.getPassword());
+    }
+
+    @Test
+    public void deleteOne() {
+        Member member = memberRepository.findByEmail("test1@test.com").orElseThrow();
+        memberRepository.delete(member);
     }
 }
