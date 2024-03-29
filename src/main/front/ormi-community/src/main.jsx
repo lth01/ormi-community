@@ -11,20 +11,48 @@ import Main from './routes/Main/Main';
 import Signup from './routes/Signup/Signup';
 import BoardCreate from './routes/Board/BoardCreate';
 import EditInformation from './routes/User/EditInformation';
+import Login from './routes/Login';
+import SignupComplete from './routes/Signup/SignupComplete';
+import FindPassword from './routes/Password/FindPassword';
 
 const router = createBrowserRouter([
-  {
-      path: "",
-      element: (
-        <EditInformation></EditInformation>
-      )
-  },
-  {
-      path: "/doc",
-      element: (
-          <Document />
-      )
-  },
+      {
+        path: "/",
+        element: <Main></Main>
+      },
+      {
+        path: "/login",
+        element: <Login></Login>
+      },
+      {
+        path: "/board",
+        element: <BoardCreate></BoardCreate>
+      },
+      {
+        path: "/document",
+        element: <DocumentWrite></DocumentWrite>
+      },
+      {
+        path: "/signup",
+        element: <Signup></Signup>,
+          
+      },
+      {
+        path: "/signup/complete",
+        element: <SignupComplete></SignupComplete>
+      },
+      {
+        path: "/user",
+        element: <EditInformation></EditInformation>,
+      },
+      {
+        path: "/password",
+        element: <FindPassword></FindPassword>
+      },
+      {
+        path: "/password/edit",
+        element: <EditPassword></EditPassword>
+      }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
