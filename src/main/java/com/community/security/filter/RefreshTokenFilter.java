@@ -19,6 +19,7 @@ import java.io.Reader;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 public class RefreshTokenFilter extends OncePerRequestFilter {
@@ -70,18 +71,18 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
             Date expTime = new Date(Instant.ofEpochMilli(exp).toEpochMilli() *1000);
             Date current = new Date(System.currentTimeMillis());
 
-            //만료 시간과 현재 시간 계산, 3일 미만 시 refresh 재생성
+            //만료 시간과 현재 시간 계산, 2일 미만 시 refresh 재생성
             long gapTime = expTime.getTime() - current.getTime();
 
-            String id = (String) refreshClaims.get("id");
+            String ip = (String) refreshClaims.get("IP");
 
             //Access 토큰은 항상 새로 생성
-            String accessTokenValue = jwtUtil.generateToken(Map.of("id", id), 1);
+            String accessTokenValue = jwtUtil.generateToken(Map.of("IP", ip), 1);
             String refreshTokenValue = tokens.get("refreshToken");
 
-            //Refresh 토큰은 3일 미만시에만 생성
-            if (gapTime < (1000 * 60 * 60 * 24 * 3 )) {
-                refreshTokenValue = jwtUtil.generateToken(Map.of("id", id), 30); //발급은 30일로 진행
+            //Refresh 토큰은 2일 미만시에만 생성
+            if (gapTime < (1000 * 60 * 60 * 24 * 2 )) {
+                refreshTokenValue = jwtUtil.generateToken(Map.of("IP", ip), 7); //발급은 7일로 진행
             }
 
             log.info("Refresh Token result : ");
@@ -92,7 +93,6 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
         } catch (RefreshTokenException refreshTokenException) {
             refreshTokenException.sendResponseError(response);
-            return;
         }
 
     }

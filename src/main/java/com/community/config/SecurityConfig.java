@@ -2,6 +2,7 @@ package com.community.config;
 
 import com.community.security.filter.APILoginFilter;
 import com.community.security.MemberDetailsService;
+import com.community.security.filter.HomePageTokenFilter;
 import com.community.security.filter.RefreshTokenFilter;
 import com.community.security.filter.TokenCheckFilter;
 import com.community.security.handler.APILoginSuccessHandler;
@@ -20,6 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -59,19 +62,23 @@ public class SecurityConfig {
         // 설정 저장(필수)
         http.authenticationManager(authenticationManager);
 
-        // LoginFilter --> /generateToken 를 호출하면 Login Filter가 실행
-        APILoginFilter apiLoginFilter = new APILoginFilter("/generateToken");
-        apiLoginFilter.setAuthenticationManager(authenticationManager);
+        //모든 회원은 접속 시 단한번 토큰 발급
+        http.addFilterBefore(new HomePageTokenFilter(jwtUtil), SecurityContextHolderFilter.class);
 
-        // LoginSuccessHandler -> 로그인 성공 시
-        APILoginSuccessHandler successHandler = new APILoginSuccessHandler(jwtUtil);
-        // LoginFilter --> 로그인 성공 시 successHandler로 이동
-        apiLoginFilter.setAuthenticationSuccessHandler(successHandler);
+        // LoginFilter --> /generateToken(변경 -> /api/login)를 호출하면 Login Filter가 실행
+        APILoginFilter apiLoginFilter = new APILoginFilter("/api/login");
+        apiLoginFilter.setAuthenticationManager(authenticationManager);
 
         // 필터 적용 위치 조정
         http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // TokenCheckFilter --> api 로 시작하는 모든 동작은 해당 필터 동작
+        //로그인 시 토큰 발급하지 않기 때문에, 따로 사용하지 않음.
+//         LoginSuccessHandler -> 로그인 성공 시
+//        APILoginSuccessHandler successHandler = new APILoginSuccessHandler(jwtUtil);
+//         LoginFilter --> 로그인 성공 시 successHandler로 이동
+//        apiLoginFilter.setAuthenticationSuccessHandler(successHandler);
+
+        // TokenCheckFilter --> "/like" 로 시작하는 모든 동작은 해당 필터 동작
         http.addFilterBefore(tokenCheckFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         // refreshToken 호출
@@ -86,19 +93,25 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/v3/**","/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll())
         //CSRF 비활성화
             .csrf(csrf -> csrf.disable())
+        //로그인 성공 이후 main 페이지 이동
+            .formLogin(login -> login.defaultSuccessUrl("/main"))
+        //로그아웃 시 main 페이지 이동
+            .logout(logout -> logout.logoutSuccessUrl("/main"))
         //세션 비활성화
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         //test를 위한 모든 사용자 권한
             .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-        // 익명 사용자에게 부여될 권한 // 익명 사용자의 principal 이름 정의 (기본값은 'anonymousUser')
-//      http.anonymous( any -> any.authorities("ANONYMOUS").principal("ANONYMOUS_USER"));
-
         //관리자 페이지와 게시글 작성에 필요한 인증 요구
 //        http.authorizeHttpRequests(auth -> auth
 //                .requestMatchers("/admin/**").hasAuthority("ADMIN")                       //admin 페이지는 ADMIN 권한만 접근가능
 //                .requestMatchers("/document").hasAnyAuthority("ADMIN", "USER")  //document 페이지는(글 작성 페이지?) 인증한 사람만(회원)
 //                .requestMatchers(HttpMethod.GET,"/document").authenticated()              //GET 예시
 //                .anyRequest().permitAll());                                                 //이외에 모든 접근은 ROLE_ANONYMOUS 도 가능
+
+        // 익명 사용자에게 부여될 권한 // 익명 사용자의 principal 이름 정의 (기본값은 'anonymousUser')
+        http.anonymous( any -> any.authorities("ANONYMOUS").principal("ANONYMOUS_USER"));
+
+
 
 
         //cors 설정

@@ -156,3 +156,11 @@ CREATE TABLE IF NOT EXISTS report (
 --    report_visible	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨 -- 삭제해야할 듯
     report_content	        VARCHAR(200) NOT NULL
 );
+
+-- 좋아요 저장 리스트
+CREATE TABLE IF NOT EXISTS like_list (
+    Like_id             VARCHAR(36) PRIMARY KEY,
+    user_ip             VARCHAR(36) NOT NULL,
+    doc_com_name        VARCHAR(36) NOT NULL,
+    create_date	        TIMESTAMP	DEFAULT NOW()
+);
