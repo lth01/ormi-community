@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS member (
 -- 권한 테이블
 CREATE TABLE IF NOT EXISTS member_role ( -- 이름 변경 authorities -> member_role
     authority_id	        VARCHAR(36)	PRIMARY KEY,
-    authority_name	        VARCHAR(100) NOT NULL,
-    member_have             VARCHAR(36) NOT NULL --추가 // 다시 제거
+    authority_name	        VARCHAR(100) NOT NULL
+--    member_have             VARCHAR(36) NOT NULL --추가 // 다시 제거
 );
 
 -- 패스워드 질문 테이블
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     review_content	        VARCHAR(200) NOT NULL,
     create_date	            TIMESTAMP   DEFAULT NOW(),
     mod_date	            TIMESTAMP   DEFAULT NOW(),
-    mod_check	            boolean NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
+    mod_check	            boolean NOT NULL DEFAULT FALSE -- NOT NULL 추가 해야 됨
 --    authority_id	        VARCHAR(36) NOT NULL  -- 칼럼 삭제
 );
 
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS comment (
     comment_mod_date	    TIMESTAMP	DEFAULT NOW(),
     comment_modifier	    VARCHAR(36)	NULL,
     comment_visible	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
-    report_id	            VARCHAR(36) ,
+    report_id	            VARCHAR(36)
 --    industry_id	            VARCHAR(36) NOT NULL,--삭제
 --    com_id	                VARCHAR(36) NOT NULL --삭제
 );
@@ -155,4 +155,12 @@ CREATE TABLE IF NOT EXISTS report (
     report_judge	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
 --    report_visible	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨 -- 삭제해야할 듯
     report_content	        VARCHAR(200) NOT NULL
+);
+
+-- 좋아요 저장 리스트
+CREATE TABLE IF NOT EXISTS like_list (
+    Like_id             VARCHAR(36) PRIMARY KEY,
+    user_ip             VARCHAR(36) NOT NULL,
+    doc_com_name        VARCHAR(36) NOT NULL,
+    create_date	        TIMESTAMP	DEFAULT NOW()
 );

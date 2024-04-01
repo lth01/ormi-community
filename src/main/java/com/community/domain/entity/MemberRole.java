@@ -23,11 +23,6 @@ public class MemberRole implements GrantedAuthority {
     @Column(name = "authority_name", nullable = false)
     private String memberRoleName;
 
-//    //relation with MemberRole
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_have", nullable = false)
-//    private Member memberHave;
-
     //권한 처리
     @Override
     public String getAuthority() {
