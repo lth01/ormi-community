@@ -1,9 +1,16 @@
 package com.community.repository;
 
 import com.community.domain.entity.Comment;
+import com.community.domain.entity.Document;
+import com.community.domain.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
+    List<Comment> findAllByDocument(Document document);
+    List<Comment> findAllByCommentCreator(Member member);
+
 }

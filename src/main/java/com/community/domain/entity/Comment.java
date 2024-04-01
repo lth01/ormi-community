@@ -2,6 +2,7 @@ package com.community.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,27 +43,27 @@ public class Comment {
     private Boolean commentVisible;
 
     //relation with doc_id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "doc_id", nullable = false)
     private Document document;
 
     //relation with doc_creator
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "comment_creator", nullable = false)
     private Member commentCreator;
 
     //relation with doc_modifier
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "comment_modifier")
     private Member commentModifier;
 
     //relation with like_it
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "like_id", nullable = false)
     private LikeIt likeIt;
 
     //relation with report
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "report_id")
     private Report report;
 

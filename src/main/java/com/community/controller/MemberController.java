@@ -44,7 +44,7 @@ public class MemberController {
     }
 
     @PutMapping("/withdrawal") //탈퇴 구현 -> 탈퇴 시 "/logout"으로 이동
-    public ResponseEntity<?> withdrawal(@RequestBody WithdrawalRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<String> withdrawal(@RequestBody WithdrawalRequest request, HttpServletResponse response) throws IOException {
         //@AuthenticationPrincipal Member member, member.getEmail()
         boolean result = memberService.withdrawal(request);
         if (result) {
