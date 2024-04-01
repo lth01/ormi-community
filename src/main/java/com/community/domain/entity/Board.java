@@ -13,35 +13,40 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(value = AuditingEntityListener.class)
 public class Board {
 
     @Id
     @Column(name = "board_id")
     private String boardId;
 
+    @Column(name = "board_name", nullable = false)
+    private String boardName;
+
     @CreatedDate
     @Column(name = "board_create_date")
     private LocalDateTime boardCreateDate;
 
     //relation with industry
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "industry_id")
     private Industry industry;
 
     //relation with companies
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "com_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "com_id")
     private Companies companies;
 
     //relation with admin
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "board_creator")
     private Member memberAdmin;
 
     //relation with user
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "board_requester", nullable = false)
     private Member memberUser;
 
+    @Column(name = "commu_board_request_approve")
+    private Boolean approve;
 }

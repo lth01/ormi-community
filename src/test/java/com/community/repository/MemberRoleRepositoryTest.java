@@ -23,6 +23,7 @@ class MemberRoleRepositoryTest {
     @Test
     public void save() {
         MemberRole authorities = new MemberRole(UUID.randomUUID().toString(), "ADMIN");
+
         log.info(authorities.getMemberRoleName());
 
         authoritiesRepository.save(authorities);
