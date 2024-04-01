@@ -41,6 +41,7 @@ class BoardRepositoryTest {
                 .companies(companies)
                 .memberAdmin(member)
                 .memberUser(member)
+                .approve(false)
                 .build();
 
         boardRepository.save(board);
