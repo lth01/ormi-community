@@ -36,7 +36,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (!path.startsWith("/like")) {
+        if (!path.startsWith("/")) {
             filterChain.doFilter(request,response);
             return;
         }

@@ -2,7 +2,6 @@ package com.community.config;
 
 import com.community.security.filter.APILoginFilter;
 import com.community.security.MemberDetailsService;
-import com.community.security.filter.HomePageTokenFilter;
 import com.community.security.filter.RefreshTokenFilter;
 import com.community.security.filter.TokenCheckFilter;
 import com.community.security.handler.APILoginSuccessHandler;
@@ -11,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,8 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.SecurityContextHolderFilter;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -62,9 +58,6 @@ public class SecurityConfig {
         // 설정 저장(필수)
         http.authenticationManager(authenticationManager);
 
-        //모든 회원은 접속 시 단한번 토큰 발급
-        http.addFilterBefore(new HomePageTokenFilter(jwtUtil), SecurityContextHolderFilter.class);
-
         // LoginFilter --> /generateToken(변경 -> /api/login)를 호출하면 Login Filter가 실행
         APILoginFilter apiLoginFilter = new APILoginFilter("/api/login");
         apiLoginFilter.setAuthenticationManager(authenticationManager);
@@ -72,17 +65,18 @@ public class SecurityConfig {
         // 필터 적용 위치 조정
         http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
-        //로그인 시 토큰 발급하지 않기 때문에, 따로 사용하지 않음.
-//         LoginSuccessHandler -> 로그인 성공 시
-//        APILoginSuccessHandler successHandler = new APILoginSuccessHandler(jwtUtil);
-//         LoginFilter --> 로그인 성공 시 successHandler로 이동
-//        apiLoginFilter.setAuthenticationSuccessHandler(successHandler);
 
-        // TokenCheckFilter --> "/like" 로 시작하는 모든 동작은 해당 필터 동작
+//         LoginSuccessHandler -> 로그인 성공 시
+        APILoginSuccessHandler successHandler = new APILoginSuccessHandler(jwtUtil);
+//         LoginFilter --> 로그인 성공 시 successHandler로 이동
+        apiLoginFilter.setAuthenticationSuccessHandler(successHandler);
+
+        // TokenCheckFilter --> "/" 로 시작하는 모든 동작은 해당 필터 동작
         http.addFilterBefore(tokenCheckFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         // refreshToken 호출
         http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil), TokenCheckFilter.class);
+
 
 
         /**
@@ -94,9 +88,10 @@ public class SecurityConfig {
         //CSRF 비활성화
             .csrf(csrf -> csrf.disable())
         //로그인 성공 이후 main 페이지 이동
-            .formLogin(login -> login.defaultSuccessUrl("/main"))
+            .formLogin(login -> login.defaultSuccessUrl("/"))
         //로그아웃 시 main 페이지 이동
-            .logout(logout -> logout.logoutSuccessUrl("/main"))
+            .logout(logout -> logout.logoutSuccessUrl("/")
+                    .deleteCookies("JSESSIONID"))
         //세션 비활성화
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         //test를 위한 모든 사용자 권한

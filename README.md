@@ -1,11 +1,11 @@
 # 🐴 Donkey Project 🐴
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=AmazonAWS&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
-출처 : https://simpleicons.org/?q=git
+
 
 > 취업과 회사에 대해 자유롭게 이야기 할 수 있는 커뮤니티 👉 [링크] [미완성!]
 
-![image](https://github.com/YoHanKi/subscribe-hodu-front-end-project/assets/139758405/5c0e1e9e-65d4-4f16-bc5a-598ecacd24f2)
+![image](https://github.com/lth01/ormi-community/assets/139758405/239dd0ee-e916-43e7-b13c-837c6c25ff25)
 
 ## 📖Description
 취업 준비에 필요한 자료를 구할 수 있는 곳이 흔치 않고, 결제를 해야 자료를 열람할 수 있는 곳이 많습니다.
