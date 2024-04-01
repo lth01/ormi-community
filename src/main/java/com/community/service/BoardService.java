@@ -26,7 +26,7 @@ public class BoardService {
     private CompaniesRepository companiesRepository;
     private MemberRepository memberRepository;
     @Transactional
-    public boolean saveBoard(CreateBoardRequest body) {
+    public Board saveBoard(CreateBoardRequest body) {
         //UUID 생성
         String createUUID = UUID.randomUUID().toString();
 
@@ -39,19 +39,14 @@ public class BoardService {
         //멤버가 실제 조회 되는지
         Optional<Member> member = memberRepository.findById(body.getRequesterId());
 
-        //동일한 게시판이 있는지 검사
-        if(boardRepository.existsByComId(body.getComId())){
-            throw new IllegalArgumentException("이미 등록된 게시판입니다.");
-        }
+        //회사 데이터는 실제로 없을 수 있음
 
+        //업종 코드가 존재하는지 검사
         if(industry.isEmpty()){
             throw new IllegalArgumentException("유효하지 않은 업종 ID입니다.");
         }
 
-        if(companies.isEmpty()){
-            throw new IllegalArgumentException("유효하지 않은 기업 ID입니다.");
-        }
-
+        //멤버 코드가 존재하는지 검사
         if(member.isEmpty()){
             throw new IllegalArgumentException("유효하지 않은 회원입니다.");
         }
@@ -59,12 +54,14 @@ public class BoardService {
         Board board = boardRepository.save(Board.builder()
                         .boardId(createUUID)
                         .industry(industry.get())
-                        .companies(companies.get())
+                        .companies(companies.orElse(null))
                         .memberUser(member.get())
                         //승인 대기
                         .approve(false)
                         .build()
         );
+
+        return board;
     }
 }
 

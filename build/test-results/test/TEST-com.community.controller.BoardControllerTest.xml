@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.community.controller.BoardControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-04-01T06:54:41" hostname="itaehuiui-Macmini.local" time="0.453">
+  <properties/>
+  <testcase name="회사 Id가 회사 DB에 없을경우 게시판 생성 요청을 보냈을때" classname="com.community.controller.BoardControllerTest" time="0.453"/>
+  <system-out><![CDATA[15:54:39.322 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.community.controller.BoardControllerTest]: BoardControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+15:54:39.372 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.community.CommunityApplication for test class com.community.controller.BoardControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.4)
+
+2024-04-01T15:54:39.526+09:00  INFO 16600 --- [community] [    Test worker] c.c.controller.BoardControllerTest       : Starting BoardControllerTest using Java 21.0.2 with PID 16600 (started by itaehui in /Users/itaehui/IdeaProjects/ormi-community)
+2024-04-01T15:54:39.527+09:00  INFO 16600 --- [community] [    Test worker] c.c.controller.BoardControllerTest       : No active profile set, falling back to 1 default profile: "default"
+2024-04-01T15:54:39.822+09:00  INFO 16600 --- [community] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-04-01T15:54:39.852+09:00  INFO 16600 --- [community] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 15 JPA repository interfaces.
+2024-04-01T15:54:40.039+09:00  INFO 16600 --- [community] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-04-01T15:54:40.148+09:00  INFO 16600 --- [community] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4703c998
+2024-04-01T15:54:40.149+09:00  INFO 16600 --- [community] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-04-01T15:54:40.171+09:00  INFO 16600 --- [community] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-04-01T15:54:40.193+09:00  INFO 16600 --- [community] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-04-01T15:54:40.206+09:00  INFO 16600 --- [community] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-04-01T15:54:40.289+09:00  INFO 16600 --- [community] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-04-01T15:54:40.762+09:00  INFO 16600 --- [community] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-04-01T15:54:40.763+09:00  INFO 16600 --- [community] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-04-01T15:54:40.948+09:00  INFO 16600 --- [community] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-04-01T15:54:41.199+09:00  WARN 16600 --- [community] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-04-01T15:54:41.209+09:00 TRACE 16600 --- [community] [    Test worker] eGlobalAuthenticationAutowiredConfigurer : Eagerly initializing {org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration$WebSecurityEnablerConfiguration=org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration$WebSecurityEnablerConfiguration@58f27c37}
+2024-04-01T15:54:41.347+09:00  INFO 16600 --- [community] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2c3c05ff, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2c62f56f, org.springframework.security.web.context.SecurityContextHolderFilter@6000ca67, org.springframework.security.web.header.HeaderWriterFilter@139a97e7, org.springframework.web.filter.CorsFilter@65f270e7, org.springframework.security.web.authentication.logout.LogoutFilter@196f9b75, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@56a7f57f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5d8edf2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@417f7d7f, org.springframework.security.web.access.ExceptionTranslationFilter@1635e239, org.springframework.security.web.access.intercept.AuthorizationFilter@1a034bbc]
+2024-04-01T15:54:41.347+09:00  INFO 16600 --- [community] [    Test worker] com.community.config.SecurityConfig      : --------------------------web configure----------------------------
+2024-04-01T15:54:41.577+09:00  WARN 16600 --- [community] [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/v3/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-01T15:54:41.577+09:00  INFO 16600 --- [community] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/v3/**']
+2024-04-01T15:54:41.577+09:00  WARN 16600 --- [community] [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/static/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-01T15:54:41.577+09:00  INFO 16600 --- [community] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/static/**']
+2024-04-01T15:54:41.577+09:00  WARN 16600 --- [community] [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/swagger-ui/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-01T15:54:41.577+09:00  INFO 16600 --- [community] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/swagger-ui/**']
+2024-04-01T15:54:41.577+09:00  WARN 16600 --- [community] [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/v3/api-docs/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-01T15:54:41.577+09:00  INFO 16600 --- [community] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/v3/api-docs/**']
+2024-04-01T15:54:41.577+09:00  WARN 16600 --- [community] [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/swagger-ui.html']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-01T15:54:41.577+09:00  INFO 16600 --- [community] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/swagger-ui.html']
+2024-04-01T15:54:41.577+09:00  WARN 16600 --- [community] [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@3d707885. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-01T15:54:41.577+09:00  INFO 16600 --- [community] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@3d707885
+2024-04-01T15:54:41.599+09:00  INFO 16600 --- [community] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-04-01T15:54:41.599+09:00  INFO 16600 --- [community] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-04-01T15:54:41.600+09:00  INFO 16600 --- [community] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2024-04-01T15:54:41.610+09:00  INFO 16600 --- [community] [    Test worker] c.c.controller.BoardControllerTest       : Started BoardControllerTest in 2.184 seconds (process running for 2.652)
+2024-04-01T15:54:41.905+09:00  INFO 16600 --- [community] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-04-01T15:54:41.905+09:00  INFO 16600 --- [community] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-04-01T15:54:41.906+09:00  INFO 16600 --- [community] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+Hibernate: 
+    select
+        i1_0.industry_id,
+        i1_0.industry_description,
+        i1_0.industry_name 
+    from
+        industry i1_0
+Hibernate: 
+    select
+        m1_0.member_id,
+        m1_0.create_date,
+        m1_0.email,
+        m1_0.find_password_answer,
+        m1_0.gender,
+        m1_0.authority_id,
+        m1_0.mod_date,
+        m1_0.name,
+        m1_0.nickname,
+        m1_0.password,
+        m1_0.password_question_id,
+        m1_0.phone,
+        m1_0.withdrawal 
+    from
+        member m1_0
+Hibernate: 
+    select
+        mr1_0.authority_id,
+        mr1_0.authority_name 
+    from
+        member_role mr1_0 
+    where
+        mr1_0.authority_id=?
+Hibernate: 
+    select
+        pq1_0.password_question_id,
+        pq1_0.question 
+    from
+        password_question pq1_0 
+    where
+        pq1_0.password_question_id=?
+Hibernate: 
+    select
+        i1_0.industry_id,
+        i1_0.industry_description,
+        i1_0.industry_name 
+    from
+        industry i1_0 
+    where
+        i1_0.industry_id=?
+Hibernate: 
+    select
+        c1_0.com_id,
+        c1_0.com_name,
+        c1_0.reg_num 
+    from
+        companies c1_0 
+    where
+        c1_0.com_id=?
+Hibernate: 
+    select
+        m1_0.member_id,
+        m1_0.create_date,
+        m1_0.email,
+        m1_0.find_password_answer,
+        m1_0.gender,
+        m1_0.authority_id,
+        mr1_0.authority_id,
+        mr1_0.authority_name,
+        m1_0.mod_date,
+        m1_0.name,
+        m1_0.nickname,
+        m1_0.password,
+        m1_0.password_question_id,
+        pq1_0.password_question_id,
+        pq1_0.question,
+        m1_0.phone,
+        m1_0.withdrawal 
+    from
+        member m1_0 
+    join
+        member_role mr1_0 
+            on mr1_0.authority_id=m1_0.authority_id 
+    join
+        password_question pq1_0 
+            on pq1_0.password_question_id=m1_0.password_question_id 
+    where
+        m1_0.member_id=?
+Hibernate: 
+    select
+        b1_0.board_id,
+        b1_0.commu_board_request_approve,
+        b1_0.board_create_date,
+        c1_0.com_id,
+        c1_0.com_name,
+        c1_0.reg_num,
+        i1_0.industry_id,
+        i1_0.industry_description,
+        i1_0.industry_name,
+        ma1_0.member_id,
+        ma1_0.create_date,
+        ma1_0.email,
+        ma1_0.find_password_answer,
+        ma1_0.gender,
+        ma1_0.authority_id,
+        mr1_0.authority_id,
+        mr1_0.authority_name,
+        ma1_0.mod_date,
+        ma1_0.name,
+        ma1_0.nickname,
+        ma1_0.password,
+        ma1_0.password_question_id,
+        pq1_0.password_question_id,
+        pq1_0.question,
+        ma1_0.phone,
+        ma1_0.withdrawal,
+        b1_0.board_requester,
+        mu1_0.member_id,
+        mu1_0.create_date,
+        mu1_0.email,
+        mu1_0.find_password_answer,
+        mu1_0.gender,
+        mu1_0.authority_id,
+        mr2_0.authority_id,
+        mr2_0.authority_name,
+        mu1_0.mod_date,
+        mu1_0.name,
+        mu1_0.nickname,
+        mu1_0.password,
+        mu1_0.password_question_id,
+        pq2_0.password_question_id,
+        pq2_0.question,
+        mu1_0.phone,
+        mu1_0.withdrawal 
+    from
+        board b1_0 
+    left join
+        companies c1_0 
+            on c1_0.com_id=b1_0.com_id 
+    left join
+        industry i1_0 
+            on i1_0.industry_id=b1_0.industry_id 
+    left join
+        member ma1_0 
+            on ma1_0.member_id=b1_0.board_creator 
+    left join
+        member_role mr1_0 
+            on mr1_0.authority_id=ma1_0.authority_id 
+    left join
+        password_question pq1_0 
+            on pq1_0.password_question_id=ma1_0.password_question_id 
+    join
+        member mu1_0 
+            on mu1_0.member_id=b1_0.board_requester 
+    left join
+        member_role mr2_0 
+            on mr2_0.authority_id=mu1_0.authority_id 
+    left join
+        password_question pq2_0 
+            on pq2_0.password_question_id=mu1_0.password_question_id 
+    where
+        b1_0.board_id=?
+Hibernate: 
+    insert 
+    into
+        board
+        (commu_board_request_approve, board_create_date, com_id, industry_id, board_creator, board_requester, board_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/Users/itaehui/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.12/be4984cb6fd1ef1d11f218a648889dfda44b8a15/byte-buddy-agent-1.14.12.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(value = AuditingEntityListener.class)
 public class Board {
 
     @Id
@@ -31,7 +31,7 @@ public class Board {
 
     //relation with companies
     @ManyToOne
-    @JoinColumn(name = "com_id", nullable = false)
+    @JoinColumn(name = "com_id")
     private Companies companies;
 
     //relation with admin
