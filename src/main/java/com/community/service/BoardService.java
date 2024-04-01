@@ -1,6 +1,7 @@
 package com.community.service;
 
 import com.community.domain.dto.CreateBoardRequest;
+import com.community.domain.dto.UpdateBoardApproveRequest;
 import com.community.domain.entity.Board;
 import com.community.domain.entity.Companies;
 import com.community.domain.entity.Industry;
@@ -76,6 +77,24 @@ public class BoardService {
         );
 
         return board;
+    }
+
+    /**
+     * 게시판 승인 여부 변경
+     * 만약 사용자가 Admin이 아닐 경우 에러 발생
+     * @param request
+     * @return
+     */
+    public Board updateApprove(UpdateBoardApproveRequest request) {
+        Board board = boardRepository.findById(request.getBoardId()).orElse(null);
+
+        if(board == null){
+            throw new IllegalArgumentException("유효하지 않은 게시판 Id입니다.");
+        }
+
+        board.setApprove(request.getApproval());
+
+        return boardRepository.save(board);
     }
 }
 

@@ -1,5 +1,6 @@
 package com.community.controller;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -18,10 +19,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.community.domain.dto.CreateBoardRequest;
+
+import com.community.repository.BoardRepository;
 import com.community.repository.CompaniesRepository;
 import com.community.repository.IndustryRepository;
 import com.community.repository.MemberRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -164,7 +166,5 @@ public class BoardControllerTest {
 		resultActions1.andExpect(status().isCreated());
 		resultActions2.andExpect(status().is4xxClientError());
 	}
-
-
 }
 
