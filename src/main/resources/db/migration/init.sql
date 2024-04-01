@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS member_interests (
 -- 기업 테이블
 CREATE TABLE IF NOT EXISTS companies (
     com_id	                VARCHAR(36)	PRIMARY KEY,
-    reg_num	                INT UNIQUE NOT NULL,
+    reg_num	                VARCHAR(14) UNIQUE NOT NULL,
     com_name	            VARCHAR(20) NOT NULL
 );
 

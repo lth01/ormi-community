@@ -48,6 +48,6 @@ class CommentRepositoryTest {
 
         commentRepository.save(comment);
 
-        Assertions.assertEquals(comment.getCommentId(), commentRepository.findAll().get(0).getCommentId());
+        Assertions.assertEquals(comment.getCommentId(), commentRepository.findById(comment.getCommentId()).orElseThrow().getCommentId());
     }
 }

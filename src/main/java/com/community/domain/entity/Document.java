@@ -39,42 +39,42 @@ public class Document {
     private Boolean docVisible;
 
     //relation with doc_creator(Member)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "doc_creator", nullable = false)
     private Member docCreator;
 
     //relation with doc_modifier(Member)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "doc_modifier")
     private Member docModifier;
 
     //relation with board
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
     //relation with industry
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "industry_id", nullable = false)
     private Industry industry;
 
     //relation with companies
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "com_id", nullable = false)
     private Companies companies;
 
     //relation with like_it
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "doc_like_id", nullable = false)
     private LikeIt likeIt;
 
     //relation with viewership
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "doc_view_id", nullable = false)
     private Viewership viewership;
 
     //relation with report
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "report_id")
     private Report report;
 

@@ -71,7 +71,7 @@ public class SecurityConfig {
 //         LoginFilter --> 로그인 성공 시 successHandler로 이동
         apiLoginFilter.setAuthenticationSuccessHandler(successHandler);
 
-        // TokenCheckFilter --> "/" 로 시작하는 모든 동작은 해당 필터 동작
+        // TokenCheckFilter --> "/document" 로 시작하는 모든 동작은 해당 필터 동작
         http.addFilterBefore(tokenCheckFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         // refreshToken 호출
