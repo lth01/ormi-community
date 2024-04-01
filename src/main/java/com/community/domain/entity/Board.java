@@ -20,6 +20,9 @@ public class Board {
     @Column(name = "board_id")
     private String boardId;
 
+    @Column(name = "board_name", nullable = false)
+    private String boardName;
+
     @CreatedDate
     @Column(name = "board_create_date")
     private LocalDateTime boardCreateDate;

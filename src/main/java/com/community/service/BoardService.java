@@ -39,7 +39,20 @@ public class BoardService {
         //멤버가 실제 조회 되는지
         Optional<Member> member = memberRepository.findById(body.getRequesterId());
 
+        //회사명은 빈값이면 안됨
+        if(body.getBoardName().equals("")){
+            throw new IllegalArgumentException("게시판 명은 반드시 입력해야합니다.");
+        }
+
+        //회사명은 겹치면 안됨
+        if(boardRepository.existsByBoardName(body.getBoardName())){
+            throw new IllegalArgumentException("동일한 이름의 게시판이 존재합니다.");
+        }
+
         //회사 데이터는 실제로 없을 수 있음
+        if(companies.isPresent() && boardRepository.existsByCompanies(companies.get())){
+            throw new IllegalArgumentException("동일한 기업을 참조하는 게시판이 존재합니다.");
+        }
 
         //업종 코드가 존재하는지 검사
         if(industry.isEmpty()){
@@ -53,6 +66,7 @@ public class BoardService {
 
         Board board = boardRepository.save(Board.builder()
                         .boardId(createUUID)
+                        .boardName(body.getBoardName())
                         .industry(industry.get())
                         .companies(companies.orElse(null))
                         .memberUser(member.get())
