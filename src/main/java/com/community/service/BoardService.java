@@ -1,5 +1,6 @@
 package com.community.service;
 
+import com.community.domain.dto.BoardResponse;
 import com.community.domain.dto.CreateBoardRequest;
 import com.community.domain.dto.UpdateBoardApproveRequest;
 import com.community.domain.entity.Board;
@@ -10,11 +11,14 @@ import com.community.repository.BoardRepository;
 import com.community.repository.CompaniesRepository;
 import com.community.repository.IndustryRepository;
 import com.community.repository.MemberRepository;
+
+import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,6 +30,8 @@ public class BoardService {
     private IndustryRepository industryRepository;
     private CompaniesRepository companiesRepository;
     private MemberRepository memberRepository;
+    private EntityManager entityManager;
+
     @Transactional
     public Board saveBoard(CreateBoardRequest body) {
         //UUID 생성
@@ -95,6 +101,13 @@ public class BoardService {
         board.setApprove(request.getApproval());
 
         return boardRepository.save(board);
+    }
+
+    public List<BoardResponse> showAllBoardExceptNotApprove() {
+        List<Board> boardList = entityManager.createQuery("select b from Board b where approve = true", Board.class).getResultList();
+
+        return boardList.stream().map(board -> {return new BoardResponse(board.getBoardId(), board.getBoardName(), board.getCompanies() == null ? "" : board.getCompanies().getComName());})
+            .toList();
     }
 }
 

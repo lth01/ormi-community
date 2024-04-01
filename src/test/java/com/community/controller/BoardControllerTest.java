@@ -2,6 +2,7 @@ package com.community.controller;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.UUID;
@@ -165,6 +166,19 @@ public class BoardControllerTest {
 		//resultActions 2는 오류 발생 400
 		resultActions1.andExpect(status().isCreated());
 		resultActions2.andExpect(status().is4xxClientError());
+	}
+
+	@Test
+	@DisplayName("현재 게시판 목록을 조회한다. 허용여부가 false라면 조회하지 않는다.")
+	void searchBoardExceptNotApprove() throws Exception{
+		//given
+
+		//when
+		ResultActions resultActions1 = mockMvc.perform(get("/board"));
+
+		//then
+		resultActions1.andExpect(status().isOk())
+			.andDo(print());
 	}
 }
 
