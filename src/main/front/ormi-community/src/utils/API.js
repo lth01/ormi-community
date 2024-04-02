@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { GenerateLiElUUID } from './keygenerator';
+const URL = "localhost:8080"
 
 /**
  * @brief 게시판 목록을 조회하는 API입니다.
@@ -35,4 +38,17 @@ export function fetchEditableUserInfo(){
         career2: '조선',
         career3: '의료'
     };
+}
+
+export function fetchNotApproveBoardList(){
+    return [
+        {boardId: GenerateLiElUUID(), boardName: "이스트소프트1", career:"IT", comName: ""},
+        {boardId: GenerateLiElUUID(), boardName: "이스트소프트2", career:"IT", comName: ""},
+        {boardId: GenerateLiElUUID(), boardName: "이스트소프트3", career:"IT", comName: ""}
+     ];
+}
+
+export function acceptBoardPublicing(boardId, approve = true){
+    //Accept API 호출
+    console.log('API 호출완료!');
 }

@@ -14,6 +14,8 @@ import EditInformation from './routes/User/EditInformation';
 import Login from './routes/Login';
 import SignupComplete from './routes/Signup/SignupComplete';
 import FindPassword from './routes/Password/FindPassword';
+import Admin from './routes/admin/Admin';
+import AdminBoard from './routes/Board/AdminBoard';
 
 const router = createBrowserRouter([
       {
@@ -52,6 +54,16 @@ const router = createBrowserRouter([
       {
         path: "/password/edit",
         element: <EditPassword></EditPassword>
+      },
+      {
+        path: "/admin",
+        element: <Admin></Admin>,
+        children : [
+          {
+            path: "/admin/board",
+            element: <AdminBoard></AdminBoard>
+          }
+        ]
       }
 ]);
 
