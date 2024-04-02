@@ -10,8 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -88,26 +90,23 @@ public class SecurityConfig {
         //CSRF 비활성화
             .csrf(csrf -> csrf.disable())
         //로그인 성공 이후 main 페이지 이동
-            .formLogin(login -> login.defaultSuccessUrl("/"))
+//            .formLogin(login -> login.defaultSuccessUrl("/"))
         //로그아웃 시 main 페이지 이동
             .logout(logout -> logout.logoutSuccessUrl("/")
                     .deleteCookies("JSESSIONID"))
         //세션 비활성화
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         //test를 위한 모든 사용자 권한
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+//            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         //관리자 페이지와 게시글 작성에 필요한 인증 요구
-//        http.authorizeHttpRequests(auth -> auth
-//                .requestMatchers("/admin/**").hasAuthority("ADMIN")                       //admin 페이지는 ADMIN 권한만 접근가능
-//                .requestMatchers("/document").hasAnyAuthority("ADMIN", "USER")  //document 페이지는(글 작성 페이지?) 인증한 사람만(회원)
-//                .requestMatchers(HttpMethod.GET,"/document").authenticated()              //GET 예시
-//                .anyRequest().permitAll());                                                 //이외에 모든 접근은 ROLE_ANONYMOUS 도 가능
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/admin/**").hasAuthority("ADMIN")                       //admin 페이지는 ADMIN 권한만 접근가능
+                .requestMatchers("/document").hasAnyAuthority("ADMIN", "USER")  //document 페이지는(글 작성 페이지?) 인증한 사람만(회원)
+                .requestMatchers(HttpMethod.GET,"/document").authenticated()              //GET 예시
+                .anyRequest().permitAll());                                                 //이외에 모든 접근은 ROLE_ANONYMOUS 도 가능
 
         // 익명 사용자에게 부여될 권한 // 익명 사용자의 principal 이름 정의 (기본값은 'anonymousUser')
         http.anonymous( any -> any.authorities("ANONYMOUS").principal("ANONYMOUS_USER"));
-
-
-
 
         //cors 설정
         http.cors(httpSecurityCorsConfigurer -> {

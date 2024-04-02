@@ -98,8 +98,8 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentCommonResponse deleteComment(String email, String comment_id, DeleteCommentRequest request) {
-        Comment comment = commentRepository.findById(comment_id).orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
+    public CommentCommonResponse deleteComment(String email, String commentId, DeleteCommentRequest request) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
         Member member = memberRepository.findByEmail(email).orElseThrow();
 
         if (email != null && comment.getCommentCreator().getEmail() != null) {

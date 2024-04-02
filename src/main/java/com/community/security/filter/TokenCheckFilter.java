@@ -47,6 +47,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
         try {
             //토큰 검사 이후 다음 필터로 전송
             validateAccessToken(request);
+            log.info("Token check filter.....................");
             filterChain.doFilter(request,response);
         } catch (AccessTokenException accessTokenException) {
             accessTokenException.sendResponseError(response);
@@ -66,7 +67,6 @@ public class TokenCheckFilter extends OncePerRequestFilter {
         if (headerStr == null || headerStr.length() < 8) {
             throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.UNACCEPT);
         }
-
         // Bearer 검사
         String tokenType = headerStr.substring(0, 6);
         String tokenStr = headerStr.substring(7);

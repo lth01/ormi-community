@@ -35,7 +35,7 @@ public class Document {
     @Column(name = "doc_mod_date")
     private LocalDateTime docModDate;
 
-    @Column(name = "doc_visible", nullable = false)
+    @Column(name = "doc_visible")
     private Boolean docVisible;
 
     //relation with doc_creator(Member)
@@ -60,7 +60,7 @@ public class Document {
 
     //relation with companies
     @ManyToOne
-    @JoinColumn(name = "com_id", nullable = false)
+    @JoinColumn(name = "com_id")
     private Companies companies;
 
     //relation with like_it

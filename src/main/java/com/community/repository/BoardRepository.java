@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, String> {
 	boolean existsByBoardName(String boardName);
-
 	boolean existsByCompanies(Companies companies);
 }

@@ -56,7 +56,7 @@ public class AdminControllerTest {
 		 * case2: ? -> false
 		 */
 		//give
-		String boardId = boardRepository.findAll().getFirst().getBoardId();
+		String boardId = boardRepository.findAll().get(0).getBoardId();
 		UpdateBoardApproveRequest request1 = new UpdateBoardApproveRequest(boardId, true);
 		UpdateBoardApproveRequest request2 = new UpdateBoardApproveRequest(boardId, false);
 

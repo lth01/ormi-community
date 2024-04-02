@@ -58,6 +58,7 @@ public class CommentController {
     @DeleteMapping("/comment/{comment_id}")
     public ResponseEntity<CommentCommonResponse> deleteComment(@PathVariable("comment_id") String commentId, @RequestBody DeleteCommentRequest request, Authentication authentication) {
         String email = authentication.getName();
+
         CommentCommonResponse response = commentService.deleteComment(email, commentId, request);
         return ResponseEntity.ok().body(response);
     }

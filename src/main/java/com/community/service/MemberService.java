@@ -2,6 +2,7 @@ package com.community.service;
 
 import com.community.domain.dto.AddMemberRequest;
 import com.community.domain.dto.ModifyInfoRequest;
+import com.community.domain.dto.UserInfoResponse;
 import com.community.domain.dto.WithdrawalRequest;
 import com.community.domain.entity.Industry;
 import com.community.domain.entity.Member;
@@ -135,5 +136,11 @@ public class MemberService {
             return true;
         }
         return false;
+    }
+
+    public UserInfoResponse userInfo(String email) {
+        if (email.isEmpty()) throw new RuntimeException("비회원 입니다.");
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("존재하지 않는 사용자 입니다."));
+        return new UserInfoResponse(member);
     }
 }
