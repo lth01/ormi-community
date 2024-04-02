@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.community.domain.dto.AddIndustryRequest;
+import com.community.domain.dto.AddPasswordQuestionRequest;
 import com.community.repository.IndustryRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.aspectj.lang.annotation.Before;
@@ -25,6 +26,8 @@ import com.community.repository.BoardRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+
+import javax.xml.transform.Result;
 
 @SpringBootTest
 @Slf4j
@@ -128,5 +131,43 @@ public class AdminControllerTest {
 				.andExpect(jsonPath("message").value("업종 이름은 20자 이상 입력될 수 없습니다."));
 		resultActions3.andExpect(status().is4xxClientError())
 				.andExpect(jsonPath("message").value("업종 코멘트는 255자를 초과할 수 없습니다."));
+	}
+
+	@Test
+	@DisplayName("비밀번호 찾기 질문 추가 동일한 질문이 있다면, 오류 반환")
+	void savePasswordQuestion() throws  Exception{
+		//given
+		String randomQuestion = RandomStringUtils.randomAlphanumeric(10);
+		String exceedLengthQuestion = RandomStringUtils.randomAlphanumeric(201);
+
+		AddPasswordQuestionRequest request1 = new AddPasswordQuestionRequest(randomQuestion);
+		AddPasswordQuestionRequest request2 = new AddPasswordQuestionRequest(exceedLengthQuestion);
+
+		String requestStr1 = objectMapper.writeValueAsString(request1);
+		String requestStr2 = objectMapper.writeValueAsString(request2);
+
+		//1. 중복되거나
+		//2. 길이가 200이 넘거나
+
+		//when
+		ResultActions resultActions1 = mockMvc.perform(post("/admin/passwordquestion")
+				.content(requestStr1)
+				.contentType(MediaType.APPLICATION_JSON));
+		ResultActions resultActions2 = mockMvc.perform(post("/admin/passwordquestion")
+				.content(requestStr1)
+				.contentType(MediaType.APPLICATION_JSON));
+		ResultActions resultActions3 = mockMvc.perform(post("/admin/passwordquestion")
+				.content(requestStr2)
+				.contentType(MediaType.APPLICATION_JSON));
+
+		//then
+		resultActions1.andExpect(status().isCreated())
+				.andExpect(jsonPath("message").value("정상적으로 추가되었습니다."));
+
+		resultActions2.andExpect(status().is4xxClientError())
+				.andExpect(jsonPath("message").value("동일한 질문이 이미 존재합니다."));
+
+		resultActions3.andExpect(status().is4xxClientError())
+				.andExpect(jsonPath("message").value("질문의 길이가 너무 깁니다."));
 	}
 }
