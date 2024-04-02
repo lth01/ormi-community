@@ -1,15 +1,13 @@
 package com.community.controller;
 
-import com.community.domain.dto.AddMemberRequest;
-import com.community.domain.dto.MemberResponse;
-import com.community.domain.dto.ModifyInfoRequest;
-import com.community.domain.dto.WithdrawalRequest;
+import com.community.domain.dto.*;
 import com.community.domain.entity.Member;
 import com.community.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -53,5 +51,12 @@ public class MemberController {
             return ResponseEntity.ok().body("회원 탈퇴 처리 되었습니다.");
         }
         else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+    }
+
+    //유저 정보 조회
+    @GetMapping("/userinfo")
+    public ResponseEntity<UserInfoResponse> userInfo(Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok().body(memberService.userInfo(email));
     }
 }

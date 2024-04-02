@@ -19,7 +19,7 @@ public class JWTUtil {
 
 
     //문자열 생성 기능
-    public String generateToken(Map<String, Object> valueMap, int days){
+    public String generateToken(Map<String, Object> valueMap, int hours){
 
 
         log.info("generateToken..." + key);
@@ -33,7 +33,7 @@ public class JWTUtil {
         Map<String, Object> payloads = new HashMap<>();
         payloads.putAll(valueMap);
 
-        int time = (60) * days;
+        int time = (60) * hours;
 
         String jwtStr = Jwts.builder()
                 .setHeader(headers)

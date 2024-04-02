@@ -65,9 +65,9 @@ public class BoardControllerTest {
 	void create() throws Exception {
 		//given
 		String boardname = "이스트소프트";
-		String industryId = industryRepository.findAll().getFirst().getIndustryId();
-		String comId = companiesRepository.findAll().getFirst().getComId();
-		String requesterId = memberRepository.findAll().getFirst().getMemberId();
+		String industryId = industryRepository.findAll().get(0).getIndustryId();
+		String comId = companiesRepository.findAll().get(0).getComId();
+		String requesterId = memberRepository.findAll().get(0).getMemberId();
 		CreateBoardRequest request = new CreateBoardRequest(boardname,industryId, comId, requesterId);
 		//to json string body
 		String jsonStr = objectMapper.writeValueAsString(request);
@@ -87,9 +87,9 @@ public class BoardControllerTest {
 	void createExceptComId() throws Exception{
 		//given
 		String boardName = "이스트소프트2";
-		String industryId = industryRepository.findAll().getFirst().getIndustryId();
+		String industryId = industryRepository.findAll().get(0).getIndustryId();
 		String comId = UUID.randomUUID().toString();
-		String requesterId = memberRepository.findAll().getFirst().getMemberId();
+		String requesterId = memberRepository.findAll().get(0).getMemberId();
 		CreateBoardRequest request = new CreateBoardRequest(boardName,industryId, comId, requesterId);
 		//to json string body
 		String jsonStr = objectMapper.writeValueAsString(request);
@@ -109,10 +109,10 @@ public class BoardControllerTest {
 	void createDuplicateBoardName() throws Exception{
 		//given
 		String dupBoardName = UUID.randomUUID().toString().substring(0, 20);
-		String industryId = industryRepository.findAll().getFirst().getIndustryId();
+		String industryId = industryRepository.findAll().get(0).getIndustryId();
 		String comId1 = UUID.randomUUID().toString();
 		String comId2 = UUID.randomUUID().toString();
-		String requesterId = memberRepository.findAll().getFirst().getMemberId();
+		String requesterId = memberRepository.findAll().get(0).getMemberId();
 
 		CreateBoardRequest request1 = new CreateBoardRequest(dupBoardName, industryId, comId1, requesterId);
 		CreateBoardRequest request2 = new CreateBoardRequest(dupBoardName, industryId, comId2, requesterId);
@@ -142,9 +142,9 @@ public class BoardControllerTest {
 		//given
 		String boardName1 = "이스트소프트3";
 		String boardName2 = "이스트소프트4";
-		String industryId = industryRepository.findAll().getFirst().getIndustryId();
-		String comId = companiesRepository.findAll().getFirst().getComId();
-		String requesterId = memberRepository.findAll().getFirst().getMemberId();
+		String industryId = industryRepository.findAll().get(0).getIndustryId();
+		String comId = companiesRepository.findAll().get(0).getComId();
+		String requesterId = memberRepository.findAll().get(0).getMemberId();
 		CreateBoardRequest request1 = new CreateBoardRequest(boardName1,industryId, comId, requesterId);
 		CreateBoardRequest request2 = new CreateBoardRequest(boardName2,industryId, comId, requesterId);
 

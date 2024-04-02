@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS Document (
     doc_id	                VARCHAR(36)	PRIMARY KEY,
     board_id	            VARCHAR(36) NOT NULL, --"commu_" 삭제
     industry_id	            VARCHAR(36) NOT NULL,
-    com_id	                VARCHAR(36) NOT NULL,
+    com_id	                VARCHAR(36), -- NOT NULl 삭제
     doc_title	            VARCHAR(100) NOT NULL, -- name -> title 변경
     doc_content	            TEXT NOT NULL,
 --    doc_writer	            VARCHAR(36)	NOT NULL, -- 삭제

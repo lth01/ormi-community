@@ -1,6 +1,7 @@
 package com.community.domain.entity;
 
 import com.community.repository.MemberRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -71,7 +72,7 @@ public class Member implements UserDetails  {
     private PasswordQuestion passwordQuestion;
 
     //relation with MemberRole
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "authority_id", nullable = false)
     private MemberRole memberRole;
 
@@ -88,7 +89,8 @@ public class Member implements UserDetails  {
 
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    @JsonIgnore
+    public Set<GrantedAuthority> getAuthorities() {
         return Set.of(memberRole);
     }
     @Override

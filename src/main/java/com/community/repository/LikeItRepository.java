@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LikeItRepository extends JpaRepository<LikeIt, String> {
-
     @Modifying
     @Query("UPDATE LikeIt SET likeCount = :count WHERE likeId = :likeId")
     void updateLikeCount(Long count, String likeId);
