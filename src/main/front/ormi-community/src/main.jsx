@@ -15,7 +15,8 @@ import Login from './routes/Login';
 import SignupComplete from './routes/Signup/SignupComplete';
 import FindPassword from './routes/Password/FindPassword';
 import Admin from './routes/admin/Admin';
-import AdminBoard from './routes/Board/AdminBoard';
+import AdminBoard from './routes/admin/AdminBoard';
+import AdminIndustry from './routes/admin/AdminIndustry';
 
 const router = createBrowserRouter([
       {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
           {
             path: "/admin/board",
             element: <AdminBoard></AdminBoard>
+          },
+          {
+            path: "/admin/industry",
+            element: <AdminIndustry></AdminIndustry>
           }
         ]
       }

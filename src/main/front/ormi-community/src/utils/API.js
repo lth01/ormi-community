@@ -40,6 +40,10 @@ export function fetchEditableUserInfo(){
     };
 }
 
+/**
+ * @brief 아직 게시판 생성 허가가 되지 않은 게시판 목록을 불러온다.
+ * @returns 
+ */
 export function fetchNotApproveBoardList(){
     return [
         {boardId: GenerateLiElUUID(), boardName: "이스트소프트1", career:"IT", comName: ""},
@@ -48,7 +52,20 @@ export function fetchNotApproveBoardList(){
      ];
 }
 
+export function fetchIndustryList(){
+    return [
+        {industryId: GenerateLiElUUID(), industryName: 'IT', industyComment: ""},
+        {industryId: GenerateLiElUUID(), industryName: '조선', industyComment: ""},
+        {industryId: GenerateLiElUUID(), industryName: '철강', industyComment: ""},
+    ];
+}
+
 export function acceptBoardPublicing(boardId, approve = true){
     //Accept API 호출
     console.log('API 호출완료!');
+}
+
+export function appendIndustry(industryName, industryComment){
+    // 업종 추가 API
+    console.log("API 호출 완료");
 }

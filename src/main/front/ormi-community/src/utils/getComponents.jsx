@@ -10,6 +10,8 @@ import Logout from "../components/Icon/Logout";
 import FileEditIcon from "@/components/Icon/FileEditIcon";
 import DeleteIcon from "@/components/Icon/DeleteIcon";
 import PlusIcon from "@/components/Icon/PlusIcon";
+import CompanyIcon from "@/components/Icon/Company";
+import IndustryIcon from "@/components/Icon/Company";
 
 export function getIcons(svgStr){
     switch(svgStr){
@@ -35,6 +37,8 @@ export function getIcons(svgStr){
         return DeleteIcon;
       case "Plus":
         return PlusIcon;
+      case "Industry":
+        return IndustryIcon;
       default:
         return null;
     }
