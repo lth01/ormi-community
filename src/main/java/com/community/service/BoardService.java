@@ -103,8 +103,8 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
-    public List<BoardResponse> showAllBoardExceptNotApprove() {
-        List<Board> boardList = entityManager.createQuery("select b from Board b where approve = true", Board.class).getResultList();
+    public List<BoardResponse> showAllBoardByCondition(Boolean approveCondition) {
+        List<Board> boardList = entityManager.createQuery("select b from Board b where approve=" + approveCondition.toString(), Board.class).getResultList();
 
         return boardList.stream().map(board -> {return new BoardResponse(board.getBoardId(), board.getBoardName(), board.getCompanies() == null ? "" : board.getCompanies().getComName());})
             .toList();

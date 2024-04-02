@@ -169,15 +169,19 @@ public class BoardControllerTest {
 	}
 
 	@Test
-	@DisplayName("현재 게시판 목록을 조회한다. 허용여부가 false라면 조회하지 않는다.")
+	@DisplayName("현재 게시판 목록을 조회한다. 허용여부를 path parameter로 전달한다.")
 	void searchBoardExceptNotApprove() throws Exception{
 		//given
 
 		//when
-		ResultActions resultActions1 = mockMvc.perform(get("/board"));
+		ResultActions resultActions1 = mockMvc.perform(get("/board/false"));
+		ResultActions resultActions2 = mockMvc.perform(get("/board/true"));
 
 		//then
 		resultActions1.andExpect(status().isOk())
+			.andDo(print());
+
+		resultActions2.andExpect(status().isOk())
 			.andDo(print());
 	}
 }
