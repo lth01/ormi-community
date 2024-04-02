@@ -1,6 +1,3 @@
-import { acceptBoardPublicing } from "@/utils/API";
-import { Button } from "../ui/button";
-
 export default function IndustryArticle({industryId ,industryName, industryComment}){
     return (
         <li className="p-4 flex flex-col border rounded-sm">
