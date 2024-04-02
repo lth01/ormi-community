@@ -5,12 +5,12 @@ import java.util.List;
 import com.community.domain.dto.BoardResponse;
 import com.community.domain.dto.CreateBoardRequest;
 import com.community.domain.dto.ErrorResult;
-import com.community.domain.entity.Board;
 import com.community.service.BoardService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,9 +30,9 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    @GetMapping("/board")
-    public ResponseEntity<List<BoardResponse>> searchBoard(){
-        List<BoardResponse> resultList = boardService.showAllBoardExceptNotApprove();
+    @GetMapping("/board/{isApprove}")
+    public ResponseEntity<List<BoardResponse>> searchBoard(@PathVariable Boolean isApprove){
+        List<BoardResponse> resultList = boardService.showAllBoardByCondition(isApprove);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(resultList);
