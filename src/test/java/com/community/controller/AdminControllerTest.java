@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.community.domain.dto.AddIndustryRequest;
+import com.community.repository.IndustryRepository;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,6 +43,9 @@ public class AdminControllerTest {
 	// Dependencies
 	@Autowired
 	private BoardRepository boardRepository;
+
+	@Autowired
+	private IndustryRepository industryRepository;
 
 	@BeforeEach
 	public void mockMvcSetUp(){
@@ -86,5 +92,41 @@ public class AdminControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("code").value("성공"));
 		assertThat(boardRepository.findById(boardId).get().getApprove()).isSameAs(false);
+	}
+
+	@Test
+	@DisplayName("업종 추가 테스트 이름이 중복하거나 업종명 혹은 설명의 크기가 제한을 넘을 경우 오류")
+	void saveIndustry() throws Exception{
+		//given1
+		String dupIndustryName = industryRepository.findAll().getFirst().getIndustryName();
+		String exccedLengthName = "123456789012345678901";
+		String exccedLengthComment = RandomStringUtils.randomAlphanumeric(260);
+
+		AddIndustryRequest request1 = new AddIndustryRequest(dupIndustryName);
+		AddIndustryRequest request2 = new AddIndustryRequest(exccedLengthName);
+		AddIndustryRequest request3 = new AddIndustryRequest("123029", exccedLengthComment);
+
+		String requestStr1 = objectMapper.writeValueAsString(request1);
+		String requestStr2 = objectMapper.writeValueAsString(request2);
+		String requestStr3 = objectMapper.writeValueAsString(request3);
+
+		//when
+		ResultActions resultActions1 = mockMvc.perform(post("/admin/industry")
+				.content(requestStr1)
+				.contentType(MediaType.APPLICATION_JSON));
+		ResultActions resultActions2 = mockMvc.perform(post("/admin/industry")
+				.content(requestStr2)
+				.contentType(MediaType.APPLICATION_JSON));
+		ResultActions resultActions3 = mockMvc.perform(post("/admin/industry")
+				.content(requestStr3)
+				.contentType(MediaType.APPLICATION_JSON));
+
+		//then
+		resultActions1.andExpect(status().is4xxClientError())
+				.andExpect(jsonPath("message").value("이미 존재하는 업종입니다."));
+		resultActions2.andExpect(status().is4xxClientError())
+				.andExpect(jsonPath("message").value("업종 이름은 20자 이상 입력될 수 없습니다."));
+		resultActions3.andExpect(status().is4xxClientError())
+				.andExpect(jsonPath("message").value("업종 코멘트는 255자를 초과할 수 없습니다."));
 	}
 }

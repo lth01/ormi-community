@@ -1,5 +1,7 @@
 package com.community.controller;
 
+import com.community.domain.dto.AddIndustryRequest;
+import com.community.service.IndustryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class AdminController {
 	private BoardService boardService;
+	private IndustryService industryService;
 
 	/**
 	 * 실제 admin 여부 검사는 filter에서 수행한다.
@@ -32,5 +35,13 @@ public class AdminController {
 
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(new ErrorResult("성공", "정상적으로 수정하였습니다."));
+	}
+
+	@PostMapping("/admin/industry")
+	public ResponseEntity<ErrorResult> saveInudstry(@RequestBody AddIndustryRequest request){
+		industryService.saveIndustry(request);
+
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new ErrorResult("성공", "정상적으로 추가되었습니다."));
 	}
 }
