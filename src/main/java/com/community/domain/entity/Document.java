@@ -74,9 +74,9 @@ public class Document {
     private Viewership viewership;
 
     //relation with report
-    @ManyToOne
-    @JoinColumn(name = "report_id")
-    private Report report;
+//    @ManyToOne
+//    @JoinColumn(name = "report_id")
+//    private Report report;
 
 
     @PrePersist

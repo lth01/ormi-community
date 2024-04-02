@@ -46,40 +46,45 @@ public class ReportService {
 
     @Transactional
     public ReportResponse reportDocument(String email, String documentId,String userIp, ReportRequest request) {
-        String uuid = UUID.randomUUID().toString();
+        //docId가 존재하는지 확인
+        if(!documentRepository.findById(documentId).isPresent()) {
+            throw new RuntimeException("존재하지 않는 게시글 입니다.");
+        } else if (reportRepository.countAllByReportThing(documentId) > 3) {
+            throw new RuntimeException("이미 다량의 신고가 접수된 게시글 입니다.");
+        }
         Member member = memberRepository.findByEmail(email).orElseThrow(()->new RuntimeException("존재하지 않는 사용자 입니다."));
-        Document document = documentRepository.findById(documentId).orElseThrow(()->new RuntimeException("존재하지 않는 게시글 입니다."));
 
         Report report = Report.builder()
-                .reportId(uuid)
+                .reportId(UUID.randomUUID().toString())
                 .reporterIp(userIp)
                 .reportContent(request.getReportContent())
                 .reporter(member)
                 .reportType(1L)
+                .reportThing(documentId)
                 .build();
 
-        //해당 게시글에 report 저장
-        document.setReport(report);
 
         return new ReportResponse(reportRepository.save(report));
     }
 
     @Transactional
     public ReportResponse reportComment(String email, String commentId,String userIp, ReportRequest request) {
-        String uuid = UUID.randomUUID().toString();
+        //comId가 존재하는지 확인
+        if(!commentRepository.findById(commentId).isPresent()) {
+            throw new RuntimeException("존재하지 않는 댓글 입니다.");
+        } else if (reportRepository.countAllByReportThing(commentId) > 3) {
+            throw new RuntimeException("이미 다량의 신고가 접수된 게시글 입니다.");
+        }
         Member member = memberRepository.findByEmail(email).orElseThrow(()->new RuntimeException("존재하지 않는 사용자 입니다."));
-        Comment comment = commentRepository.findById(commentId).orElseThrow(()->new RuntimeException("존재하지 않는 댓글 입니다."));
 
         Report report = Report.builder()
-                .reportId(uuid)
+                .reportId(UUID.randomUUID().toString())
                 .reporterIp(userIp)
                 .reportContent(request.getReportContent())
                 .reporter(member)
                 .reportType(2L)
+                .reportThing(commentId)
                 .build();
-
-        //해당 댓글에 report 저장
-        comment.setReport(report);
 
         return new ReportResponse(reportRepository.save(report));
     }
@@ -89,17 +94,16 @@ public class ReportService {
         Report report = reportRepository.findById(reportId).orElseThrow(() -> new RuntimeException("해당 신고가 존재하지 않습니다."));
 
         if (report.getReportType() == 1L) {
-            Document document = documentRepository.findByReport(report).orElseThrow(()->new RuntimeException("존재하지 않는 게시글 입니다."));
+            Document document = documentRepository.findById(report.getReportThing()).orElseThrow(()->new RuntimeException("존재하지 않는 게시글 입니다."));
             document.setDocVisible(true);
             report.setReportJudge(true);
             return new ReportResponse(report);
         } else if (report.getReportType() == 2L) {
-            Comment comment = commentRepository.findByReport(report).orElseThrow(()->new RuntimeException("존재하지 않는 댓글 입니다."));
+            Comment comment = commentRepository.findById(report.getReportThing()).orElseThrow(()->new RuntimeException("존재하지 않는 댓글 입니다."));
             comment.setCommentVisible(true);
             report.setReportJudge(true);
             return new ReportResponse(report);
         }
         throw new IllegalArgumentException("잘못된 형식의 신고 입니다.");
     }
-
 }

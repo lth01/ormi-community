@@ -15,6 +15,5 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
     List<Comment> findAllByDocument(Document document);
     List<Comment> findAllByCommentCreator(Member member);
     void deleteAllByDocument(Document document);
-    Optional<Comment> findByReport(Report report);
 
 }

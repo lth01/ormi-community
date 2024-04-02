@@ -10,4 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ReportRepository extends JpaRepository<Report, String> {
+    Optional<Report> findReportByReporterIpAndReportThing(String ip, String thing);
+    int countAllByReportThing(String thing);
 }

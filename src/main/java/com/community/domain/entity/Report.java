@@ -38,11 +38,15 @@ public class Report {
     // 1: 게시글 2: 댓글 3: 리뷰
     @Column(name = "report_type")
     private Long reportType;
+    // 게시글 및 댓글, 리뷰 아이디
+    @Column(name = "report_thing")
+    private String reportThing;
 
     //relation with doc_creator(Member)
     @ManyToOne
     @JoinColumn(name = "reporter_id", nullable = false)
     private Member reporter;
+
 
 
     @PrePersist
