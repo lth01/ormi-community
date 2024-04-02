@@ -9,4 +9,5 @@ public class BoardResponse {
 	private String boardId;
 	private String boardName;
 	private String comName;
+	private String industryName;
 }
