@@ -12,8 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
-    List<Comment> findAllByDocument(Document document);
-    List<Comment> findAllByCommentCreator(Member member);
+    Optional<List<Comment>> findAllByDocument(Document document);
+    Optional<List<Comment>> findAllByCommentCreator(Member member);
     void deleteAllByDocument(Document document);
 
 }

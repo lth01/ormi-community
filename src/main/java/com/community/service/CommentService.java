@@ -47,7 +47,7 @@ public class CommentService {
     public List<FindCommentResponse> findAllByDocs(String docId) {
         Document document = documentRepository.findById(docId).orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다."));
 
-        List<Comment> list = Optional.ofNullable(commentRepository.findAllByDocument(document)).orElseThrow(() -> new EntityNotFoundException("댓글이 존재하지 않습니다."));
+        List<Comment> list = commentRepository.findAllByDocument(document).orElseThrow(() -> new EntityNotFoundException("댓글이 존재하지 않습니다."));
 
         List<FindCommentResponse> response = new ArrayList<>();
         for (Comment comment : list) {

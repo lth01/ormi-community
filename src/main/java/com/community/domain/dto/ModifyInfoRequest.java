@@ -14,7 +14,7 @@ public class ModifyInfoRequest {
     private String nickname;
     private String password;
     private String phone;
-    private PasswordQuestion passwordQuestion;
+    private String passwordQuestionId;
     private String findPasswordAnswer;
     private List<String> industriesId;
 }

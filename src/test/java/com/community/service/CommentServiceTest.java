@@ -61,7 +61,7 @@ class CommentServiceTest {
     void update() {
         //given
         Member member = memberRepository.findByEmail("test1@test.com").orElseThrow();
-        Comment comment1 = commentRepository.findAllByCommentCreator(member).get(0);
+        Comment comment1 = commentRepository.findAllByCommentCreator(member).orElseThrow().get(0);
         ModifyCommentRequest modifyCommentRequest = new ModifyCommentRequest(null, "내용 수정");
 
         //when
@@ -75,7 +75,7 @@ class CommentServiceTest {
     void delete() {
         //given
         Member member = memberRepository.findByEmail("test1@test.com").orElseThrow();
-        Comment comment1 = commentRepository.findAllByCommentCreator(member).get(0);
+        Comment comment1 = commentRepository.findAllByCommentCreator(member).orElseThrow().get(0);
         DeleteCommentRequest request = new DeleteCommentRequest(null);
 
         //when
@@ -89,7 +89,7 @@ class CommentServiceTest {
     void increaseLike() {
         //given
         Member member = memberRepository.findByEmail("test1@test.com").orElseThrow();
-        Comment comment1 = commentRepository.findAllByCommentCreator(member).get(0);
+        Comment comment1 = commentRepository.findAllByCommentCreator(member).orElseThrow().get(0);
 
 
 

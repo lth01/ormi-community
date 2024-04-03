@@ -26,12 +26,13 @@ public class DocumentService {
     private MemberRepository memberRepository;
     private CommentRepository commentRepository;
 
-    public DocumentService(DocumentRepository documentRepository, ViewershipRepository viewershipRepository, LikeItRepository likeItRepository, BoardRepository boardRepository, MemberRepository memberRepository) {
+    public DocumentService(DocumentRepository documentRepository, ViewershipRepository viewershipRepository, LikeItRepository likeItRepository, BoardRepository boardRepository, MemberRepository memberRepository, CommentRepository commentRepository) {
         this.documentRepository = documentRepository;
         this.viewershipRepository = viewershipRepository;
         this.likeItRepository = likeItRepository;
         this.boardRepository = boardRepository;
         this.memberRepository = memberRepository;
+        this.commentRepository = commentRepository;
     }
 
     //Slice 처리 조회(조회 시 조회수 함께 상승)
@@ -130,7 +131,7 @@ public class DocumentService {
             documentRepository.delete(document);
             //게시글에 있던 댓글 모두 삭제
             try {
-                if (commentRepository.findAllByDocument(document) != null) {
+                if (commentRepository.findAllByDocument(document).isPresent()) {
                     commentRepository.deleteAllByDocument(document);
                 }
             } catch (RuntimeException e) {}

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +45,7 @@ class MemberInterestsRepositoryTest {
     public void findByMember() {
         Member member = memberRepository.findAll().get(0);
 
-        List<MemberInterests> list = memberInterestsRepository.findAllByMember(member);
+        List<MemberInterests> list = memberInterestsRepository.findAllByMember(member).orElse(new ArrayList<>());
 
         for(MemberInterests interests : list) {
             log.info(interests.getIndustry().getIndustryName());

@@ -103,7 +103,7 @@ class DocumentControllerTest {
     void saveDocument() throws Exception {
         Board board = boardRepository.findAll().get(0);
 
-        AddDocumentRequest request = new AddDocumentRequest("게시글 제목", "게시글 내용", board);
+        AddDocumentRequest request = new AddDocumentRequest("게시글 제목", "게시글 내용", board.getBoardId());
 
         ResultActions resultActions = mockMvc.perform(post("/document/manage")
                 .with(SecurityMockMvcRequestPostProcessors.user(member))
@@ -119,7 +119,7 @@ class DocumentControllerTest {
     void modifyDocument() throws Exception {
         Document document = documentRepository.findAll().get(0);
 
-        ModifyDocumentRequest request = new ModifyDocumentRequest("제목 수정", "내용 수정", member);
+        ModifyDocumentRequest request = new ModifyDocumentRequest("제목 수정", "내용 수정");
 
         ResultActions resultActions = mockMvc.perform(put("/document/manage/" + document.getDocId())
                 .with(SecurityMockMvcRequestPostProcessors.user(member))
@@ -132,7 +132,7 @@ class DocumentControllerTest {
 
     @Test
     void deleteDocument() throws Exception {
-        Document document = documentRepository.findAllByDocCreator(member).get(0);
+        Document document = documentRepository.findAllByDocCreator(member).orElseThrow().get(0);
 
         ResultActions resultActions = mockMvc.perform(delete("/document/manage/" + document.getDocId())
                 .with(SecurityMockMvcRequestPostProcessors.user(member))

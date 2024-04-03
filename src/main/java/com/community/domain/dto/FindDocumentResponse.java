@@ -38,6 +38,9 @@ public class FindDocumentResponse {
         email = tmp[0];
         memberRoleName = document.getDocCreator().getMemberRole().getMemberRoleName();
 
+        boardId = document.getBoard().getBoardId();
+        boardName = document.getBoard().getBoardName();
+
         this.likeCount = likeCount;
         this.viewCount = viewCount;
     }

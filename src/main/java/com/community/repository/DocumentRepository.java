@@ -13,7 +13,7 @@ import java.util.*;
 
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, String> {
-    List<Document> findAllByDocCreator(Member member);
+    Optional<List<Document>> findAllByDocCreator(Member member);
     Slice<Document> findAllByBoard(Board board, Pageable page);
 
 }

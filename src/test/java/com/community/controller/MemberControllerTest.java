@@ -127,7 +127,7 @@ class MemberControllerTest {
                 "도도새",
                 "1234",
                 "01012345678",
-                question,
+                question.getPasswordQuestionId(),
                 "도도새",
                 industries
         );

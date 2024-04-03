@@ -11,5 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface MemberInterestsRepository extends JpaRepository<MemberInterests, String> {
-    List<MemberInterests> findAllByMember(Member member);
+    Optional<List<MemberInterests>> findAllByMember(Member member);
 }
