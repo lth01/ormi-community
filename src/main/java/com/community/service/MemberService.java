@@ -81,24 +81,26 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponse update(ModifyInfoRequest request) {
+    public MemberResponse update(String email, ModifyInfoRequest request) {
 
-        Member member = memberRepository.findByEmail("test@test.com").orElseThrow(() -> new RuntimeException("잘못된 사용자 입니다."));
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("잘못된 사용자 입니다."));
+
+        if (!member.getEmail().equals(email)) throw new RuntimeException("수정은 본인만 가능 합니다.");
 
         //빈공간 및 같은 값은 수정 하지 않음.
-        if(!(request.getNickname() == null || request.getNickname().equals(member.getNickname()))) {
+        if(!(request.getNickname().isEmpty() || request.getNickname().isBlank() || request.getNickname().equals(member.getNickname()))) {
             member.setNickname(request.getNickname());
         }
-        if(!(request.getPassword() == null || encoder.matches(member.getPassword(), request.getPassword()))){
+        if(!(request.getPassword().isBlank() || request.getPassword().isEmpty() || encoder.matches(member.getPassword(), request.getPassword()))){
             member.setPassword(encoder.encode(request.getPassword()));
         }
-        if(!(request.getPhone() == null || request.getPhone().equals(member.getPhone()))) {
+        if(!(request.getPhone().isBlank() || request.getPhone().isEmpty() || request.getPhone().equals(member.getPhone()))) {
             member.setPhone(request.getPhone());
         }
         if(!(request.getPasswordQuestion() == null || request.getPasswordQuestion().equals(member.getPasswordQuestion()))) {
             member.setPasswordQuestion(request.getPasswordQuestion());
         }
-        if(!(request.getFindPasswordAnswer() == null || request.getFindPasswordAnswer().equals(member.getFindPasswordAnswer()))) {
+        if(!(request.getFindPasswordAnswer().isBlank() || request.getFindPasswordAnswer().isEmpty() || request.getFindPasswordAnswer().equals(member.getFindPasswordAnswer()))) {
             member.setFindPasswordAnswer(request.getFindPasswordAnswer());
         }
 
@@ -124,8 +126,10 @@ public class MemberService {
     }
 
     @Transactional
-    public boolean withdrawal(WithdrawalRequest request) {
+    public boolean withdrawal(String email, WithdrawalRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(() -> new IllegalArgumentException("잘못된 입력 입니다."));
+
+        if (member.getEmail().equals(email)) throw new RuntimeException("삭제는 본인만 가능 합니다.");
 
         if(encoder.matches(request.getPassword(), member.getPassword())) {
             member.setWithdrawal(true);
