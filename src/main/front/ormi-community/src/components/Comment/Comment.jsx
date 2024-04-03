@@ -6,14 +6,14 @@ import { useState, useEffect } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 
-const Comment = ({userInfoList}) => {
+const Comment = ({commentInfoList}) => {
     //현재는 Comment를 생성할 때 호출하도록 되어있음. 함수 호출 시점은 바뀔 수 있음.
     return (
         <div className="p-4 border-t">
             <ul className="flex flex-col gap-4">
                 {
-                    userInfoList.map(userInfo =>{
-                        return (<CommentItem key={GenerateLiElUUID()} userInfo={userInfo}></CommentItem>);
+                    commentInfoList.map(commentInfo =>{
+                        return (<CommentItem key={commentInfo.commentId} {...commentInfo}></CommentItem>);
                     })
                 }
             </ul>
@@ -30,8 +30,8 @@ const Comment = ({userInfoList}) => {
  * @param { {nickName: String, userId: String, commentDate: Date, comment: String, likeCount: number, likeAble: boolean} } userInfo 
  * @returns 
  */
-const CommentItem = ({userInfo}) =>{
-    const shortNickName = getShortNickName(userInfo.nickName);
+const CommentItem = ({commentId, nickname, commentCreatorIp, email, commentDate, commentContent, likeCount, likeAble = true}) =>{
+    const shortNickName = getShortNickName(nickname);
 
     return (
         <li className="space-y-4">
@@ -40,12 +40,12 @@ const CommentItem = ({userInfo}) =>{
                     <AvatarFallback className="font-bold">{shortNickName}</AvatarFallback>
                 </Avatar>
                 <div>
-                    <p className="text-sm font-semibold">{`${userInfo.nickName}(${userInfo.userId})`}</p>
-                    <p className="text-xs text-gray-500">{userInfo.commentDate}</p>
-                    <p className="mt-1 text-sm">{userInfo.comment}</p>
+                    <p className="text-sm font-semibold">{`${nickname}(${email})`}</p>
+                    <p className="text-xs text-gray-500">{commentDate}</p>
+                    <p className="mt-1 text-sm">{commentContent}</p>
                     <div className="flex items-center mt-1 space-x-1 text-sm text-gray-500">
-                        <HeartIcon className={`h-4 w-4 ${userInfo.likeAble ? "" : "text-red-500"}`} />
-                        <span>{userInfo.likeCount}</span>
+                        <HeartIcon className={`h-4 w-4 ${likeAble ? "" : "text-red-500"}`} />
+                        <span>{likeCount}</span>
                     </div>
                 </div>
             </div>
