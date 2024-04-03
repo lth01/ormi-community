@@ -18,8 +18,6 @@ public class DocumentResponse {
     private Member docCreator;
     private Board board;
     private Companies companies;
-    private LikeIt likeIt;
-    private Viewership viewership;
 
     public DocumentResponse(Document document) {
         docId = document.getDocId();
@@ -28,8 +26,5 @@ public class DocumentResponse {
         docCreateDate = document.getDocCreateDate();
         docCreator = document.getDocCreator();
         board = document.getBoard();
-        companies = document.getCompanies();
-        likeIt = document.getLikeIt();
-        viewership = document.getViewership();
     }
 }
