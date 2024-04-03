@@ -1,6 +1,7 @@
 package com.community.service;
 
 import com.community.domain.dto.AddPasswordQuestionRequest;
+import com.community.domain.dto.PasswordQuestionResponse;
 import com.community.domain.entity.PasswordQuestion;
 import com.community.repository.PasswordQuestionRepository;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,4 +37,13 @@ public class PasswordQuestionService {
 
         return question;
     }
+
+	public List<PasswordQuestionResponse> showAllPasswordQuestion() {
+        List<PasswordQuestion> passwordQuestionList = passwordQuestionRepository.findAll();
+
+        return passwordQuestionList.stream().map(question -> {
+				return new PasswordQuestionResponse(question.getPasswordQuestionId(), question.getQuestion());
+			})
+            .toList();
+	}
 }
