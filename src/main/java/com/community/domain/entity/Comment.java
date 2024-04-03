@@ -65,6 +65,6 @@ public class Comment {
 
     @PrePersist
     public void prePersist() {
-        commentVisible = commentVisible == null ? false : commentVisible;
+        commentVisible = commentVisible == null ? true : commentVisible;
     }
 }

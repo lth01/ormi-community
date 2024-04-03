@@ -98,12 +98,12 @@ public class ReportService {
 
         if (report.getReportType() == 1L) {
             Document document = documentRepository.findById(report.getReportThing()).orElseThrow(()->new EntityNotFoundException("존재하지 않는 게시글 입니다."));
-            document.setDocVisible(true);
+            document.setDocVisible(false);
             report.setReportJudge(true);
             return new ReportResponse(report);
         } else if (report.getReportType() == 2L) {
             Comment comment = commentRepository.findById(report.getReportThing()).orElseThrow(()->new EntityNotFoundException("존재하지 않는 댓글 입니다."));
-            comment.setCommentVisible(true);
+            comment.setCommentVisible(false);
             report.setReportJudge(true);
             return new ReportResponse(report);
         }

@@ -3,6 +3,7 @@ package com.community.service;
 import com.community.domain.dto.*;
 import com.community.domain.entity.*;
 import com.community.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -36,13 +37,14 @@ public class DocumentService {
     //Slice 처리 조회(조회 시 조회수 함께 상승)
     @Transactional
     public List<FindDocumentResponse> findAllByBoard(String boardId, Pageable pageable) {
-        Board board =boardRepository.findById(boardId).orElseThrow(() -> new RuntimeException("해당 게시판에 게시글이 없습니다."));
+        Board board =boardRepository.findById(boardId).orElseThrow(() -> new EntityNotFoundException("해당 게시판에 게시글이 없습니다."));
         Slice<Document> slice = documentRepository.findAllByBoard(board, pageable);
 
         List<Document> list = slice.getContent();
         List<FindDocumentResponse> resultList = new ArrayList<>();
 
         for (Document document : list) {
+            if (!document.getDocVisible()) continue;
             Long viewCount = viewershipRepository.findById(document.getDocId()).get().getViewCount() + 1L;
             Long likeCount = likeItRepository.findById(document.getDocId()).get().getLikeCount();
 
@@ -55,7 +57,7 @@ public class DocumentService {
 
     //단건 조회
     public FindDocumentResponse findOneDocument(String documentId) {
-        Document document = documentRepository.findById(documentId).orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
+        Document document = documentRepository.findById(documentId).orElseThrow(() -> new EntityNotFoundException("해당 게시물이 존재하지 않습니다."));
         Long viewCount = viewershipRepository.findById(documentId).get().getViewCount();
         Long likeCount = likeItRepository.findById(documentId).get().getLikeCount();
 
@@ -66,7 +68,7 @@ public class DocumentService {
     @Transactional
     public DocumentWriteResponse saveDocument(String email, AddDocumentRequest request) {
         String uuid = UUID.randomUUID().toString();
-        Member member = memberRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("해당 사용자가 존재하지 않습니다."));
+        Member member = memberRepository.findByEmail(email).orElseThrow(()-> new EntityNotFoundException("해당 사용자가 존재하지 않습니다."));
         if(request.getBoard() == null || request.getDocTitle().isEmpty() || request.getDocContent().isEmpty())
             throw new RuntimeException("빈칸이 존재합니다.");
 
@@ -100,8 +102,8 @@ public class DocumentService {
     //게시글 수정
     @Transactional
     public DocumentWriteResponse modifyDocument(String email, String documentId, ModifyDocumentRequest request) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("해당 사용자가 존재하지 않습니다."));
-        Document document = documentRepository.findById(documentId).orElseThrow(()->new RuntimeException("게시글이 존재하지 않습니다."));
+        Member member = memberRepository.findByEmail(email).orElseThrow(()-> new EntityNotFoundException("해당 사용자가 존재하지 않습니다."));
+        Document document = documentRepository.findById(documentId).orElseThrow(()->new EntityNotFoundException("게시글이 존재하지 않습니다."));
 
         if (document.getDocCreator().getEmail().equals(email)) {
             int count = 0;
@@ -122,7 +124,7 @@ public class DocumentService {
     //게시글 삭제
     @Transactional
     public DocumentWriteResponse deleteDocument(String email, String documentId) {
-        Document document =documentRepository.findById(documentId).orElseThrow(()->new RuntimeException("게시글이 존재하지 않습니다."));
+        Document document =documentRepository.findById(documentId).orElseThrow(()->new EntityNotFoundException("게시글이 존재하지 않습니다."));
         if (document.getDocCreator().getEmail().equals(email)) {
             documentRepository.delete(document);
             //게시글에 있던 댓글 모두 삭제
@@ -139,7 +141,7 @@ public class DocumentService {
     //게시글 좋아요
     @Transactional
     public DocumentWriteResponse increaseDocumentLike(String documentId) {
-        Document document = documentRepository.findById(documentId).orElseThrow(()-> new RuntimeException("게시글이 존재하지 않습니다."));
+        Document document = documentRepository.findById(documentId).orElseThrow(()-> new EntityNotFoundException("게시글이 존재하지 않습니다."));
         Long count = likeItRepository.findById(document.getDocId()).get().getLikeCount() + 1L;
 
         likeItRepository.updateLikeCount(count, document.getDocId());
