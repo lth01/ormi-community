@@ -28,6 +28,7 @@ public class FindCommentResponse {
         commentId = comment.getCommentId();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss.SSS");
         commentDate = comment.getCommentCreateDate().format(formatter);
+        commentContent = comment.getCommentContent();
         if (comment.getCommentCreator() == null) {
             String[] tmp = comment.getCommentCreatorIp().split("\\.");
             commentCreatorIp = tmp[0] + "." + tmp[1] + ".*.*";
