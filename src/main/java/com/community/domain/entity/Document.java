@@ -58,27 +58,6 @@ public class Document {
     @JoinColumn(name = "industry_id", nullable = false)
     private Industry industry;
 
-    //relation with companies
-    @ManyToOne
-    @JoinColumn(name = "com_id")
-    private Companies companies;
-
-    //relation with like_it
-    @ManyToOne
-    @JoinColumn(name = "doc_like_id", nullable = false)
-    private LikeIt likeIt;
-
-    //relation with viewership
-    @ManyToOne
-    @JoinColumn(name = "doc_view_id", nullable = false)
-    private Viewership viewership;
-
-    //relation with report
-//    @ManyToOne
-//    @JoinColumn(name = "report_id")
-//    private Report report;
-
-
     @PrePersist
     public void prePersist() {
         docVisible = docVisible == null ? false : docVisible;

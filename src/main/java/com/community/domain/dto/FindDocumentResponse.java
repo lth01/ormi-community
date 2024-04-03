@@ -26,7 +26,7 @@ public class FindDocumentResponse {
     private Long likeCount;
     private Long viewCount;
 
-    public FindDocumentResponse(Document document) {
+    public FindDocumentResponse(Document document, Long viewCount, Long likeCount) {
         docId = document.getDocId();
         docTitle = document.getDocTitle();
         docContent = document.getDocContent();
@@ -38,7 +38,7 @@ public class FindDocumentResponse {
         email = tmp[0];
         memberRoleName = document.getDocCreator().getMemberRole().getMemberRoleName();
 
-        likeCount = document.getLikeIt().getLikeCount();
-        viewCount = document.getViewership().getViewCount();
+        this.likeCount = likeCount;
+        this.viewCount = viewCount;
     }
 }

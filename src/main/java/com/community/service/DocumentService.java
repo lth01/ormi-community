@@ -40,19 +40,26 @@ public class DocumentService {
         Slice<Document> slice = documentRepository.findAllByBoard(board, pageable);
 
         List<Document> list = slice.getContent();
+        List<FindDocumentResponse> resultList = new ArrayList<>();
 
         for (Document document : list) {
-            Long count = document.getViewership().getViewCount() + 1L;
-            String viewId = document.getViewership().getViewId();
-            viewershipRepository.updateViewership(count,viewId);
+            Long viewCount = viewershipRepository.findById(document.getDocId()).get().getViewCount() + 1L;
+            Long likeCount = likeItRepository.findById(document.getDocId()).get().getLikeCount();
+
+            viewershipRepository.updateViewership(viewCount, document.getDocId());
+
+            resultList.add(new FindDocumentResponse(document, viewCount, likeCount));
         }
-        return list.stream().filter(x -> x.getDocVisible() == false).map(FindDocumentResponse::new).toList();
+        return resultList;
     }
 
     //단건 조회
     public FindDocumentResponse findOneDocument(String documentId) {
         Document document = documentRepository.findById(documentId).orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
-        return new FindDocumentResponse(document);
+        Long viewCount = viewershipRepository.findById(documentId).get().getViewCount();
+        Long likeCount = likeItRepository.findById(documentId).get().getLikeCount();
+
+        return new FindDocumentResponse(document, viewCount, likeCount);
     }
 
     //게시글 작성
@@ -63,6 +70,18 @@ public class DocumentService {
         if(request.getBoard() == null || request.getDocTitle().isEmpty() || request.getDocContent().isEmpty())
             throw new RuntimeException("빈칸이 존재합니다.");
 
+        //LikeIt 테이블에 삽입
+        LikeIt likeIt = LikeIt.builder()
+            .likeId(uuid)
+            .likeCount(0L)
+            .build();
+
+        //Viewership 테이블에 삽입
+        Viewership viewership = Viewership.builder()
+            .viewId(uuid)
+            .viewCount(0L)
+            .build();
+
         Document document = Document.builder()
                 .docId(uuid)
                 .docTitle(request.getDocTitle())
@@ -70,10 +89,10 @@ public class DocumentService {
                 .docCreator(member)
                 .board(request.getBoard())
                 .industry(request.getBoard().getIndustry())
-                .likeIt(likeItRepository.save(new LikeIt(UUID.randomUUID().toString(), 0L)))
-                .viewership(viewershipRepository.save(new Viewership(UUID.randomUUID().toString(), 0L)))
                 .build();
 
+        likeItRepository.save(likeIt);
+        viewershipRepository.save(viewership);
         documentRepository.save(document);
         return new DocumentWriteResponse(document);
     }
@@ -121,10 +140,9 @@ public class DocumentService {
     @Transactional
     public DocumentWriteResponse increaseDocumentLike(String documentId) {
         Document document = documentRepository.findById(documentId).orElseThrow(()-> new RuntimeException("게시글이 존재하지 않습니다."));
-        Long count = document.getLikeIt().getLikeCount() + 1L;
-        String likeId = document.getLikeIt().getLikeId();
+        Long count = likeItRepository.findById(document.getDocId()).get().getLikeCount() + 1L;
 
-        likeItRepository.updateLikeCount(count, likeId);
+        likeItRepository.updateLikeCount(count, document.getDocId());
         return new DocumentWriteResponse(document);
     }
 }

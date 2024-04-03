@@ -61,7 +61,7 @@ class DocumentControllerTest {
     @Autowired
     private AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    private String TEST_EMAIL = "test@test.com";
+    private String TEST_EMAIL = "test2@test.com";
     private String TEST_PASSWORD = "1234";
 
     private HttpHeaders httpHeaders;
