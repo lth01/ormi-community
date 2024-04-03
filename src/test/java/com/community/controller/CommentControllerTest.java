@@ -69,7 +69,7 @@ public class CommentControllerTest {
 
     @Test
     void showCommentAll() throws Exception {
-        Member member = memberRepository.findByEmail("test@test.com").orElseThrow();
+        Member member = memberRepository.findByEmail("test2@test.com").orElseThrow();
         Document document = documentRepository.findAllByDocCreator(member).get(0);
         List<Comment> list = commentRepository.findAllByDocument(document);
 
@@ -81,7 +81,7 @@ public class CommentControllerTest {
 
     @Test
     void saveComment() throws Exception {
-        Member member = memberRepository.findByEmail("test@test.com").orElseThrow();
+        Member member = memberRepository.findByEmail("test2@test.com").orElseThrow();
         Document document = documentRepository.findAllByDocCreator(member).get(0);
         AddCommentRequest request = new AddCommentRequest(null, "127.0.0.1", "Test comment");
 
