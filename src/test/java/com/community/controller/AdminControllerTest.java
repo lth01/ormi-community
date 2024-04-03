@@ -8,7 +8,6 @@ import com.community.domain.dto.AddIndustryRequest;
 import com.community.domain.dto.AddPasswordQuestionRequest;
 import com.community.repository.IndustryRepository;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
-import javax.xml.transform.Result;
 
 @SpringBootTest
 @Slf4j
