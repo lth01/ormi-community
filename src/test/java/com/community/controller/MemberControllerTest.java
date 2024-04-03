@@ -98,9 +98,9 @@ class MemberControllerTest {
     void signup() throws Exception {
         //given
         PasswordQuestion question = passwordQuestionRepository.findByQuestion("좋아하는 동물은?").orElseThrow();
-        List<Industry> industries = new ArrayList<>();
-        industries.add(industryRepository.findAll().get(0));
-        AddMemberRequest request = new AddMemberRequest("김요한", "두두새", "test2@test.com", "1234", "M", "010-1234-1234", question, "도도새", industries);
+        List<String> industries = new ArrayList<>();
+        industries.add(industryRepository.findAll().get(0).getIndustryId());
+        AddMemberRequest request = new AddMemberRequest("김요한", "두다새", "test3@test.com", "1234", "M", "010-1234-1234", question, "도도새", industries);
         String json = objectMapper.writeValueAsString(request);
 
         //when
@@ -112,15 +112,15 @@ class MemberControllerTest {
 
         //then
         resultActions.andExpect(status().isCreated())
-                .andExpect(jsonPath("email").value(request.getEmail()));
+                .andExpect(jsonPath("email").value(request.getEmail())).andDo(print());
     }
 
     @Test
     void modifyMemberInfo() throws Exception {
         //given
         PasswordQuestion question = passwordQuestionRepository.findByQuestion("좋아하는 동물은?").orElseThrow();
-        List<Industry> industries = new ArrayList<>();
-        industries.add(industryRepository.findAll().get(0));
+        List<String> industries = new ArrayList<>();
+        industries.add(industryRepository.findAll().get(0).getIndustryId());
 
         ModifyInfoRequest request = new ModifyInfoRequest(
                 "test@test.com",

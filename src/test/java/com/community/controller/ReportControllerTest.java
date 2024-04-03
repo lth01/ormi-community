@@ -54,9 +54,6 @@ class ReportControllerTest {
         member = memberRepository.findAllByMemberRole(role).orElseThrow(() -> new RuntimeException("NO")).get(0);
     }
 
-    @Test
-    void showAllReport() {
-    }
 
     @Test
     void reportDocument() throws Exception {
@@ -69,7 +66,7 @@ class ReportControllerTest {
                 .content(objectMapper.writeValueAsString(request)));
 
         resultActions.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.reportContent").value("욕설"));
+                .andExpect(jsonPath("$.reportContent").value("욕설")).andDo(print());
     }
 
     @Test
@@ -83,7 +80,7 @@ class ReportControllerTest {
                 .content(objectMapper.writeValueAsString(request)));
 
         resultActions.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.reportContent").value("욕설"));
+                .andExpect(jsonPath("$.reportContent").value("욕설")).andDo(print());
     }
 
     @Test

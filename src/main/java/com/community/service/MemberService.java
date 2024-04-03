@@ -5,6 +5,7 @@ import com.community.domain.entity.Industry;
 import com.community.domain.entity.Member;
 import com.community.domain.entity.MemberInterests;
 import com.community.domain.entity.MemberRole;
+import com.community.repository.IndustryRepository;
 import com.community.repository.MemberInterestsRepository;
 import com.community.repository.MemberRepository;
 import com.community.repository.MemberRoleRepository;
@@ -24,12 +25,14 @@ public class MemberService {
     private MemberRepository memberRepository;
     private MemberRoleRepository memberRoleRepository;
     private MemberInterestsRepository memberInterestsRepository;
+    private IndustryRepository industryRepository;
     private PasswordEncoder encoder;
 
-    public MemberService(MemberRepository memberRepository, MemberRoleRepository memberRoleRepository, MemberInterestsRepository memberInterestsRepository, PasswordEncoder encoder) {
+    public MemberService(MemberRepository memberRepository, MemberRoleRepository memberRoleRepository, MemberInterestsRepository memberInterestsRepository, IndustryRepository industryRepository, PasswordEncoder encoder) {
         this.memberRepository = memberRepository;
         this.memberRoleRepository = memberRoleRepository;
         this.memberInterestsRepository = memberInterestsRepository;
+        this.industryRepository = industryRepository;
         this.encoder = encoder;
     }
 
@@ -70,7 +73,8 @@ public class MemberService {
                 .build());
 
         //관심 업종 저장
-        for(Industry industry : request.getIndustries()) {
+        for(String industryId : request.getIndustries()) {
+            Industry industry = industryRepository.findById(industryId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 업종입니다."));
             MemberInterests interest = new MemberInterests(
                     UUID.randomUUID().toString(),
                     industry,
@@ -108,12 +112,12 @@ public class MemberService {
 
         //관심 업종 저장
         List<MemberInterests> list = memberInterestsRepository.findAllByMember(member);
-        for(Industry industry : request.getIndustries()) {
+        for(String industryId : request.getIndustriesId()) {
             int count = 0;
             for(MemberInterests interests : list) {
-                if(interests.getIndustry().equals(industry)) continue;
+                if(interests.getIndustry().equals(industryId)) continue;
                 else if (list.size() + count > 3) memberInterestsRepository.delete(interests);
-
+                Industry industry = industryRepository.findById(industryId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 업종입니다."));
                 MemberInterests interest = new MemberInterests(
                         UUID.randomUUID().toString(),
                         industry,
@@ -143,6 +147,7 @@ public class MemberService {
     public UserInfoResponse userInfo(String email) {
         if (email == null || email.isEmpty()) throw new RuntimeException("비회원 입니다.");
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 입니다."));
-        return new UserInfoResponse(member);
+        List<InterestResponse> list = memberInterestsRepository.findAllByMember(member).stream().map(InterestResponse::new).toList();
+        return new UserInfoResponse(member, list);
     }
 }
