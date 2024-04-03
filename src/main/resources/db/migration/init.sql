@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS comment (
     doc_id	                VARCHAR(36) NOT NULL,
     comment_password	    VARCHAR(30)	,
     like_id         	    VARCHAR(36)	,
-    comment_creator_ip	    CIDR	NOT NULL,
+    comment_creator_ip	    VARCHAR(16)	,
     comment_content	        VARCHAR(200) NOT NULL,
     comment_create_date	    TIMESTAMP	DEFAULT NOW(),
     comment_creator	        VARCHAR(36)	NULL,

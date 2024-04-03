@@ -24,14 +24,6 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    //모두 조회
-    @GetMapping("/admin/report")
-    public ResponseEntity<List<ReportResponse>> showAllReport(@PageableDefault(size = 10) Pageable pageable) {
-        List<ReportResponse> response = reportService.showAllReport(pageable);
-
-        return ResponseEntity.ok().body(response);
-    }
-
     //게시글 신고
     @PostMapping("/report/doc/{document_id}")
     public ResponseEntity<ReportResponse> reportDocument(@PathVariable("document_id") String documentId, @RequestBody ReportRequest request
@@ -52,6 +44,14 @@ public class ReportController {
         ReportResponse response = reportService.reportComment(email, commentId, userIp, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    //모두 조회
+    @GetMapping("/admin/report")
+    public ResponseEntity<List<ReportResponse>> showAllReport(@PageableDefault(size = 10) Pageable pageable) {
+        List<ReportResponse> response = reportService.showAllReport(pageable);
+
+        return ResponseEntity.ok().body(response);
     }
 
     //신고 승인
