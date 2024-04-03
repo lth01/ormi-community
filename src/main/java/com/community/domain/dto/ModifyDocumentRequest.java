@@ -13,5 +13,4 @@ import java.time.LocalDateTime;
 public class ModifyDocumentRequest {
     private String docTitle;
     private String docContent;
-    private Member docModifier;
 }

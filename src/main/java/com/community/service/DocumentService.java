@@ -69,7 +69,8 @@ public class DocumentService {
     public DocumentWriteResponse saveDocument(String email, AddDocumentRequest request) {
         String uuid = UUID.randomUUID().toString();
         Member member = memberRepository.findByEmail(email).orElseThrow(()-> new EntityNotFoundException("해당 사용자가 존재하지 않습니다."));
-        if(request.getBoard() == null || request.getDocTitle().isEmpty() || request.getDocContent().isEmpty())
+        Board board = boardRepository.findById(request.getBoardId()).orElseThrow(()-> new EntityNotFoundException("해당 게시판이 존재하지 않습니다."));
+        if(request.getBoardId().isBlank() || request.getDocTitle().isEmpty() || request.getDocContent().isEmpty())
             throw new RuntimeException("빈칸이 존재합니다.");
 
         //LikeIt 테이블에 삽입
@@ -89,8 +90,8 @@ public class DocumentService {
                 .docTitle(request.getDocTitle())
                 .docContent(request.getDocContent())
                 .docCreator(member)
-                .board(request.getBoard())
-                .industry(request.getBoard().getIndustry())
+                .board(board)
+                .industry(board.getIndustry())
                 .build();
 
         likeItRepository.save(likeIt);

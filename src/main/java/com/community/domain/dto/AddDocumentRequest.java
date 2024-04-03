@@ -12,11 +12,5 @@ import lombok.NoArgsConstructor;
 public class AddDocumentRequest {
     private String docTitle;
     private String docContent;
-    private Board board;
-
-    public AddDocumentRequest(Document document) {
-        docTitle = document.getDocTitle();
-        docContent = document.getDocContent();
-        board = document.getBoard();
-    }
+    private String boardId;
 }
