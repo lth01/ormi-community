@@ -43,7 +43,6 @@ class CommentRepositoryTest {
                 .commentContent("댓글 내용")
                 .document(document)
                 .commentCreator(member)
-                .likeIt(likeItRepository.save(new LikeIt(UUID.randomUUID().toString(), 0L)))
                 .build();
 
         commentRepository.save(comment);

@@ -23,14 +23,14 @@ public class CommentController {
 
     // 댓글 리스트 가져오기
     @GetMapping("/comment/list/{doc_id}")
-    public ResponseEntity<List<CommentResponse>> showCommentAll(@PathVariable("doc_id") String docId) {
-        List<CommentResponse> list = commentService.findAllByDocs(docId);
+    public ResponseEntity<List<FindCommentResponse>> showCommentAll(@PathVariable("doc_id") String docId) {
+        List<FindCommentResponse> list = commentService.findAllByDocs(docId);
         return ResponseEntity.ok().body(list);
     }
 
     // 댓글 단건 조회
     @GetMapping("/comment/{comment_id}")
-    public ResponseEntity<CommentResponse> showOneComment(@PathVariable("comment_id") String commentId) {
+    public ResponseEntity<FindCommentResponse> showOneComment(@PathVariable("comment_id") String commentId) {
         return ResponseEntity.ok().body(commentService.findOneById(commentId));
     }
 
@@ -40,7 +40,8 @@ public class CommentController {
         //아이피 가져오기
         request.setCommentCreatorIp(servletRequest.getRemoteAddr());
         //접속 중인 사용자의 데이터 가져오기
-        String email = authentication.getName();
+        String email = "";
+        if (authentication != null) {email = authentication.getName();}
         CommentCommonResponse response = commentService.saveComment(email ,docId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -48,7 +49,8 @@ public class CommentController {
     //댓글 수정
     @PutMapping("/comment/{comment_id}")
     public ResponseEntity<CommentCommonResponse> modifyComment(@PathVariable("comment_id") String commentId, @RequestBody ModifyCommentRequest request, Authentication authentication) {
-        String email = authentication.getName();
+        String email = "";
+        if (authentication != null) {email = authentication.getName();}
         CommentCommonResponse response = commentService.updateComment(email, commentId, request);
 
         return ResponseEntity.ok().body(response);
@@ -57,8 +59,8 @@ public class CommentController {
     //댓글 삭제
     @DeleteMapping("/comment/{comment_id}")
     public ResponseEntity<CommentCommonResponse> deleteComment(@PathVariable("comment_id") String commentId, @RequestBody DeleteCommentRequest request, Authentication authentication) {
-        String email = authentication.getName();
-
+        String email = "";
+        if (authentication != null) {email = authentication.getName();}
         CommentCommonResponse response = commentService.deleteComment(email, commentId, request);
         return ResponseEntity.ok().body(response);
     }

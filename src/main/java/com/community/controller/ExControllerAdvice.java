@@ -1,6 +1,7 @@
 package com.community.controller;
 
 import com.community.domain.dto.ErrorResult;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,4 +25,12 @@ public class ExControllerAdvice {
         log.error("[exceptionHandle] RuntimeExHandle", e);
         return new ErrorResult("잘못된 사용자", e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ErrorResult NotFoundExHandle(EntityNotFoundException e) {
+        log.error("[exceptionHandle] EntityNotFoundExHandle", e);
+        return new ErrorResult("존재하지 않는 데이터", e.getMessage());
+    }
+
 }
