@@ -8,7 +8,13 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class IndustryResponse {
-    //프론트에서 Select 컴포넌트에 사용하는 데이터는 value, title object로 표현됨
-    private String value;
-    private String title;
+    private String industryId;
+    private String industryName;
+    private String industryDescription;
+
+    public IndustryResponse(String industryId, String industryName){
+       industryId = industryId;
+       industryName = industryName;
+       industryDescription = "";
+    }
 }

@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 public class UserInfoResponse {
     private String nickname;
     private String email;
-    private MemberRole memberRole;
+    private String memberRoleName;
 
     public UserInfoResponse(Member member) {
         nickname = member.getNickname();
         email = member.getEmail();
-        memberRole = member.getMemberRole();
+        memberRoleName = member.getMemberRole().getMemberRoleName();
     }
 }

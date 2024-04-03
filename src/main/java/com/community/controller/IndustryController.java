@@ -22,8 +22,10 @@ public class IndustryController {
     public ResponseEntity<List<IndustryResponse>> searchIndustry(){
         List<Industry> industryList = industryService.showAllIndustry();
         List<IndustryResponse> response = industryList.stream().map(industry -> IndustryResponse.builder()
-                    .value(industry.getIndustryId())
-                    .title(industry.getIndustryName())
+                    .industryId(industry.getIndustryId())
+                    .industryName(industry.getIndustryName())
+                    .industryDescription(industry.getIndustryDescription() == null ? "" :
+                        industry.getIndustryDescription())
                     .build())
                 .collect(Collectors.toList());
 

@@ -1,9 +1,6 @@
 package com.community.controller;
 
-import com.community.domain.dto.AddDocumentRequest;
-import com.community.domain.dto.DocumentResponse;
-import com.community.domain.dto.DocumentWriteResponse;
-import com.community.domain.dto.ModifyDocumentRequest;
+import com.community.domain.dto.*;
 import com.community.service.DocumentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -26,29 +23,23 @@ public class DocumentController {
     }
 
     //slice 조회
-    @GetMapping("/board/list/{board_id}")
-    public ResponseEntity<List<DocumentResponse>> showAllDocument(
+    @GetMapping("/document/list/{board_id}")
+    public ResponseEntity<List<FindDocumentResponse>> showAllDocument(
             @PathVariable("board_id") String boardId,
             @PageableDefault(size = 10) Pageable pageable) {
-        List<DocumentResponse> list = documentService.findAllByBoard(boardId, pageable);
+        List<FindDocumentResponse> list = documentService.findAllByBoard(boardId, pageable);
         return ResponseEntity.ok().body(list);
     }
 
     //단건 조회
-    @GetMapping("/board/{document_id}")
-    public ResponseEntity<DocumentResponse> showOneDocument(@PathVariable("document_id") String documentId) {
-        DocumentResponse response = documentService.findOneDocument(documentId);
+    @GetMapping("/document/{document_id}")
+    public ResponseEntity<FindDocumentResponse> showOneDocument(@PathVariable("document_id") String documentId) {
+        FindDocumentResponse response = documentService.findOneDocument(documentId);
         return ResponseEntity.ok().body(response);
     }
 
-    //작성 페이지 이동
-    @GetMapping("/document/{document_id}")
-    public ResponseEntity<DocumentWriteResponse> showWriteDocument(@PathVariable(required = false, name = "document_id") String documentId) {
-        DocumentWriteResponse response = documentService.showWriteDocument(documentId);
-        return ResponseEntity.ok().body(response);
-    }
     //게시글 작성
-    @PostMapping("/document")
+    @PostMapping("/document/manage")
     public ResponseEntity<DocumentWriteResponse> saveDocument(@RequestBody AddDocumentRequest request, Authentication authentication) {
         String email = authentication.getName();
         DocumentWriteResponse response = documentService.saveDocument(email, request);
@@ -56,7 +47,7 @@ public class DocumentController {
     }
 
     //게시글 수정
-    @PutMapping("/document/{document_id}")
+    @PutMapping("/document/manage/{document_id}")
     public ResponseEntity<DocumentWriteResponse> modifyDocument(@PathVariable("document_id") String documentId,@RequestBody ModifyDocumentRequest request, Authentication authentication) {
         String email = authentication.getName();
         DocumentWriteResponse response = documentService.modifyDocument(email,documentId,request);
@@ -65,7 +56,7 @@ public class DocumentController {
 
 
     //게시글 삭제
-    @DeleteMapping("/document/{document_id}")
+    @DeleteMapping("/document/manage/{document_id}")
     public ResponseEntity<DocumentWriteResponse> deleteDocument(@PathVariable("document_id") String documentId, Authentication authentication) {
         String email = authentication.getName();
         DocumentWriteResponse response = documentService.deleteDocument(email, documentId);
@@ -73,7 +64,7 @@ public class DocumentController {
     }
 
     //게시글 좋아요
-    @PutMapping("/board/{document_id}/like")
+    @PutMapping("/document/{document_id}/like")
     public ResponseEntity<DocumentWriteResponse> increaseDocumentLike(@PathVariable("document_id") String documentId) {
         DocumentWriteResponse response = documentService.increaseDocumentLike(documentId);
         return ResponseEntity.ok().body(response);
