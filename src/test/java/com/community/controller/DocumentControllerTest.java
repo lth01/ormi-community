@@ -93,7 +93,7 @@ class DocumentControllerTest {
     void showAllDocument() throws Exception {
         Board board = boardRepository.findAll().get(0);
 
-        ResultActions resultActions = mockMvc.perform(get("/board/list/" + board.getBoardId() + "?page=0")
+        ResultActions resultActions = mockMvc.perform(get("/document/list/" + board.getBoardId() + "?page=0")
                 .with(SecurityMockMvcRequestPostProcessors.user(member)));
 
         resultActions.andExpect(status().isOk()).andDo(print());
@@ -105,14 +105,14 @@ class DocumentControllerTest {
 
         AddDocumentRequest request = new AddDocumentRequest("게시글 제목", "게시글 내용", board);
 
-        ResultActions resultActions = mockMvc.perform(post("/document")
+        ResultActions resultActions = mockMvc.perform(post("/document/manage")
                 .with(SecurityMockMvcRequestPostProcessors.user(member))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
                 .headers(httpHeaders));
 
         resultActions.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.docTitle").value(request.getDocTitle()));
+                .andExpect(jsonPath("$.docTitle").value(request.getDocTitle())).andDo(print());
     }
 
     @Test
@@ -121,23 +121,23 @@ class DocumentControllerTest {
 
         ModifyDocumentRequest request = new ModifyDocumentRequest("제목 수정", "내용 수정", member);
 
-        ResultActions resultActions = mockMvc.perform(put("/document/" + document.getDocId())
+        ResultActions resultActions = mockMvc.perform(put("/document/manage/" + document.getDocId())
                 .with(SecurityMockMvcRequestPostProcessors.user(member))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
                 .headers(httpHeaders));
 
-        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(status().isOk()).andDo(print());
     }
 
     @Test
     void deleteDocument() throws Exception {
         Document document = documentRepository.findAllByDocCreator(member).get(0);
 
-        ResultActions resultActions = mockMvc.perform(delete("/document/" + document.getDocId())
+        ResultActions resultActions = mockMvc.perform(delete("/document/manage/" + document.getDocId())
                 .with(SecurityMockMvcRequestPostProcessors.user(member))
                 .headers(httpHeaders));
 
-        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(status().isOk()).andDo(print());
     }
 }

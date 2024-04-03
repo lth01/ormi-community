@@ -6,21 +6,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DocumentWriteResponse {
-    private String docId;
+public class DocWritePageResponse {
     private String docTitle;
     private String docContent;
-    private String boardId;
-    private String boardName;
+    private String docBoardId;
+    private String docBoardName;
 
-    public DocumentWriteResponse(Document document) {
-        docId = document.getDocId();
+
+    public DocWritePageResponse(Document document) {
         docTitle = document.getDocTitle();
         docContent = document.getDocContent();
-        boardId = document.getBoard().getBoardId();
-        boardName = document.getBoard().getBoardName();
+        docBoardId = document.getBoard().getBoardId();
+        docBoardName = document.getBoard().getBoardName();
     }
+
 }

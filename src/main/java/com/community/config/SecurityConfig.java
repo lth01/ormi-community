@@ -101,8 +101,8 @@ public class SecurityConfig {
         //관리자 페이지와 게시글 작성에 필요한 인증 요구
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")                       //admin 페이지는 ADMIN 권한만 접근가능
-                .requestMatchers("/document").hasAnyAuthority("ADMIN", "USER")  //document 페이지는(글 작성 페이지?) 인증한 사람만(회원)
-                .requestMatchers(HttpMethod.GET,"/document").authenticated()              //GET 예시
+                .requestMatchers("/document/manage").hasAnyAuthority("ADMIN", "USER")  //document 페이지는(글 작성 페이지?) 인증한 사람만(회원)
+                .requestMatchers(HttpMethod.GET,"/document/manage").authenticated()              //GET 예시
                 .anyRequest().permitAll());                                                 //이외에 모든 접근은 ROLE_ANONYMOUS 도 가능
 
         // 익명 사용자에게 부여될 권한 // 익명 사용자의 principal 이름 정의 (기본값은 'anonymousUser')

@@ -27,30 +27,26 @@ public class MemberController {
 
     @PostMapping("/register") //회원가입
     public ResponseEntity<MemberResponse> signup(@RequestBody AddMemberRequest request) {
-        Member member = memberService.save(request);
-        MemberResponse response = MemberResponse.builder()
-                .email(member.getEmail())
-                .nickname(member.getNickname())
-                .build();
+        MemberResponse response = memberService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/modifyInfo") //회원정보 수정 (프론트 연결 시 AuthenticationPrincipal 확인)
-    public ResponseEntity<Member> modify(@RequestBody ModifyInfoRequest request) {
-        Member modMember = memberService.update(request);
-        return ResponseEntity.ok().body(modMember);
+    public ResponseEntity<MemberResponse> modify(@RequestBody ModifyInfoRequest request) {
+        MemberResponse response = memberService.update(request);
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping("/withdrawal") //탈퇴 구현 -> 탈퇴 시 "/logout"으로 이동
-    public ResponseEntity<String> withdrawal(@RequestBody WithdrawalRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> withdrawal(@RequestBody WithdrawalRequest request, HttpServletResponse response) throws IOException {
         //@AuthenticationPrincipal Member member, member.getEmail()
         boolean result = memberService.withdrawal(request);
         if (result) {
             //프론트에서 처리하는 것이 적절(ResponseEntity 과 충돌 우려)
             response.sendRedirect("/logout");
-            return ResponseEntity.ok().body("회원 탈퇴 처리 되었습니다.");
+            return ResponseEntity.ok().body(new SuccessResult("성공", "정상적으로 탈퇴 되었습니다."));
         }
-        else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+        else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResult("실패", "탈퇴 중 문제가 발생하였습니다."));
     }
 
     //유저 정보 조회

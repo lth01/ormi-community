@@ -1,9 +1,6 @@
 package com.community.service;
 
-import com.community.domain.dto.AddDocumentRequest;
-import com.community.domain.dto.DocumentResponse;
-import com.community.domain.dto.DocumentWriteResponse;
-import com.community.domain.dto.ModifyDocumentRequest;
+import com.community.domain.dto.*;
 import com.community.domain.entity.*;
 import com.community.repository.*;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +9,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +35,7 @@ public class DocumentService {
 
     //Slice 처리 조회(조회 시 조회수 함께 상승)
     @Transactional
-    public List<DocumentResponse> findAllByBoard(String boardId, Pageable pageable) {
+    public List<FindDocumentResponse> findAllByBoard(String boardId, Pageable pageable) {
         Board board =boardRepository.findById(boardId).orElseThrow(() -> new RuntimeException("해당 게시판에 게시글이 없습니다."));
         Slice<Document> slice = documentRepository.findAllByBoard(board, pageable);
 
@@ -47,22 +46,13 @@ public class DocumentService {
             String viewId = document.getViewership().getViewId();
             viewershipRepository.updateViewership(count,viewId);
         }
-        return list.stream().filter(x -> x.getDocVisible() == false).map(DocumentResponse::new).toList();
+        return list.stream().filter(x -> x.getDocVisible() == false).map(FindDocumentResponse::new).toList();
     }
 
     //단건 조회
-    public DocumentResponse findOneDocument(String documentId) {
+    public FindDocumentResponse findOneDocument(String documentId) {
         Document document = documentRepository.findById(documentId).orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
-        return new DocumentResponse(document);
-    }
-
-    //작성 페이지 이동
-    public DocumentWriteResponse showWriteDocument(String documentId) {
-        if(documentId != null) {
-            Document document = documentRepository.findById(documentId).orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
-            return new DocumentWriteResponse(document);
-        }
-        return new DocumentWriteResponse();
+        return new FindDocumentResponse(document);
     }
 
     //게시글 작성
