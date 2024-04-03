@@ -1,9 +1,6 @@
 package com.community.service;
 
-import com.community.domain.dto.AddMemberRequest;
-import com.community.domain.dto.ModifyInfoRequest;
-import com.community.domain.dto.UserInfoResponse;
-import com.community.domain.dto.WithdrawalRequest;
+import com.community.domain.dto.*;
 import com.community.domain.entity.Industry;
 import com.community.domain.entity.Member;
 import com.community.domain.entity.MemberInterests;
@@ -37,7 +34,7 @@ public class MemberService {
 
     //회원가입
     @Transactional
-    public Member save(AddMemberRequest request) {
+    public MemberResponse save(AddMemberRequest request) {
         //UUID 자동 생성
         String createUUID = UUID.randomUUID().toString();
         //기본 USER 권한 추가
@@ -80,11 +77,11 @@ public class MemberService {
             memberInterestsRepository.save(interest);
         }
 
-        return member;
+        return new MemberResponse(member);
     }
 
     @Transactional
-    public Member update(ModifyInfoRequest request) {
+    public MemberResponse update(ModifyInfoRequest request) {
 
         Member member = memberRepository.findByEmail("test@test.com").orElseThrow(() -> new RuntimeException("잘못된 사용자 입니다."));
 
@@ -123,7 +120,7 @@ public class MemberService {
             }
 
         }
-        return member;
+        return new MemberResponse(member);
     }
 
     @Transactional
@@ -139,7 +136,7 @@ public class MemberService {
     }
 
     public UserInfoResponse userInfo(String email) {
-        if (email.isEmpty()) throw new RuntimeException("비회원 입니다.");
+        if (email == null || email.isEmpty()) throw new RuntimeException("비회원 입니다.");
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("존재하지 않는 사용자 입니다."));
         return new UserInfoResponse(member);
     }
