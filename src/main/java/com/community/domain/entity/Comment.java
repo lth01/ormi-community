@@ -63,9 +63,9 @@ public class Comment {
     private LikeIt likeIt;
 
     //relation with report
-    @ManyToOne
-    @JoinColumn(name = "report_id")
-    private Report report;
+//    @ManyToOne
+//    @JoinColumn(name = "report_id")
+//    private Report report;
 
 
     @PrePersist

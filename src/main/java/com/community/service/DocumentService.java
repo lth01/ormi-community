@@ -47,7 +47,7 @@ public class DocumentService {
             String viewId = document.getViewership().getViewId();
             viewershipRepository.updateViewership(count,viewId);
         }
-        return list.stream().map(DocumentResponse::new).toList();
+        return list.stream().filter(x -> x.getDocVisible() == false).map(DocumentResponse::new).toList();
     }
 
     //단건 조회

@@ -54,10 +54,6 @@ class DocumentControllerTest {
     @Autowired
     private DocumentRepository documentRepository;
     @Autowired
-    private CommentRepository commentRepository;
-    @Autowired
-    private LikeItRepository likeItRepository;
-    @Autowired
     private BoardRepository boardRepository;
     private Member member;
     @Autowired
