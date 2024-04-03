@@ -60,6 +60,6 @@ public class Document {
 
     @PrePersist
     public void prePersist() {
-        docVisible = docVisible == null ? false : docVisible;
+        docVisible = docVisible == null ? true : docVisible;
     }
 }

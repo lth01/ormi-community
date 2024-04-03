@@ -19,5 +19,5 @@ public class AddMemberRequest {
     private String phone;
     private PasswordQuestion passwordQuestion;
     private String findPasswordAnswer;
-    private List<Industry> industries;
+    private List<String> industries;
 }

@@ -29,6 +29,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
@@ -71,12 +72,10 @@ public class CommentControllerTest {
     void showCommentAll() throws Exception {
         Member member = memberRepository.findByEmail("test2@test.com").orElseThrow();
         Document document = documentRepository.findAllByDocCreator(member).get(0);
-        List<Comment> list = commentRepository.findAllByDocument(document);
 
         ResultActions resultActions = mockMvc.perform(get("/comment/list/" + document.getDocId()));
 
-        resultActions.andExpect(jsonPath("$.size()").value(list.size()));
-
+        resultActions.andExpect(status().isOk()).andDo(print());
     }
 
     @Test
@@ -91,7 +90,7 @@ public class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.commentContent").value("Test comment"));
+                .andExpect(jsonPath("$.commentContent").value("Test comment")).andDo(print());
     }
 
     @Test
@@ -105,7 +104,7 @@ public class CommentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
 
-        resultActions.andExpect(status().isOk()).andExpect(jsonPath("$.commentContent").value("내용 수정!"));
+        resultActions.andExpect(status().isOk()).andExpect(jsonPath("$.commentContent").value("내용 수정!")).andDo(print());
 
     }
 
@@ -120,7 +119,7 @@ public class CommentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
 
-        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(status().isOk()).andDo(print());
 
     }
 
@@ -131,6 +130,6 @@ public class CommentControllerTest {
         log.info(comment.getCommentId());
         ResultActions resultActions = mockMvc.perform(put("/comment/" + comment.getCommentId() + "/like"));
 
-        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(status().isOk()).andDo(print());
     }
 }

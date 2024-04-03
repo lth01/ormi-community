@@ -102,6 +102,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")                       //admin 페이지는 ADMIN 권한만 접근가능
                 .requestMatchers("/document/manage").hasAnyAuthority("ADMIN", "USER")  //document 페이지는(글 작성 페이지?) 인증한 사람만(회원)
+                .requestMatchers("/report/**").hasAnyAuthority("ADMIN", "USER")
                 .requestMatchers(HttpMethod.GET,"/document/manage").authenticated()              //GET 예시
                 .anyRequest().permitAll());                                                 //이외에 모든 접근은 ROLE_ANONYMOUS 도 가능
 

@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS Document (
     doc_creator	            VARCHAR(36)	NOT NULL, --작성자
     doc_mod_date	        TIMESTAMP	DEFAULT NOW(),
     doc_modifier	        VARCHAR(36)	,
-    doc_visible	            BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
+    doc_visible	            BOOLEAN	NOT NULL DEFAULT true, -- NOT NULL 추가 해야 됨
     report_id	            VARCHAR(36) -- key -> id로 변경
 );
 
@@ -122,13 +122,13 @@ CREATE TABLE IF NOT EXISTS comment (
     doc_id	                VARCHAR(36) NOT NULL,
     comment_password	    VARCHAR(30)	,
     like_id         	    VARCHAR(36)	,
-    comment_creator_ip	    CIDR	NOT NULL,
+    comment_creator_ip	    VARCHAR(16)	,
     comment_content	        VARCHAR(200) NOT NULL,
     comment_create_date	    TIMESTAMP	DEFAULT NOW(),
     comment_creator	        VARCHAR(36)	NULL,
     comment_mod_date	    TIMESTAMP	DEFAULT NOW(),
     comment_modifier	    VARCHAR(36)	NULL,
-    comment_visible	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
+    comment_visible	        BOOLEAN	NOT NULL DEFAULT true, -- NOT NULL 추가 해야 됨
     report_id	            VARCHAR(36)
 --    industry_id	            VARCHAR(36) NOT NULL,--삭제
 --    com_id	                VARCHAR(36) NOT NULL --삭제

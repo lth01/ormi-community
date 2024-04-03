@@ -52,7 +52,8 @@ public class CommentService {
         List<FindCommentResponse> response = new ArrayList<>();
         for (Comment comment : list) {
             if(!comment.getCommentVisible()) continue;
-            Long likeCount = likeItRepository.findById(docId).get().getLikeCount();
+            LikeIt likeIt = likeItRepository.findById(docId).orElse(likeItRepository.save(new LikeIt(UUID.randomUUID().toString(), 0L)));
+            Long likeCount = likeIt.getLikeCount();
             response.add(new FindCommentResponse(comment, likeCount));
         }
 
