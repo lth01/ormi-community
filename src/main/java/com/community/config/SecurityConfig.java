@@ -61,7 +61,7 @@ public class SecurityConfig {
         http.authenticationManager(authenticationManager);
 
         // LoginFilter --> /generateToken(변경 -> /api/login)를 호출하면 Login Filter가 실행
-        APILoginFilter apiLoginFilter = new APILoginFilter("/api/login");
+        APILoginFilter apiLoginFilter = new APILoginFilter("/login");
         apiLoginFilter.setAuthenticationManager(authenticationManager);
 
         // 필터 적용 위치 조정
