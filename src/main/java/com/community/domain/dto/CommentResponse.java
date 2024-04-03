@@ -33,6 +33,6 @@ public class CommentResponse {
         commentContent = comment.getCommentContent();
         commentCreator = comment.getCommentCreator();
         document = comment.getDocument();
-        likeIt = comment.getLikeIt();
+
     }
 }

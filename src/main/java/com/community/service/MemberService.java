@@ -8,6 +8,7 @@ import com.community.domain.entity.MemberRole;
 import com.community.repository.MemberInterestsRepository;
 import com.community.repository.MemberRepository;
 import com.community.repository.MemberRoleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -83,7 +84,7 @@ public class MemberService {
     @Transactional
     public MemberResponse update(String email, ModifyInfoRequest request) {
 
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("잘못된 사용자 입니다."));
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("잘못된 사용자 입니다."));
 
         if (!member.getEmail().equals(email)) throw new RuntimeException("수정은 본인만 가능 합니다.");
 
@@ -141,7 +142,7 @@ public class MemberService {
 
     public UserInfoResponse userInfo(String email) {
         if (email == null || email.isEmpty()) throw new RuntimeException("비회원 입니다.");
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("존재하지 않는 사용자 입니다."));
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 입니다."));
         return new UserInfoResponse(member);
     }
 }

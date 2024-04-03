@@ -31,6 +31,9 @@ public class Comment {
     @Column(name = "comment_content", nullable = false)
     private String commentContent;
 
+    @Column(name = "anony_nickname")
+    private String anonyNickname;
+
     @CreatedDate
     @Column(name = "comment_create_date")
     private LocalDateTime commentCreateDate;
@@ -57,15 +60,7 @@ public class Comment {
     @JoinColumn(name = "comment_modifier")
     private Member commentModifier;
 
-    //relation with like_it
-    @ManyToOne
-    @JoinColumn(name = "like_id", nullable = false)
-    private LikeIt likeIt;
 
-    //relation with report
-//    @ManyToOne
-//    @JoinColumn(name = "report_id")
-//    private Report report;
 
 
     @PrePersist

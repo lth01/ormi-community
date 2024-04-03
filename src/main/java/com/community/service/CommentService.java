@@ -14,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,23 +36,30 @@ public class CommentService {
         this.memberRepository = memberRepository;
     }
 
-    public CommentResponse findOneById(String commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("존재하지 않는 댓글 입니다."));
-        return new CommentResponse(comment);
+    //댓글 단건 조회
+    public FindCommentResponse findOneById(String commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 댓글 입니다."));
+        Long likeCount = likeItRepository.findById(commentId).get().getLikeCount();
+        return new FindCommentResponse(comment, likeCount);
     }
 
-    public List<CommentResponse> findAllByDocs(String docId) {
+    //댓글 모두 조회
+    public List<FindCommentResponse> findAllByDocs(String docId) {
         Document document = documentRepository.findById(docId).orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다."));
 
-        List<Comment> list = commentRepository.findAllByDocument(document);
+        List<Comment> list = Optional.ofNullable(commentRepository.findAllByDocument(document)).orElseThrow(() -> new EntityNotFoundException("댓글이 존재하지 않습니다."));
 
-        if(list.isEmpty()) {
-            throw new RuntimeException("댓글이 존재하지 않습니다.");
+        List<FindCommentResponse> response = new ArrayList<>();
+        for (Comment comment : list) {
+            if(!comment.getCommentVisible()) continue;
+            Long likeCount = likeItRepository.findById(docId).get().getLikeCount();
+            response.add(new FindCommentResponse(comment, likeCount));
         }
 
-        return list.stream().map(x -> new CommentResponse(x)).collect(Collectors.toList());
+        return response;
     }
 
+    //댓글 생성
     @Transactional
     public CommentCommonResponse saveComment(String email,String docId, AddCommentRequest request) {
         //document ID 추가
@@ -60,6 +69,11 @@ public class CommentService {
         //멤버 ID 추가
         Member member = memberRepository.findByEmail(email).orElseThrow();
 
+        //LikeIt 테이블에 삽입
+        LikeIt likeIt = LikeIt.builder()
+                .likeId(uuid)
+                .likeCount(0L)
+                .build();
 
         Comment comment = Comment.builder()
                 .commentId(uuid)
@@ -68,16 +82,15 @@ public class CommentService {
                 .commentContent(request.getCommentContent())
                 .document(document)
                 .commentCreator(member)
-                .likeIt(likeItRepository.save(new LikeIt(UUID.randomUUID().toString(), 0L)))
                 .build();
 
-
+        likeItRepository.save(likeIt);
         return new CommentCommonResponse(commentRepository.save(comment));
     }
 
     @Transactional
     public CommentCommonResponse updateComment(String email, String comment_id, ModifyCommentRequest request) {
-        Comment comment = commentRepository.findById(comment_id).orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
+        Comment comment = commentRepository.findById(comment_id).orElseThrow(() -> new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
         Member member = memberRepository.findByEmail(email).orElseThrow();
 
         if (email != null && comment.getCommentCreator().getEmail() != null) {
@@ -99,7 +112,7 @@ public class CommentService {
 
     @Transactional
     public CommentCommonResponse deleteComment(String email, String commentId, DeleteCommentRequest request) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
         Member member = memberRepository.findByEmail(email).orElseThrow();
 
         if (email != null && comment.getCommentCreator().getEmail() != null) {
@@ -112,19 +125,19 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
-        likeItRepository.delete(comment.getLikeIt());
+        likeItRepository.deleteById(commentId);
 
         return new CommentCommonResponse(comment);
     }
 
 
+    //댓글 좋아요 증가
     @Transactional
     public CommentCommonResponse increaseCommentLike(String commentId) {
-        Comment comment = commentRepository.getReferenceById(commentId);
-        Long count = comment.getLikeIt().getLikeCount() + 1L;
-        String likeId = comment.getLikeIt().getLikeId();
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
+        Long count = likeItRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("해당 댓글이 존재하지 않습니다.")).getLikeCount() + 1L;
 
-        likeItRepository.updateLikeCount(count, likeId);
+        likeItRepository.updateLikeCount(count, commentId);
         return new CommentCommonResponse(comment);
     }
 }
