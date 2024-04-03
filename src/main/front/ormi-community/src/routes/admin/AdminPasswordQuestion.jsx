@@ -9,7 +9,8 @@ export default function AdminPasswordQuestion(){
     const [passwordQuestion, setPasswordQuestion] = useState("");
     const [passwordQuestionList, setPasswordQuestionList] = useState([]);
     useEffect(()=>{
-        setPasswordQuestionList(fetchPasswordQuestion());
+        fetchPasswordQuestion()
+        .then(data => setPasswordQuestionList(data));
     },[]);
 
     return (

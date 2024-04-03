@@ -21,6 +21,7 @@ export function AdminMenus(){
                                 <ul className="flex flex-col w-[150px] gap-4 p-4 md:w-[200px] lg:w-[200px] max-h-[500px] overflow-y-auto">
                                     <Menu href="/admin/board" svg={getIcons("Plus")}>게시판 관리</Menu>
                                     <Menu href="/admin/industry" svg={getIcons("Industry")}>업종관리</Menu>
+                                    <Menu href="/admin/passwordquestion" svg={getIcons("User")}>비밀번호질문관리</Menu>
                                 </ul>
                             </NavigationMenuContent>
                         </NavigationMenuItem>

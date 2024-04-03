@@ -1,18 +1,7 @@
 import axios from 'axios';
 import { GenerateLiElUUID } from './keygenerator';
-const URL = "localhost:8080"
+const URL = "http://localhost:8080"
 
-/**
- * @brief 게시판 목록을 조회하는 API입니다.
- * @returns 게시판 목록을 json 배열로 반환
- */
-export function fetchBoardList(){
-    return [
-        {value: '1', title:'너의 이름은?'},
-        {value: '2', title:'너의 직업은?'},
-        {value: '3', title:'행복한가요?'},
-    ];
-}
 
 /**
  * 
@@ -41,35 +30,45 @@ export function fetchEditableUserInfo(){
 }
 
 /**
- * @brief 아직 게시판 생성 허가가 되지 않은 게시판 목록을 불러온다.
- * @returns 
+ * @brief 게시판 생성 허가가 완료된 목록을 조회하는 API입니다.
+ * @returns  { {boardId: UUID, boardName: String, industyrName: String, comName: String}[] }
  */
-export function fetchNotApproveBoardList(){
-    return [
-        {boardId: GenerateLiElUUID(), boardName: "이스트소프트1", career:"IT", comName: ""},
-        {boardId: GenerateLiElUUID(), boardName: "이스트소프트2", career:"IT", comName: ""},
-        {boardId: GenerateLiElUUID(), boardName: "이스트소프트3", career:"IT", comName: ""}
-     ];
+export async function fetchBoardList(){
+    return axios.get(URL + "/board/true")
+    .then(response => response.data);
 }
 
-export function fetchIndustryList(){
-    return [
-        {industryId: GenerateLiElUUID(), industryName: 'IT', industyComment: ""},
-        {industryId: GenerateLiElUUID(), industryName: '조선', industyComment: ""},
-        {industryId: GenerateLiElUUID(), industryName: '철강', industyComment: ""},
-    ];
+/**
+ * @brief 아직 게시판 생성 허가가 되지 않은 게시판 목록을 불러온다.
+ * @returns  { {boardId: UUID, boardName: String, industyrName: String, comName: String}[] }
+ */
+export async function fetchNotApproveBoardList(){
+    return axios.get(URL + "/board/false")
+    .then((response) => response.data);
+   
+    // return [
+    //     {boardId: GenerateLiElUUID(), boardName: "이스트소프트1", career:"IT", comName: ""},
+    //     {boardId: GenerateLiElUUID(), boardName: "이스트소프트2", career:"IT", comName: ""},
+    //     {boardId: GenerateLiElUUID(), boardName: "이스트소프트3", career:"IT", comName: ""}
+    //  ];
+}
+
+/**
+ * @breif 업종 목록을 조회한다. 
+ * @returns { { industryId: String, industryName: String, industryDescription: String }[] }
+ */
+export async function fetchIndustryList(){
+    return axios.get(URL + "/industry")
+    .then(async (response) => response.data);
 }
 
 /**
  * @brief 비밀번호 찾기 질문을 서버로부터 받아온다.
  * @returns 
  */
-export function fetchPasswordQuestion(){
-    return [
-        {passwordQuestionId: GenerateLiElUUID(), passwordQuestion: '1'},
-        {passwordQuestionId: GenerateLiElUUID(), passwordQuestion: '2'},
-        {passwordQuestionId: GenerateLiElUUID(), passwordQuestion: '3'},
-    ];
+export async function fetchPasswordQuestion(){
+    return axios.get(URL + "/passwordquestion")
+    .then(async (response) => response.data);
 }
 
 export function acceptBoardPublicing(boardId, approve = true){
