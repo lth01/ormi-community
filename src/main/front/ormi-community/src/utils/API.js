@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { GenerateLiElUUID } from './keygenerator';
 const URL = "http://localhost:8080"
 
 
@@ -9,6 +8,17 @@ const URL = "http://localhost:8080"
  */
 export async function fetchDocComments(docId){
     return axios.get(URL + `/comment/list/${docId}`)
+    .then((response) => response.data);
+}
+
+/**
+ * @breif 게시판id와 pageNumber로 게시글을 불러온다.
+ * @param {String} boardId 
+ * @param {number} docPageNumber 
+ * @returns { {docId: String, docTitle: String, docContent : String, docCreateDate: YYYY-MM-DD HH:MM:SS.XXX, nickname: String || null, email: String, memberRoleName: USER, boardId: String, boardName: String, likeCount: number, viewCount: number} }
+ */
+export async function fetchDocumentList(boardId, docPageNumber){
+    axios.get(URL + `/document/list/${boardId}?page=${docPageNumber || 0}`)
     .then((response) => response.data);
 }
 
