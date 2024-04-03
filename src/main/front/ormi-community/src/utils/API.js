@@ -60,6 +60,18 @@ export function fetchIndustryList(){
     ];
 }
 
+/**
+ * @brief 비밀번호 찾기 질문을 서버로부터 받아온다.
+ * @returns 
+ */
+export function fetchPasswordQuestion(){
+    return [
+        {passwordQuestionId: GenerateLiElUUID(), passwordQuestion: '1'},
+        {passwordQuestionId: GenerateLiElUUID(), passwordQuestion: '2'},
+        {passwordQuestionId: GenerateLiElUUID(), passwordQuestion: '3'},
+    ];
+}
+
 export function acceptBoardPublicing(boardId, approve = true){
     //Accept API 호출
     console.log('API 호출완료!');
@@ -68,4 +80,9 @@ export function acceptBoardPublicing(boardId, approve = true){
 export function appendIndustry(industryName, industryComment){
     // 업종 추가 API
     console.log("API 호출 완료");
+}
+
+export function appendPasswordQuestion(passwordQuestion){
+    // 비밀번호 질문 추가 API
+    console.log("비밀번호 질문 추가 API 호출 완료");
 }

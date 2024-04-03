@@ -17,6 +17,7 @@ import FindPassword from './routes/Password/FindPassword';
 import Admin from './routes/admin/Admin';
 import AdminBoard from './routes/admin/AdminBoard';
 import AdminIndustry from './routes/admin/AdminIndustry';
+import AdminPasswordQuestion from './routes/admin/AdminPasswordQuestion';
 
 const router = createBrowserRouter([
       {
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
           {
             path: "/admin/industry",
             element: <AdminIndustry></AdminIndustry>
+          },
+          {
+            path: "/admin/passwordquestion",
+            element: <AdminPasswordQuestion></AdminPasswordQuestion>
           }
         ]
       }
