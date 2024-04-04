@@ -6,7 +6,7 @@ export default function Menus(){
     //fetch MenuList by Server
     //가데이터
     const fetchMenus = [
-        {href: "/doc", svg: "FileEdit", title: "게시글작성"},
+        {href: "/document", svg: "FileEdit", title: "게시글작성"},
         {href: "/board", svg: "Plus", title: "게시판생성"},
     ];
 

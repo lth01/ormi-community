@@ -5,9 +5,12 @@ import { loginReqParam } from "@/utils/Parameter";
 import { correctRegxEmail, correctRegxPwd } from "@/utils/patternMatcher";
 import { Link } from "react-router-dom";
 import { login } from "@/utils/API";
+import { useNavigate } from "react-router-dom";
 
 // 로그인 화면 컴포넌트
 export default function Login(){
+    const navigate = useNavigate();
+
     const doLogin = function(){
         const emailVal = document.getElementById("tBox_email").value;
         const pwdVal = document.getElementById("tBox_pwd").value;
@@ -32,6 +35,7 @@ export default function Login(){
         .then(response => {
             //jwt 토큰 발급 확인
             console.log(response);
+            navigate("/");
         });
 
     }

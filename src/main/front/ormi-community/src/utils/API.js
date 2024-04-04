@@ -1,13 +1,59 @@
 import axios from 'axios';
+import mem from "mem";
+import { getAccessToken, getRefreshToken, removeAccessToken, removeRefreshToken, setAccessToken, setRefreshToken } from './Cookie';
 const URL = "http://localhost:8080"
 
+axios.interceptors.response.use(
+    (res) => res,
+    async (res) => {
+    const { config, response } = res;
+
+    //token 재시도 이후, 혹은 별도의 이유로 에러가 나면 reject
+    if(config.url === (URL + "/refreshToken") || response.status !== 401 || config.sent){
+        return Promise.reject(res);
+    }
+
+    config.sent = true;
+    await getNewAccessToken();
+
+    if(getAccessToken()){
+        return axios(config);
+    }
+
+    return Promise.reject(res);
+});
+
+//Access Token을 계속 들고있는건 보안상 이슈 가능성 존재
+const donkeyGet = async (URL) => {
+    const accessToken = getAccessToken();
+    const refreshToken = getRefreshToken();
+
+    return axios.get(URL, {
+        headers: {
+            Authorization: JSON.stringify({accessToken, refreshToken})
+        }
+    });
+}
+
+const donkeyPost = async (URL, body) => {
+    const accessToken = getAccessToken();
+    const refreshToken = getRefreshToken();
+
+    return axios.post(URL, body, {
+        headers: {
+            Authorization: JSON.stringify({accessToken, refreshToken})
+        }
+    });
+}
 
 /**
  * 
  * @returns { {commentId: String, nickname: String, commentCreatorIp: String || null , email: String, commentDate: "YYYY-MM-DD HH:MM:SS.XXX", commentContent: String, likeCount: number}[] } API returns
  */
 export async function fetchDocComments(docId){
-    return axios.get(URL + `/comment/list/${docId}`)
+    const DocCommentURL = URL + `/comment/list/${docId}`;
+
+    return donkeyGet(DocCommentURL)
     .then((response) => response.data);
 }
 
@@ -18,7 +64,9 @@ export async function fetchDocComments(docId){
  * @returns { {docId: String, docTitle: String, docContent : String, docCreateDate: YYYY-MM-DD HH:MM:SS.XXX, nickname: String || null, email: String, memberRoleName: USER, boardId: String, boardName: String, likeCount: number, viewCount: number} }
  */
 export async function fetchDocumentList(boardId, docPageNumber){
-    axios.get(URL + `/document/list/${boardId}?page=${docPageNumber || 0}`)
+    const DocumentListURL = URL +  `/document/list/${boardId}?page=${docPageNumber || 0}`;
+
+    return donkeyGet(DocumentListURL)
     .then((response) => response.data);
 }
 
@@ -43,7 +91,8 @@ export function fetchEditableUserInfo(){
  * @returns  { {boardId: UUID, boardName: String, industyrName: String, comName: String}[] }
  */
 export async function fetchBoardList(){
-    return axios.get(URL + "/board/true")
+    const BoardListURL = URL + "/board/true";
+    return donkeyGet(BoardListURL)
     .then(response => response.data);
 }
 
@@ -52,7 +101,8 @@ export async function fetchBoardList(){
  * @returns  { {boardId: UUID, boardName: String, industyrName: String, comName: String}[] }
  */
 export async function fetchNotApproveBoardList(){
-    return axios.get(URL + "/board/false")
+    const NotApproveBoardListURL = URL + "/board/false";
+    return donkeyGet(NotApproveBoardListURL) 
     .then((response) => response.data);
 }
 
@@ -61,7 +111,8 @@ export async function fetchNotApproveBoardList(){
  * @returns { { industryId: String, industryName: String, industryDescription: String }[] }
  */
 export async function fetchIndustryList(){
-    return axios.get(URL + "/industry")
+    const IndustryListURL = URL + "/industry";
+    return donkeyGet(IndustryListURL) 
     .then((response) => response.data);
 }
 
@@ -70,10 +121,15 @@ export async function fetchIndustryList(){
  * @returns  { { passwordQuestionId : String, passwordQuestion: String}[] }
  */
 export async function fetchPasswordQuestion(){
-    return axios.get(URL + "/passwordquestion")
+    const PasswordQuestionURL = URL + "/passwordquestion";
+    return donkeyGet(PasswordQuestionURL)
     .then(async (response) => response.data);
 }
 
+/**
+ * @brief 성별 데이터를 가져온다. 
+ * @returns { {value: String , title: String }[] }
+ */
 export async function fetchGender(){
     return [
         {value: "M", title: "남성"},
@@ -81,14 +137,45 @@ export async function fetchGender(){
     ]
 }
 
+/**
+ * @param { signupReqParam }
+ * @brief 회원가입 API 
+ */
 export async function signup(signupReqParam){
-    return axios.post(URL + `/member/register`,signupReqParam)
+    const signupURL = URL + `/member/register`;
+    return donkeyPost(signupURL, signupReqParam)
     .then((response) => response.data);
 }
 
+/**
+ * 
+ * @param { loginReqParam } loginReqParam 
+ * @returns 로그인 결과 반환
+ */
 export async function login(loginReqParam){
-    return axios.post(URL + "/login", loginReqParam)
-    .then((response) => response.data);
+    const loginURL = URL + "/login";
+    //응답 데이터 : accessToken, refreshToken
+    return donkeyPost(loginURL, loginReqParam)
+    .then((response) => response.data) 
+    .then(json => {
+        setAccessToken(json.accessToken);
+        setRefreshToken(json.refreshToken);
+    })
+    .catch(response =>{
+        alert("로그인에 실패하였습니다. 이메일 혹은 비밀번호를 확인해주세요");
+    });
+}
+
+export async function writeDocument(docWriteReqParam){
+    const writeDocumentURL = URL + "/document/manage";
+    return donkeyPost(writeDocumentURL, docWriteReqParam)
+    .then((response) => response.data)
+    .catch(e =>{
+        removeAccessToken();
+        removeRefreshToken();
+        alert("로그인이 만료되었습니다. 다시 로그인해주세요");
+        location.href = "/";
+    });
 }
 
 export function acceptBoardPublicing(boardId, approve = true){
@@ -104,4 +191,24 @@ export function appendIndustry(industryName, industryComment){
 export function appendPasswordQuestion(passwordQuestion){
     // 비밀번호 질문 추가 API
     console.log("비밀번호 질문 추가 API 호출 완료");
+}
+
+/**
+ * 다수의 API가 토큰 재발급을 의존할 경우를 대비한 메모미제이션
+ */
+export const getNewAccessToken = mem(async () =>{
+    const newAccessTokenURL = URL + "/refreshToken";
+    return donkeyGet(newAccessTokenURL)
+    .then(response => response.data)
+    .then(json => setAccessToken(json.accessToken));
+}, {maxAge: 1000})
+
+/**
+ * @breif 현재 유저가 로그인한 상태인지 확인한다.
+ * AccessToken이 있을 경우 true
+ * 사유: 실제 로그인한 유저인지 확인하는 API를 호출하면 실제 로그인한 유저가 만료되었는지 확인 가능하므로
+ * @returns 
+ */
+export function isLoginUser(){
+    return getAccessToken() ? true : false;
 }

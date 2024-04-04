@@ -33,3 +33,13 @@ export function loginReqParam(email, password){
 
    return reqParam
 }
+
+export function documentWriteReqParam(boardId, docTitle, docContent){
+   const reqParam = {};
+
+   reqParam.boardId = boardId || "";
+   reqParam.docTitle = docTitle || "";
+   reqParam.docContent = docContent || "";
+
+   return reqParam;
+}
