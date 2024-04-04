@@ -67,11 +67,28 @@ export async function fetchIndustryList(){
 
 /**
  * @brief 비밀번호 찾기 질문을 서버로부터 받아온다.
- * @returns 
+ * @returns  { { passwordQuestionId : String, passwordQuestion: String}[] }
  */
 export async function fetchPasswordQuestion(){
     return axios.get(URL + "/passwordquestion")
     .then(async (response) => response.data);
+}
+
+export async function fetchGender(){
+    return [
+        {value: "M", title: "남성"},
+        {value: "F", title: "여성"}
+    ]
+}
+
+export async function signup(signupReqParam){
+    return axios.post(URL + `/member/register`,signupReqParam)
+    .then((response) => response.data);
+}
+
+export async function login(loginReqParam){
+    return axios.post(URL + "/login", loginReqParam)
+    .then((response) => response.data);
 }
 
 export function acceptBoardPublicing(boardId, approve = true){
