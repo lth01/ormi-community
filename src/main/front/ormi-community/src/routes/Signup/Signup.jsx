@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Select, SelectTrigger, SelectContent, SelectLabel, SelectItem, SelectGroup, SelectValue } from "@/components/ui/select";
 import { fetchGender, fetchIndustryList, fetchPasswordQuestion, signup } from "@/utils/API";
-import { GenerateLiElUUID } from "@/utils/keygenerator";
+import { GenerateLiElUUID } from "@/utils/common";
 import { signupReqParam } from "@/utils/Parameter";
 import { correctRegxEmail, correctRegxPwd } from "@/utils/patternMatcher";
 import { useState, useEffect } from "react";

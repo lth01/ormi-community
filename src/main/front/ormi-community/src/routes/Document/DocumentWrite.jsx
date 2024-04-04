@@ -6,7 +6,7 @@ import { fetchBoardList, writeDocument } from "@/utils/API";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { GenerateLiElUUID } from "@/utils/keygenerator";
+import { GenerateLiElUUID } from "@/utils/common";
 import { documentWriteReqParam } from "@/utils/Parameter";
 
 /**

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import mem from "mem";
 import { getAccessToken, getRefreshToken, removeAccessToken, removeRefreshToken, setAccessToken, setRefreshToken } from './Cookie';
-const URL = "http://localhost:8080"
+const URL = "http://localhost:8080";
+const ipCheckURL = "https://geolocation-db.com/json/";
 
 axios.interceptors.response.use(
     (res) => res,
@@ -138,6 +139,15 @@ export async function fetchGender(){
 }
 
 /**
+ * @brief 내 IP 확인
+ */
+export async function fetchOwnIp(){
+    const ipData = await fetch(ipCheckURL);
+    const locationIp = await ipData.json();
+    return locationIp;
+}
+
+/**
  * @param { signupReqParam }
  * @brief 회원가입 API 
  */
@@ -176,6 +186,12 @@ export async function writeDocument(docWriteReqParam){
         alert("로그인이 만료되었습니다. 다시 로그인해주세요");
         location.href = "/";
     });
+}
+
+export async function writeComment(commentWriteReqParam, docId){
+    const writeCommentURL = URL + `/comment/${docId}`;
+    return donkeyPost(writeCommentURL, commentWriteReqParam)
+    .then((response) => response.data);
 }
 
 export function acceptBoardPublicing(boardId, approve = true){

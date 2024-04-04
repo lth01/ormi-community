@@ -5,20 +5,31 @@ import CommentCircleIcon from "../Icon/CommentCircleIcon";
 import HeartIcon from "../Icon/HeartIcon";
 import { Comment } from "../Comment/Comment";
 import { useState, useEffect } from "react";
-import { fetchDocComments } from "@/utils/API";
+import { fetchDocComments, fetchOwnIp } from "@/utils/API";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Menu from "../Menu/Menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogTitle, AlertDialogTrigger, AlertDialogHeader } from "../ui/alert-dialog";
 import { getIcons } from "@/utils/getComponents";
+import { isLoginUser } from "@/utils/API";
 
 
 const Document = ({boardName, docInfo}) =>{
     const [showComment, setCommentVisibility] = useState(false);
     const [commentInfoList, setCommentInfos] = useState([]);
+    const [isAnonymous, setLoginUser] = useState(true);
+    const [ownIP, setOwnIP] = useState("");
+
+    useEffect(() =>{
+        fetchOwnIp()
+        .then(data => {
+            setOwnIP(data.IPv4);
+            setLoginUser(!isLoginUser());
+        });
+    }, []);
 
     useEffect(() =>{
         fetchDocComments(docInfo ? docInfo?.docId : '9c99ad47-2ae2-498e-b7b8-24a03d3a3725')
-        .then((data) => setCommentInfos(data));;
+        .then((data) => setCommentInfos(data));
     },[showComment]);
 
     const toggleVisibility = () =>{
@@ -33,7 +44,7 @@ const Document = ({boardName, docInfo}) =>{
             <DocumentFooter toggleFunc={toggleVisibility}></DocumentFooter>           
             {
                 showComment ?
-                <Comment commentInfoList={commentInfoList}></Comment> :
+                <Comment commentInfoList={commentInfoList} ownIP={ownIP} isAnonymous={isAnonymous}></Comment> :
                 <></>
             }
         </Card>
