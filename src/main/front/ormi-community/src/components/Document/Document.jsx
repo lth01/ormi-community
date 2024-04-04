@@ -18,8 +18,7 @@ const Document = ({boardName, docInfo}) =>{
 
     useEffect(() =>{
         fetchDocComments(docInfo ? docInfo?.docId : '9c99ad47-2ae2-498e-b7b8-24a03d3a3725')
-        .then((data) => setCommentInfos(data));
-        ;
+        .then((data) => setCommentInfos(data));;
     },[showComment]);
 
     const toggleVisibility = () =>{
