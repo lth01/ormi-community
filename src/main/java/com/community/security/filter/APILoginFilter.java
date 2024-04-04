@@ -30,6 +30,8 @@ public class APILoginFilter extends AbstractAuthenticationProcessingFilter {
             return null;
         }
 
+
+
         Map<String, String> jsonData = parseRequestJSON(request);
         log.info("-----------------------------------APILoginFilter---------------------");
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
