@@ -4,6 +4,7 @@ import com.community.security.filter.APILoginFilter;
 import com.community.security.MemberDetailsService;
 import com.community.security.filter.RefreshTokenFilter;
 import com.community.security.filter.TokenCheckFilter;
+import com.community.security.handler.APILoginFailureHandler;
 import com.community.security.handler.APILoginSuccessHandler;
 import com.community.util.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -68,10 +69,15 @@ public class SecurityConfig {
         http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
 
-//         LoginSuccessHandler -> 로그인 성공 시
+        // LoginSuccessHandler -> 로그인 성공 시
         APILoginSuccessHandler successHandler = new APILoginSuccessHandler(jwtUtil);
-//         LoginFilter --> 로그인 성공 시 successHandler로 이동
+        // LoginFilter --> 로그인 성공 시 successHandler로 이동
         apiLoginFilter.setAuthenticationSuccessHandler(successHandler);
+
+        // failureHandler -> 로그인 실패 시
+        APILoginFailureHandler failureHandler = new APILoginFailureHandler();
+        // failureHandler -> 로그인 실패 시 failureHandler로 이동
+        apiLoginFilter.setAuthenticationFailureHandler(failureHandler);
 
         // TokenCheckFilter --> "/document" 로 시작하는 모든 동작은 해당 필터 동작
         http.addFilterBefore(tokenCheckFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
