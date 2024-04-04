@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -41,7 +42,7 @@ public class DocumentController {
     //게시글 작성
     @PostMapping("/document/manage")
     public ResponseEntity<DocumentWriteResponse> saveDocument(@RequestBody AddDocumentRequest request, Authentication authentication) {
-        String email = authentication.getName();
+        String email = Optional.ofNullable(authentication.getName()).orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
         DocumentWriteResponse response = documentService.saveDocument(email, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -49,7 +50,7 @@ public class DocumentController {
     //게시글 수정
     @PutMapping("/document/manage/{document_id}")
     public ResponseEntity<DocumentWriteResponse> modifyDocument(@PathVariable("document_id") String documentId,@RequestBody ModifyDocumentRequest request, Authentication authentication) {
-        String email = authentication.getName();
+        String email = Optional.ofNullable(authentication.getName()).orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
         DocumentWriteResponse response = documentService.modifyDocument(email,documentId,request);
         return ResponseEntity.ok().body(response);
     }
@@ -58,7 +59,7 @@ public class DocumentController {
     //게시글 삭제
     @DeleteMapping("/document/manage/{document_id}")
     public ResponseEntity<DocumentWriteResponse> deleteDocument(@PathVariable("document_id") String documentId, Authentication authentication) {
-        String email = authentication.getName();
+        String email = Optional.ofNullable(authentication.getName()).orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
         DocumentWriteResponse response = documentService.deleteDocument(email, documentId);
         return ResponseEntity.ok().body(response);
     }

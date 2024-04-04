@@ -2,6 +2,8 @@ package com.community.security.filter;
 
 import com.community.security.exception.AccessTokenException;
 import com.community.util.JWTUtil;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -36,7 +38,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (!path.startsWith("/document/manage")) {
+        if (!path.startsWith("/document/manage") || (!path.startsWith("/member") && (path.contains("/modifyInfo") || path.contains("/withdrawal")))) {
             filterChain.doFilter(request,response);
             return;
         }
@@ -47,33 +49,31 @@ public class TokenCheckFilter extends OncePerRequestFilter {
         try {
             //토큰 검사 이후 다음 필터로 전송
             validateAccessToken(request);
-            log.info("Token check filter.....................");
             filterChain.doFilter(request,response);
         } catch (AccessTokenException accessTokenException) {
             accessTokenException.sendResponseError(response);
         }
     }
 
-    /**
-     * 토큰이 Bearer 형식인지 확인하는 메서드
-     * 토큰은 해당 타입(Bearer)과 인증값을 "type+인증값"으로 보내기 때문에
-     * 1. 토큰의 이상여부 확인
-     * 2. 타입 확인
-     * 3. 토큰의 만료 및 유효성 검사
-     */
     private Map<String, Object> validateAccessToken(HttpServletRequest request) throws AccessTokenException {
-        String headerStr = request.getHeader("Authorization");
+//        String headerStr = request.getHeader("Authorization");
+        JsonParser jsonParser = new JsonParser();
+        JsonObject tokens = jsonParser.parse(request.getHeader("Authorization")).getAsJsonObject();
 
-        if (headerStr == null || headerStr.length() < 8) {
+        String tokenStr = tokens.get("accessToken").getAsString();
+        log.info(tokenStr);
+
+
+        if (tokenStr == null || tokenStr.length() < 8) {
             throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.UNACCEPT);
         }
         // Bearer 검사
-        String tokenType = headerStr.substring(0, 6);
-        String tokenStr = headerStr.substring(7);
+//        String tokenType = headerStr.substring(0, 6);
+//        String tokenStr = headerStr.substring(7);
 
-        if (!"Bearer".equalsIgnoreCase(tokenType)) {
-            throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.BADTYPE);
-        }
+//        if (!"Bearer".equalsIgnoreCase(tokenType)) {
+//            throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.BADTYPE);
+//        }
 
         try {
             Map<String, Object> values = jwtUtil.validateToken(tokenStr);
