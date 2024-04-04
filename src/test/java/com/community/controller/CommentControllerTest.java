@@ -71,7 +71,7 @@ public class CommentControllerTest {
     @Test
     void showCommentAll() throws Exception {
         Member member = memberRepository.findByEmail("test2@test.com").orElseThrow();
-        Document document = documentRepository.findAllByDocCreator(member).get(0);
+        Document document = documentRepository.findAllByDocCreator(member).orElseThrow().get(0);
 
         ResultActions resultActions = mockMvc.perform(get("/comment/list/" + document.getDocId()));
 
@@ -81,7 +81,7 @@ public class CommentControllerTest {
     @Test
     void saveComment() throws Exception {
         Member member = memberRepository.findByEmail("test2@test.com").orElseThrow();
-        Document document = documentRepository.findAllByDocCreator(member).get(0);
+        Document document = documentRepository.findAllByDocCreator(member).orElseThrow().get(0);
         AddCommentRequest request = new AddCommentRequest(null, "127.0.0.1", "Test comment");
 
 
@@ -96,7 +96,7 @@ public class CommentControllerTest {
     @Test
     void modifyComment() throws Exception {
         Member member = memberRepository.findByEmail("test@test.com").orElseThrow();
-        Comment comment = commentRepository.findAllByCommentCreator(member).get(0);
+        Comment comment = commentRepository.findAllByCommentCreator(member).orElseThrow().get(0);
         ModifyCommentRequest request = new ModifyCommentRequest(null, "내용 수정!");
 
         ResultActions resultActions = mockMvc.perform(put("/comment/" + comment.getCommentId())
@@ -111,7 +111,7 @@ public class CommentControllerTest {
     @Test
     void deleteComment() throws Exception {
         Member member = memberRepository.findByEmail("test@test.com").orElseThrow();
-        Comment comment = commentRepository.findAllByCommentCreator(member).get(0);
+        Comment comment = commentRepository.findAllByCommentCreator(member).orElseThrow().get(0);
         DeleteCommentRequest request = new DeleteCommentRequest(null);
 
         ResultActions resultActions = mockMvc.perform(put("/comment/" + comment.getCommentId())
@@ -126,7 +126,7 @@ public class CommentControllerTest {
     @Test
     void likeComment() throws Exception {
         Member member = memberRepository.findByEmail("test@test.com").orElseThrow();
-        Comment comment = commentRepository.findAllByCommentCreator(member).get(0);
+        Comment comment = commentRepository.findAllByCommentCreator(member).orElseThrow().get(0);
         log.info(comment.getCommentId());
         ResultActions resultActions = mockMvc.perform(put("/comment/" + comment.getCommentId() + "/like"));
 

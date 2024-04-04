@@ -100,7 +100,7 @@ class MemberControllerTest {
         PasswordQuestion question = passwordQuestionRepository.findByQuestion("좋아하는 동물은?").orElseThrow();
         List<String> industries = new ArrayList<>();
         industries.add(industryRepository.findAll().get(0).getIndustryId());
-        AddMemberRequest request = new AddMemberRequest("김요한", "두다새", "test3@test.com", "1234", "M", "010-1234-1234", question, "도도새", industries);
+        AddMemberRequest request = new AddMemberRequest("김요한", "두다새", "test3@test.com", "1234", "M", "010-1234-1234", question.getPasswordQuestionId(), "도도새", industries);
         String json = objectMapper.writeValueAsString(request);
 
         //when
@@ -127,7 +127,7 @@ class MemberControllerTest {
                 "도도새",
                 "1234",
                 "01012345678",
-                question,
+                question.getPasswordQuestionId(),
                 "도도새",
                 industries
         );

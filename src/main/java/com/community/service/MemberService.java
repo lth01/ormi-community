@@ -1,20 +1,15 @@
 package com.community.service;
 
 import com.community.domain.dto.*;
-import com.community.domain.entity.Industry;
-import com.community.domain.entity.Member;
-import com.community.domain.entity.MemberInterests;
-import com.community.domain.entity.MemberRole;
-import com.community.repository.IndustryRepository;
-import com.community.repository.MemberInterestsRepository;
-import com.community.repository.MemberRepository;
-import com.community.repository.MemberRoleRepository;
+import com.community.domain.entity.*;
+import com.community.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,13 +21,15 @@ public class MemberService {
     private MemberRoleRepository memberRoleRepository;
     private MemberInterestsRepository memberInterestsRepository;
     private IndustryRepository industryRepository;
+    private PasswordQuestionRepository passwordQuestionRepository;
     private PasswordEncoder encoder;
 
-    public MemberService(MemberRepository memberRepository, MemberRoleRepository memberRoleRepository, MemberInterestsRepository memberInterestsRepository, IndustryRepository industryRepository, PasswordEncoder encoder) {
+    public MemberService(MemberRepository memberRepository, MemberRoleRepository memberRoleRepository, MemberInterestsRepository memberInterestsRepository, IndustryRepository industryRepository, PasswordQuestionRepository passwordQuestionRepository, PasswordEncoder encoder) {
         this.memberRepository = memberRepository;
         this.memberRoleRepository = memberRoleRepository;
         this.memberInterestsRepository = memberInterestsRepository;
         this.industryRepository = industryRepository;
+        this.passwordQuestionRepository = passwordQuestionRepository;
         this.encoder = encoder;
     }
 
@@ -43,6 +40,7 @@ public class MemberService {
         String createUUID = UUID.randomUUID().toString();
         //기본 USER 권한 추가
         MemberRole USER = memberRoleRepository.findAllByMemberRoleName("USER").orElseThrow();
+        PasswordQuestion question = passwordQuestionRepository.findById(request.getPasswordQuestionId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 질문 입니다."));
 
         //닉네임 유효성 검사
         if(memberRepository.existsByNickname(request.getNickname())) {
@@ -67,7 +65,7 @@ public class MemberService {
                 .password(encoder.encode(request.getPassword()))
                 .gender(request.getGender())
                 .phone(request.getPhone())
-                .passwordQuestion(request.getPasswordQuestion())
+                .passwordQuestion(question)
                 .findPasswordAnswer(request.getFindPasswordAnswer())
                 .memberRole(USER)
                 .build());
@@ -89,6 +87,7 @@ public class MemberService {
     public MemberResponse update(String email, ModifyInfoRequest request) {
 
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("잘못된 사용자 입니다."));
+        PasswordQuestion question = passwordQuestionRepository.findById(request.getPasswordQuestionId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 질문 입니다."));
 
         if (!member.getEmail().equals(email)) throw new RuntimeException("수정은 본인만 가능 합니다.");
 
@@ -102,8 +101,8 @@ public class MemberService {
         if(!(request.getPhone().isBlank() || request.getPhone().isEmpty() || request.getPhone().equals(member.getPhone()))) {
             member.setPhone(request.getPhone());
         }
-        if(!(request.getPasswordQuestion() == null || request.getPasswordQuestion().equals(member.getPasswordQuestion()))) {
-            member.setPasswordQuestion(request.getPasswordQuestion());
+        if(!(question.getQuestion().isBlank() || question.getQuestion().equals(member.getPasswordQuestion().getQuestion()))) {
+            member.setPasswordQuestion(question);
         }
         if(!(request.getFindPasswordAnswer().isBlank() || request.getFindPasswordAnswer().isEmpty() || request.getFindPasswordAnswer().equals(member.getFindPasswordAnswer()))) {
             member.setFindPasswordAnswer(request.getFindPasswordAnswer());
@@ -111,7 +110,7 @@ public class MemberService {
 
 
         //관심 업종 저장
-        List<MemberInterests> list = memberInterestsRepository.findAllByMember(member);
+        List<MemberInterests> list = memberInterestsRepository.findAllByMember(member).orElse(new ArrayList<>());
         for(String industryId : request.getIndustriesId()) {
             int count = 0;
             for(MemberInterests interests : list) {
@@ -147,7 +146,7 @@ public class MemberService {
     public UserInfoResponse userInfo(String email) {
         if (email == null || email.isEmpty()) throw new RuntimeException("비회원 입니다.");
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 입니다."));
-        List<InterestResponse> list = memberInterestsRepository.findAllByMember(member).stream().map(InterestResponse::new).toList();
+        List<InterestResponse> list = memberInterestsRepository.findAllByMember(member).orElseThrow(() -> new EntityNotFoundException("잘못된 접근입니다.")).stream().map(InterestResponse::new).toList();
         return new UserInfoResponse(member, list);
     }
 }
