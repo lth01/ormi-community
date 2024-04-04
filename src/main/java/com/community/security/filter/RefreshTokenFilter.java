@@ -3,6 +3,8 @@ package com.community.security.filter;
 import com.community.security.exception.RefreshTokenException;
 import com.community.util.JWTUtil;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
@@ -37,21 +39,17 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         if (!path.equals(refreshPath)) {
-            log.info("skip refresh token filter....");
             filterChain.doFilter(request, response);
             return;
         }
 
-        log.info("Refresh Token Filter run.................");
-
         //전송된 JSON에서 access와 refresh 를 얻어온다.
-        Map<String, String> tokens = parseRequestJSON(request);
 
-        String accessToken = tokens.get("accessToken");
-        String refreshToken = tokens.get("refreshToken");
+        JsonParser jsonParser = new JsonParser();
+        JsonObject tokens = jsonParser.parse(request.getHeader("Authorization")).getAsJsonObject();
 
-        log.info("accessToken : " + accessToken);
-        log.info("refreshToken : " + refreshToken);
+        String accessToken = tokens.get("accessToken").getAsString();
+        String refreshToken = tokens.get("refreshToken").getAsString();
 
         try {
             checkAccessToken(accessToken);
@@ -63,31 +61,11 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
         try {
             refreshClaims = checkRefreshToken(refreshToken);
-            log.info(refreshClaims.toString());
-
-            //Refresh 토큰의 유효기간이 얼마 남지 않은 경우 발급
-            Integer exp = (Integer) refreshClaims.get("exp");
-
-            Date expTime = new Date(Instant.ofEpochMilli(exp).toEpochMilli() *1000);
-            Date current = new Date(System.currentTimeMillis());
-
-            //만료 시간과 현재 시간 계산, 2일 미만 시 refresh 재생성
-            long gapTime = expTime.getTime() - current.getTime();
-
             String email = (String) refreshClaims.get("email");
 
             //Access 토큰은 항상 새로 생성
             String accessTokenValue = jwtUtil.generateToken(Map.of("email", email), 1);
-            String refreshTokenValue = tokens.get("refreshToken");
-
-            //Refresh 토큰은 2일 미만시에만 생성
-            if (gapTime < (1000 * 60 * 60 * 24)) {
-                refreshTokenValue = jwtUtil.generateToken(Map.of("email", email), 24);
-            }
-
-            log.info("Refresh Token result : ");
-            log.info("accessToken : " + accessTokenValue);
-            log.info("refreshToken : " + refreshTokenValue);
+            String refreshTokenValue = tokens.get("refreshToken").getAsString();
 
             sendTokens(accessTokenValue, refreshTokenValue, response);
 
@@ -118,9 +96,8 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
         } catch (MalformedJwtException malformedJwtException) {
             throw new RefreshTokenException(RefreshTokenException.ErrorCase.NO_REFRESH);
         } catch (Exception exception) {
-            new RefreshTokenException(RefreshTokenException.ErrorCase.NO_REFRESH);
+            throw new RefreshTokenException(RefreshTokenException.ErrorCase.NO_REFRESH);
         }
-        return null;
     }
 
     //토큰을 전송하는 메서드
@@ -136,16 +113,5 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
         }catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private Map<String, String> parseRequestJSON(HttpServletRequest request) {
-
-        try(Reader reader = new InputStreamReader(request.getInputStream())) {
-            Gson gson = new Gson();
-            return gson.fromJson(reader, Map.class);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-        return null;
     }
 }
