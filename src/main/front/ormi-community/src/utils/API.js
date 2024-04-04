@@ -1,16 +1,25 @@
 import axios from 'axios';
-import { GenerateLiElUUID } from './keygenerator';
 const URL = "http://localhost:8080"
 
 
 /**
  * 
- * @returns { {nickName: String, userId: String, commentDate: "YYYY-MM-DD", comment: String, likeCount: number, likeAble: boolean}[] } API returns
+ * @returns { {commentId: String, nickname: String, commentCreatorIp: String || null , email: String, commentDate: "YYYY-MM-DD HH:MM:SS.XXX", commentContent: String, likeCount: number}[] } API returns
  */
-export function fetchDocComments(){
-    return [ {nickName: "thlee", userId: "130dfqi", commentDate: "2024-03-01", comment: "안녕하세요 저는 뚱이에요", likeCount: 3, likeAble: true},
-        {nickName: "afl", userId: "1123123i", commentDate: "2024-03-01", comment: "안녕하세요 저는 뚱이에요2", likeCount: 2, likeAble: true},
-    ];
+export async function fetchDocComments(docId){
+    return axios.get(URL + `/comment/list/${docId}`)
+    .then((response) => response.data);
+}
+
+/**
+ * @breif 게시판id와 pageNumber로 게시글을 불러온다.
+ * @param {String} boardId 
+ * @param {number} docPageNumber 
+ * @returns { {docId: String, docTitle: String, docContent : String, docCreateDate: YYYY-MM-DD HH:MM:SS.XXX, nickname: String || null, email: String, memberRoleName: USER, boardId: String, boardName: String, likeCount: number, viewCount: number} }
+ */
+export async function fetchDocumentList(boardId, docPageNumber){
+    axios.get(URL + `/document/list/${boardId}?page=${docPageNumber || 0}`)
+    .then((response) => response.data);
 }
 
 /**
@@ -45,12 +54,6 @@ export async function fetchBoardList(){
 export async function fetchNotApproveBoardList(){
     return axios.get(URL + "/board/false")
     .then((response) => response.data);
-   
-    // return [
-    //     {boardId: GenerateLiElUUID(), boardName: "이스트소프트1", career:"IT", comName: ""},
-    //     {boardId: GenerateLiElUUID(), boardName: "이스트소프트2", career:"IT", comName: ""},
-    //     {boardId: GenerateLiElUUID(), boardName: "이스트소프트3", career:"IT", comName: ""}
-    //  ];
 }
 
 /**
@@ -59,7 +62,7 @@ export async function fetchNotApproveBoardList(){
  */
 export async function fetchIndustryList(){
     return axios.get(URL + "/industry")
-    .then(async (response) => response.data);
+    .then((response) => response.data);
 }
 
 /**

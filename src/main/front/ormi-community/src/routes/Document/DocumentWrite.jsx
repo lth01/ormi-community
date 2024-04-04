@@ -15,8 +15,8 @@ import { GenerateLiElUUID } from "@/utils/keygenerator";
 export default function DocumentWrite(){
     const [boardList, setBoardList] = useState([]);
     useEffect(() =>{
-        const newBoardList = fetchBoardList();
-        setBoardList([...newBoardList]);
+        fetchBoardList()
+        .then(data => {setBoardList(data);});
     },[]);
     return (
         <main className="flex flex-col bg-gray-100 min-h-screen items-center justify-center">
@@ -30,7 +30,7 @@ export default function DocumentWrite(){
                             <SelectContent>
                                 {
                                     boardList.map(board =>{
-                                        return <SelectItem key={GenerateLiElUUID()} value={board.value}>{board.title}</SelectItem>;
+                                        return <SelectItem key={board.boardId} value={board.boardId}>{board.boardName}</SelectItem>;
                                     })
                                 }
                             </SelectContent>

@@ -2,16 +2,17 @@ import LabelSection from "@/components/Layout/LabelSection";
 import LogoHeader from "@/components/Layout/LogoHeader";
 import { Select, SelectTrigger, SelectContent, SelectLabel, SelectItem, SelectGroup, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { fetchBoardList } from "@/utils/API";
+import { fetchBoardList, fetchIndustryList } from "@/utils/API";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 
 export default function BoardCreate(){
     const [boardList, setBoardList] = useState([]);
     const [interestCareer, setInterestCareers] = useState([]);
+    const [industries, setIndustries] = useState([]);
     useEffect(() =>{
-        const newBoardList = fetchBoardList();
-        setBoardList([...newBoardList]);
+        fetchIndustryList()
+        .then(data => setIndustries(data));
     },[]);
 
     return (
@@ -27,9 +28,9 @@ export default function BoardCreate(){
                             <SelectValue placeholder="업종"></SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="IT">IT</SelectItem>
-                            <SelectItem value="조선">조선</SelectItem>
-                            <SelectItem value="의료">의료</SelectItem>
+                            {
+                                industries.map(industry => <SelectItem value={industry.industryId}>{industry.industryName}</SelectItem>)
+                            }
                         </SelectContent>
                     </Select>
                 </LabelSection>

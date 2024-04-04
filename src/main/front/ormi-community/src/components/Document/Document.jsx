@@ -14,11 +14,12 @@ import { getIcons } from "@/utils/getComponents";
 
 const Document = ({boardName, docInfo}) =>{
     const [showComment, setCommentVisibility] = useState(false);
-    const [usrInfoList, setUsrInfos] = useState([]);
+    const [commentInfoList, setCommentInfos] = useState([]);
 
     useEffect(() =>{
-        const newUsers = fetchDocComments();
-        setUsrInfos([...newUsers]);
+        fetchDocComments(docInfo ? docInfo?.docId : '9c99ad47-2ae2-498e-b7b8-24a03d3a3725')
+        .then((data) => setCommentInfos(data));
+        ;
     },[showComment]);
 
     const toggleVisibility = () =>{
@@ -33,7 +34,7 @@ const Document = ({boardName, docInfo}) =>{
             <DocumentFooter toggleFunc={toggleVisibility}></DocumentFooter>           
             {
                 showComment ?
-                <Comment userInfoList={usrInfoList}></Comment> :
+                <Comment commentInfoList={commentInfoList}></Comment> :
                 <></>
             }
         </Card>
