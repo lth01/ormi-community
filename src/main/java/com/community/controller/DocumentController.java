@@ -4,7 +4,9 @@ import com.community.domain.dto.*;
 import com.community.service.DocumentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -73,5 +75,16 @@ public class DocumentController {
     public ResponseEntity<SuccessResult> increaseDocumentLike(@PathVariable("document_id") String documentId) {
         documentService.increaseDocumentLike(documentId);
         return ResponseEntity.ok().body(new SuccessResult("성공", "좋아요가 성공적으로 적용 되었습니다."));
+    }
+
+    //게시글 찾기
+    @GetMapping("/document/search/{keyword}")
+    public ResponseEntity<List<FindDocumentResponse>> searchDocument(@PathVariable() String keyword,
+                                                                     @PageableDefault(size = 10)
+                                                                     @SortDefault.SortDefaults({@SortDefault(sort = "docCreateDate", direction = Sort.Direction.DESC)})
+                                                                     Pageable pageable) {
+
+        List<FindDocumentResponse> list = documentService.searchDocument(keyword,pageable);
+        return ResponseEntity.ok().body(list);
     }
 }

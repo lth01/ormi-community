@@ -15,5 +15,5 @@ import java.util.*;
 public interface DocumentRepository extends JpaRepository<Document, String> {
     Optional<List<Document>> findAllByDocCreator(Member member);
     Slice<Document> findAllByBoard(Board board, Pageable page);
-
+    Slice<Document> findByDocContentContaining(String keyword, Pageable page);
 }
