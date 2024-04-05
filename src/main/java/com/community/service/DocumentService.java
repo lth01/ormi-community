@@ -152,6 +152,9 @@ public class DocumentService {
 
     @Transactional
     public List<FindDocumentResponse> searchDocument(String keyword, Pageable pageable) {
+        if (keyword == null) {
+            throw new IllegalArgumentException("잘못된 입력 입니다.");
+        }
         Slice<Document> slice = documentRepository.findByDocContentContaining(keyword,pageable);
 
         List<Document> list = slice.getContent();

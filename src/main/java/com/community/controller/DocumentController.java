@@ -2,6 +2,7 @@ package com.community.controller;
 
 import com.community.domain.dto.*;
 import com.community.service.DocumentService;
+import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -77,14 +78,13 @@ public class DocumentController {
         return ResponseEntity.ok().body(new SuccessResult("성공", "좋아요가 성공적으로 적용 되었습니다."));
     }
 
-    //게시글 찾기
-    @GetMapping("/document/search/{keyword}")
-    public ResponseEntity<List<FindDocumentResponse>> searchDocument(@PathVariable() String keyword,
+    //게시글 검색 조회
+    @GetMapping("/document/search/")
+    public ResponseEntity<List<FindDocumentResponse>> searchDocument(@RequestBody SearchDocumentRequest request,
                                                                      @PageableDefault(size = 10)
                                                                      @SortDefault.SortDefaults({@SortDefault(sort = "docCreateDate", direction = Sort.Direction.DESC)})
                                                                      Pageable pageable) {
-
-        List<FindDocumentResponse> list = documentService.searchDocument(keyword,pageable);
+        List<FindDocumentResponse> list = documentService.searchDocument(request.getKeyword(),pageable);
         return ResponseEntity.ok().body(list);
     }
 }
