@@ -123,15 +123,11 @@ class MemberControllerTest {
         industries.add(industryRepository.findAll().get(0).getIndustryId());
 
         ModifyInfoRequest request = new ModifyInfoRequest(
-                "test@test.com",
                 "도도새",
-                "1234",
-                "01012345678",
                 question.getPasswordQuestionId(),
                 "도도새",
                 industries
         );
-
 
         //when
         ResultActions resultActions = mockMvc.perform(put("/member/modifyInfo")

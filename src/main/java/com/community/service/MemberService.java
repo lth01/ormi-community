@@ -171,6 +171,16 @@ public class MemberService {
         return new FindPasswordResponse(request);
     }
 
+    @Transactional
+    public MemberResponse changePassword(ChangePasswordRequest request) {
+        if (request.getEmail() == null || request.getPassword() == null) throw new IllegalArgumentException("데이터가 비어 있습니다.");
+        if (request.getEmail().isEmpty() || request.getPassword().isEmpty()) throw new IllegalArgumentException("데이터가 비어 있습니다.");
+        if (validatePassword(request.getPassword())) throw new IllegalArgumentException("비밀번호 유형이 올바르지 않습니다.");
+        Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 입니다."));
+        member.setPassword(encoder.encode(request.getPassword()));
+        return new MemberResponse(member);
+    }
+
     //비밀번호 유효성 검사 메서드
     public boolean validatePassword(String password) {
         String regex = "^(?=.\\d)(?=.[A-Z])(?=.[a-z])(?=.[^\\w\\d\\s:])([^\\s]){8,16}$";
