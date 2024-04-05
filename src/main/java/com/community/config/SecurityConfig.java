@@ -1,7 +1,9 @@
 package com.community.config;
 
+import com.community.repository.MemberRepository;
 import com.community.security.filter.APILoginFilter;
 import com.community.security.MemberDetailsService;
+import com.community.security.filter.JwtAuthenticationFilter;
 import com.community.security.filter.RefreshTokenFilter;
 import com.community.security.filter.TokenCheckFilter;
 import com.community.security.handler.APILoginFailureHandler;
@@ -33,11 +35,12 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final MemberDetailsService memberDetailsService;
-
+    private final MemberRepository memberRepository;
     private final JWTUtil jwtUtil;
 
-    public SecurityConfig(MemberDetailsService memberDetailsService, JWTUtil jwtUtil) {
+    public SecurityConfig(MemberDetailsService memberDetailsService, MemberRepository memberRepository, JWTUtil jwtUtil) {
         this.memberDetailsService = memberDetailsService;
+        this.memberRepository = memberRepository;
         this.jwtUtil = jwtUtil;
     }
 
@@ -80,6 +83,9 @@ public class SecurityConfig {
         apiLoginFilter.setAuthenticationFailureHandler(failureHandler);
 
         // TokenCheckFilter --> "/document" 로 시작하는 모든 동작은 해당 필터 동작
+        http.addFilterBefore(new JwtAuthenticationFilter(memberRepository,jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
+
         http.addFilterBefore(tokenCheckFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         // refreshToken 호출

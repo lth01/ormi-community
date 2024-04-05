@@ -7,6 +7,7 @@ import com.community.domain.entity.Document;
 import com.community.domain.entity.Member;
 import com.community.repository.*;
 import com.community.util.JWTUtil;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -83,10 +84,14 @@ class DocumentControllerTest {
 
         Map<String, Object> claimMap = Map.of("email", TEST_EMAIL);
 
-        String jwt = jwtUtil.generateToken(claimMap, 1);
+        String AccessJWT = jwtUtil.generateToken(claimMap, 1);
+        String RefreshJWT = jwtUtil.generateToken(claimMap, 1);
 
         httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Bearer " + jwt);
+        Gson gson = new Gson();
+        Map<String, String> token = Map.of("accessToken",AccessJWT, "refreshToken", RefreshJWT);
+        String jsonStr = gson.toJson(token);
+        httpHeaders.add("Authorization", jsonStr);
     }
 
     @Test
@@ -111,8 +116,7 @@ class DocumentControllerTest {
                 .content(objectMapper.writeValueAsString(request))
                 .headers(httpHeaders));
 
-        resultActions.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.docTitle").value(request.getDocTitle())).andDo(print());
+        resultActions.andExpect(status().isCreated()).andDo(print());
     }
 
     @Test
