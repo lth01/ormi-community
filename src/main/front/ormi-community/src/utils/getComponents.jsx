@@ -12,6 +12,7 @@ import DeleteIcon from "@/components/Icon/DeleteIcon";
 import PlusIcon from "@/components/Icon/PlusIcon";
 import CompanyIcon from "@/components/Icon/Company";
 import IndustryIcon from "@/components/Icon/Company";
+import BoardMenu from "@/components/Menu/BoardMenu";
 
 export function getIcons(svgStr){
     switch(svgStr){
@@ -59,4 +60,13 @@ export function getIcons(svgStr){
     menuList = menuList.filter(menu => menu.svg != null);
   
     return menuList.map((menu) => <Menu svg={menu.svg} href={menu.href}>{menu.title}</Menu>);
+  }
+
+  /**
+   * 
+   * @param {{boardId: String, boardName: String, clickCallbackFn: Function | null , className:String}} boardMenuList 
+   * @returns {BoardMenu[]}
+   */
+  export function getBoardMenuComponents(boardMenuList){
+    return boardMenuList.map((boardMenu) => <BoardMenu {...boardMenu}></BoardMenu>)
   }

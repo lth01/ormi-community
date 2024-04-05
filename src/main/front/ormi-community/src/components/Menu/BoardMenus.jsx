@@ -5,17 +5,28 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger,
   } from "@/components/ui/navigation-menu"
-import { getMenuComponents } from "../../utils/getComponents";
+import { getBoardMenuComponents} from "../../utils/getComponents";
+import { useContext, useEffect, useState } from "react";
+import { fetchBoardList } from "@/utils/API";
+import { GlobalContext } from "@/index";
 
 export default function BoardMenus(){
-    const fetchBoards = [
-        {href: "", svg: "Share", title: "삼성전자"},
-        {href: "", svg: "Share", title: "SK하이닉스"},
-        {href: "", svg: "Share", title: "웅진코놀ㅈㅁㄹㅁㅈ로맺돼awefaweofiajwefojo"},
-    ];
+    const [boardList, setBoardList] = useState([]);
+    const [menuList, setMenuList] = useState([]);
+    
+    // global state hook
+    const {selectDocID, setSelectDocID} = useContext(GlobalContext);
 
-    const MenuList = getMenuComponents(fetchBoards);
 
+    useEffect(() =>{
+        fetchBoardList()
+        .then(data =>{
+            setBoardList(data);
+            setMenuList(getBoardMenuComponents(data));
+            setSelectDocID(data.length > 0 ? data[0].boardId : "");
+        });
+    }, []);
+    
     return (
         <NavigationMenu>
             <NavigationMenuList>
@@ -23,7 +34,7 @@ export default function BoardMenus(){
                     <NavigationMenuTrigger className="p-0">게시판목록</NavigationMenuTrigger>
                     <NavigationMenuContent className="overflow-y-auto">
                         <ul className="flex flex-col w-[150px] gap-4 p-4 md:w-[200px] lg:w-[200px] max-h-[500px] overflow-y-auto">
-                            {...MenuList}
+                            {...menuList}
                         </ul>
                     </NavigationMenuContent>
                 </NavigationMenuItem>
