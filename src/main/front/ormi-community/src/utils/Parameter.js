@@ -54,6 +54,13 @@ export function commentWriteReqParam(commentPassword, commentCreatorIp, commentC
    return reqParam;
 }
 
-export function editUserInfoReqParam(){
+export function editUserInfoReqParam(nickname, passwordQuestionId, findPasswordAnswer, industriesId){
+   const reqParam = {};
 
+   reqParam.nickname = nickname;
+   reqParam.passwordQuestionId = passwordQuestionId;
+   reqParam.findPasswordAnswer = findPasswordAnswer;
+   reqParam.industriesId = industriesId;
+
+   return reqParam;
 }

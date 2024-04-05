@@ -214,9 +214,10 @@ export function appendPasswordQuestion(passwordQuestion){
     console.log("비밀번호 질문 추가 API 호출 완료");
 }
 
-export function editUserInfo(userEditInfo){
+export async function editUserInfo(userEditInfo){
     const editUserInfoURL = URL + `/member/modifyInfo`;
-    donkeyPut(editUserInfoURL, userEditInfo);
+    return donkeyPut(editUserInfoURL, userEditInfo)
+    .then(response => response.data);
 }
 
 /**

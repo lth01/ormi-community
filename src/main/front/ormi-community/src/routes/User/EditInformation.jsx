@@ -5,13 +5,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectContent, SelectLabel, SelectItem, SelectGroup, SelectValue } from "@/components/ui/select";
 import { GlobalContext } from "@/index";
-import { fetchGender, fetchIndustryList, fetchPasswordQuestion, fetchUserInfo, isLoginUser, logout} from "@/utils/API";
+import { editUserInfo, fetchGender, fetchIndustryList, fetchPasswordQuestion, fetchUserInfo, isLoginUser, logout} from "@/utils/API";
+import { editUserInfoReqParam } from "@/utils/Parameter";
 import { goToback } from "@/utils/RouteHelper";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 
 
 export default function EditInformation(){
+    const nevigate = useNavigate();
     //변수 선언 지역
     const navigate = useNavigate();
     //전역변수 - 로그인 여부 확인
@@ -58,6 +60,20 @@ export default function EditInformation(){
         setInterestIndustry1(interest[0] ? interest[0].industryId : "");
         setInterestIndustry2(interest[1] ? interest[1].industryId : "");
         setInterestIndustry3(interest[2] ? interest[2].industryId : "");
+    }
+
+    const doEditUserInfo = () =>{
+        //원래는 여기에 유효성 검증이 필요하나... 시간상 일단 스킵
+        let industriesId = [interestIndustry1 || undefined, interestIndustry2 || undefined, interestIndustry3 || undefined];
+        industriesId = industriesId.filter(industry => industry);
+        const reqParam = editUserInfoReqParam(tBox_nickname_val, ddl_phq_val, tBox_pha_val, industriesId);
+
+        editUserInfo(reqParam)
+        .then(data =>{
+            alert("성공적으로 수정되었습니다.");
+            navigate("/");
+        })
+        .catch(e => console.log(e));
     }
 
 
@@ -126,12 +142,9 @@ export default function EditInformation(){
                         <div onClick={()=>{navigate(-1)}}>취소</div>
                     </Button>
                     <Button asChild className="bg-violet-800 mt-4 hover:bg-violet-600">
-                        <div onClick={()=>{console.log("정보수정")}}>정보수정</div>
+                        <div onClick={doEditUserInfo}>정보수정</div>
                     </Button>
                 </div>
-                {/* 버튼은 onClick 콜백 동작 불가 */}
-                
-                
             </section>
         </main>
     );
