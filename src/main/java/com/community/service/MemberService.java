@@ -97,18 +97,13 @@ public class MemberService {
 
         if (!member.getEmail().equals(email)) throw new RuntimeException("수정은 본인만 가능 합니다.");
 
+        if (request.getNickname() == null || request.getFindPasswordAnswer() == null || request.getPasswordQuestionId() == null || request.getIndustriesId() == null) {
+            throw new IllegalArgumentException("빈공간이 존재합니다.");
+        }
         //빈공간 및 같은 값은 수정 하지 않음.
         if(!(request.getNickname().isEmpty() || request.getNickname().isBlank() || request.getNickname().equals(member.getNickname()))) {
             if (memberRepository.existsByNickname(request.getNickname())) throw new IllegalArgumentException("이미 등록된 닉네임 입니다.");
             member.setNickname(request.getNickname());
-        }
-        if(!(request.getPassword().isBlank() || request.getPassword().isEmpty() || encoder.matches(member.getPassword(), request.getPassword()))){
-            // 비밀번호 유효성 검사
-            if (validatePassword(request.getPassword())) throw new IllegalArgumentException("비밀번호가 올바르지 않습니다.");
-            member.setPassword(encoder.encode(request.getPassword()));
-        }
-        if(!(request.getPhone().isBlank() || request.getPhone().isEmpty() || request.getPhone().equals(member.getPhone()))) {
-            member.setPhone(request.getPhone());
         }
         if(!(question.getQuestion().isBlank() || question.getQuestion().equals(member.getPasswordQuestion().getQuestion()))) {
             member.setPasswordQuestion(question);
@@ -157,6 +152,23 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 입니다."));
         List<InterestResponse> list = memberInterestsRepository.findAllByMember(member).orElseThrow(() -> new EntityNotFoundException("잘못된 접근입니다.")).stream().map(InterestResponse::new).toList();
         return new UserInfoResponse(member, list);
+    }
+
+    public FindPasswordResponse findPassword(FindPasswordRequest request) {
+        if (request.getEmail() == null || request.getPasswordQuestionId() == null || request.getFindPasswordAnswer() == null) {
+            throw new IllegalArgumentException("데이터가 비어 있습니다.");
+        }
+        if (request.getEmail().isEmpty() || request.getPasswordQuestionId().isEmpty() || request.getFindPasswordAnswer().isEmpty()) {
+            throw new IllegalArgumentException("데이터가 비어 있습니다.");
+        }
+        Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 입니다."));
+        if (member.getPasswordQuestion().getPasswordQuestionId().equals(request.getPasswordQuestionId())) {
+            throw new IllegalArgumentException("가입정보와 입력하신 데이터가 상이합니다.");
+        }
+        if (member.getFindPasswordAnswer().equals(request.getFindPasswordAnswer())) {
+            throw new IllegalArgumentException("가입정보와 입력하신 데이터가 상이합니다.");
+        }
+        return new FindPasswordResponse(request);
     }
 
     //비밀번호 유효성 검사 메서드
