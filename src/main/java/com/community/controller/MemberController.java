@@ -65,4 +65,10 @@ public class MemberController {
         if (email == null) throw new IllegalArgumentException("잘못 입력 되었습니다.");
         return ResponseEntity.ok().body(memberService.userInfo(email));
     }
+
+    //비밀번호 찾기 질문
+    @PostMapping("/member/findpassword")
+    public ResponseEntity<FindPasswordResponse> findPassword(@RequestBody FindPasswordRequest request) {
+        return ResponseEntity.ok().body(memberService.findPassword(request));
+    }
 }
