@@ -8,6 +8,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,33 +42,36 @@ public class DocumentController {
 
     //게시글 작성
     @PostMapping("/document/manage")
-    public ResponseEntity<DocumentWriteResponse> saveDocument(@RequestBody AddDocumentRequest request, Authentication authentication) {
+    public ResponseEntity<SuccessResult> saveDocument(@RequestBody AddDocumentRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = Optional.ofNullable(authentication.getName()).orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
-        DocumentWriteResponse response = documentService.saveDocument(email, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        documentService.saveDocument(email, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResult("성공", "게시글이 성공적으로 작성 되었습니다."));
     }
 
     //게시글 수정
     @PutMapping("/document/manage/{document_id}")
-    public ResponseEntity<DocumentWriteResponse> modifyDocument(@PathVariable("document_id") String documentId,@RequestBody ModifyDocumentRequest request, Authentication authentication) {
+    public ResponseEntity<SuccessResult> modifyDocument(@PathVariable("document_id") String documentId,@RequestBody ModifyDocumentRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = Optional.ofNullable(authentication.getName()).orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
-        DocumentWriteResponse response = documentService.modifyDocument(email,documentId,request);
-        return ResponseEntity.ok().body(response);
+        documentService.modifyDocument(email,documentId,request);
+        return ResponseEntity.ok().body(new SuccessResult("성공", "게시글이 성공적으로 수정 되었습니다."));
     }
 
 
     //게시글 삭제
     @DeleteMapping("/document/manage/{document_id}")
-    public ResponseEntity<DocumentWriteResponse> deleteDocument(@PathVariable("document_id") String documentId, Authentication authentication) {
+    public ResponseEntity<SuccessResult> deleteDocument(@PathVariable("document_id") String documentId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = Optional.ofNullable(authentication.getName()).orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
-        DocumentWriteResponse response = documentService.deleteDocument(email, documentId);
-        return ResponseEntity.ok().body(response);
+        documentService.deleteDocument(email, documentId);
+        return ResponseEntity.ok().body(new SuccessResult("성공", "게시글이 성공적으로 삭제 되었습니다."));
     }
 
     //게시글 좋아요
     @PutMapping("/document/{document_id}/like")
-    public ResponseEntity<DocumentWriteResponse> increaseDocumentLike(@PathVariable("document_id") String documentId) {
-        DocumentWriteResponse response = documentService.increaseDocumentLike(documentId);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<SuccessResult> increaseDocumentLike(@PathVariable("document_id") String documentId) {
+        documentService.increaseDocumentLike(documentId);
+        return ResponseEntity.ok().body(new SuccessResult("성공", "좋아요가 성공적으로 적용 되었습니다."));
     }
 }

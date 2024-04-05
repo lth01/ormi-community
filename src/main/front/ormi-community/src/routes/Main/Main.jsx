@@ -1,9 +1,23 @@
 import Header from "@/components/Layout/Header";
 import Menus from "@/components/Menu/Menus";
 import mainCharacter from "../../assets/image/mainCharacter.png";
-import { Document } from "@/components/Document/Document";
+import { useContext, useEffect, useState } from "react";
+import { GlobalContext } from "@/index";
+import { fetchDocumentList } from "@/utils/API";
+import { getDocumentComponents } from "@/utils/getComponents";
 
 export default function Main(){
+   const {selectBoardID} = useContext(GlobalContext);
+   const [documentList, setDocumentList] = useState([]);
+
+    useEffect(()=>{
+      if(!selectBoardID) return ;
+      fetchDocumentList(selectBoardID)
+      .then(data => {
+        setDocumentList(getDocumentComponents(data));
+      });
+    },[selectBoardID]);
+
     return (
     <div className="flex flex-col h-screen">
         <Header></Header>
@@ -16,8 +30,9 @@ export default function Main(){
             <div className="flex justify-center bg-[#7a8cd1] rounded-lg">
                 <img src={mainCharacter} className="h-[380px]"></img>
             </div>
-            <Document></Document>
-            <Document></Document>
+            <div>
+              {...documentList}
+            </div>
           </div>
         </section>
       </main>

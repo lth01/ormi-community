@@ -30,13 +30,13 @@ import java.util.Set;
 public class Member implements UserDetails  {
 
     @Id
-    @Column(name = "member_id", nullable = false)
+    @Column(name = "member_id")
     private String memberId;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
     @Column(name = "email",nullable = false, unique = true)

@@ -68,7 +68,8 @@ public class CommentService {
         //UUID 생성
         String uuid = UUID.randomUUID().toString();
         //멤버 ID 추가
-        Member member = memberRepository.findByEmail(email).orElseThrow();
+        Member member = null;
+        if(!email.isEmpty()) member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("잘못된 사용자 입니다."));
 
         //LikeIt 테이블에 삽입
         LikeIt likeIt = LikeIt.builder()
@@ -82,7 +83,7 @@ public class CommentService {
                 .commentCreatorIp(request.getCommentCreatorIp())
                 .commentContent(request.getCommentContent())
                 .document(document)
-                .commentCreator(member)
+                .commentCreator(member == null? null : member)
                 .build();
 
         likeItRepository.save(likeIt);
@@ -92,9 +93,11 @@ public class CommentService {
     @Transactional
     public CommentCommonResponse updateComment(String email, String comment_id, ModifyCommentRequest request) {
         Comment comment = commentRepository.findById(comment_id).orElseThrow(() -> new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
-        Member member = memberRepository.findByEmail(email).orElseThrow();
 
-        if (email != null && comment.getCommentCreator().getEmail() != null) {
+        Member member = null;
+        if(!email.isEmpty()) member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("잘못된 사용자 입니다."));
+
+        if (!email.isEmpty() && comment.getCommentCreator().getEmail() != null) {
             if (!(comment.getCommentCreator().getMemberId().equals(member.getMemberId()))) throw new RuntimeException("작성자 외에 수정할 수 없습니다.");
         }
 
@@ -106,7 +109,7 @@ public class CommentService {
             comment.setCommentContent(request.getCommentContent());
         }
 
-        comment.setCommentModifier(member);
+        if(member != null) comment.setCommentModifier(member);
 
         return new CommentCommonResponse(comment);
     }
@@ -114,9 +117,11 @@ public class CommentService {
     @Transactional
     public CommentCommonResponse deleteComment(String email, String commentId, DeleteCommentRequest request) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
-        Member member = memberRepository.findByEmail(email).orElseThrow();
 
-        if (email != null && comment.getCommentCreator().getEmail() != null) {
+        Member member = null;
+        if(!email.isEmpty()) member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("잘못된 사용자 입니다."));
+
+        if (!email.isEmpty() && comment.getCommentCreator().getEmail() != null) {
             if (!(comment.getCommentCreator().getMemberId().equals(member.getMemberId()))) throw new RuntimeException("작성자 외에 삭제할 수 없습니다.");
         }
 
