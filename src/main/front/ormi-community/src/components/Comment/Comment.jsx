@@ -1,13 +1,16 @@
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import HeartIcon from "../Icon/HeartIcon"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { fetchOwnIp, isLoginUser, writeComment } from "@/utils/API";
+import { writeComment } from "@/utils/API";
 import AnonymousInputSection from "./AnonymousInputSection";
 import { commentWriteReqParam } from "@/utils/Parameter";
+import { GlobalContext } from "@/index";
 
-const Comment = ({commentInfoList, ownIP, isAnonymous}) => {
+const Comment = ({commentInfoList, ownIP}) => {
+    //전역 변수 - 로그인 여부
+    const {isLoginUser} = useContext(GlobalContext);
     const [nickname, setNickName] = useState("");
     const [password, setPassword] = useState("");
     const [content, setContent] = useState("");
@@ -30,7 +33,7 @@ const Comment = ({commentInfoList, ownIP, isAnonymous}) => {
                 }
             </ul>
             {
-                isAnonymous ? 
+                !isLoginUser ? 
                 <AnonymousInputSection ownIP={ownIP} setNickName={setNickName} setPassword={setPassword}></AnonymousInputSection> :
                 <></>
             }

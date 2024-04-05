@@ -4,7 +4,7 @@ import MoreVerticalIcon from "../Icon/MoreVerticalIcon";
 import CommentCircleIcon from "../Icon/CommentCircleIcon";
 import HeartIcon from "../Icon/HeartIcon";
 import { Comment } from "../Comment/Comment";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { fetchDocComments, fetchOwnIp } from "@/utils/API";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Menu from "../Menu/Menu";
@@ -12,20 +12,20 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { getIcons } from "@/utils/getComponents";
 import { isLoginUser } from "@/utils/API";
 import { GenerateLiElUUID } from "@/utils/common";
+import { GlobalContext } from "@/index";
 
 
 const Document = (props) =>{
     const {boardName, docId, docTitle, docContent, boardId, nickname, email} = props;
+
     const [showComment, setCommentVisibility] = useState(false);
     const [commentInfoList, setCommentInfos] = useState([]);
-    const [isAnonymous, setLoginUser] = useState(true);
     const [ownIP, setOwnIP] = useState("");
 
     useEffect(() =>{
         fetchOwnIp()
         .then(data => {
             setOwnIP(data.IPv4);
-            setLoginUser(!isLoginUser());
         });
     }, []);
 
@@ -46,7 +46,7 @@ const Document = (props) =>{
             <DocumentFooter toggleFunc={toggleVisibility}></DocumentFooter>           
             {
                 showComment ?
-                <Comment commentInfoList={commentInfoList} ownIP={ownIP} isAnonymous={isAnonymous}></Comment> :
+                <Comment commentInfoList={commentInfoList} ownIP={ownIP}></Comment> :
                 <></>
             }
         </Card>

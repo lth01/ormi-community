@@ -1,27 +1,17 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AvatarImage, AvatarFallback, Avatar} from "../ui/avatar"
-import { Input } from "../ui/input";
 import DonkeyLogo from "../Icon/DonkeyLogo";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Menu from "../Menu/Menu";
 import { getIcons } from "../../utils/getComponents";
 import { NavigationMenuLink, NavigationMenuList, NavigationMenu, NavigationMenuItem } from "../ui/navigation-menu";
 import { useEffect, useState } from "react";
-import { fetchUserInfo, isLoginUser } from "@/utils/API";
+import { fetchUserInfo, isLoginUser, logout } from "@/utils/API";
+import { GlobalContext } from "@/index";
 function Header(){
-    const [isAnonymous, setAnonymous] = useState(true);
-    const [userInfo, setUserInfo] = useState(null);
-    useEffect(() =>{
-      isLoginUser() ?
-      //유저 정보 조회 및 보관 
-      fetchUserInfo()
-      .then(data =>{
-        console.log(data);
-        setUserInfo(data);
-        setAnonymous(false);
-      }) :
-      setAnonymous(true);
-    },[]);
+    //전역변수 - 로그인 여부
+    const {isLogin} = useContext(GlobalContext);
 
     return <header className="flex items-center justify-between px-4 py-2 border-b dark:border-gray-800">
         <Link className="flex items-center gap-2 text-lg font-semibold" to="/">
@@ -29,7 +19,7 @@ function Header(){
         </Link>
         <div className="flex items-center gap-4">
           {
-            !isAnonymous ?
+            isLogin ?
             <Popover>
               <PopoverTrigger asChild>
                 <Avatar className="h-8 w-8">
@@ -38,21 +28,18 @@ function Header(){
                 </Avatar>
               </PopoverTrigger>
               <PopoverContent className="w-80 grid gap-2">
-                <Menu href={"/"} svg={getIcons("User")}>정보수정</Menu>               
-                <Menu href={"/"} svg={getIcons("Logout")}>로그아웃</Menu>               
+                <Menu href={"/user"} svg={getIcons("User")}>정보수정</Menu>               
+                {/* 토큰 없앤 후 리다이렉션 */}
+                <Menu href={"/"} beforeClicks={[logout]} svg={getIcons("Logout")}>로그아웃</Menu>               
               </PopoverContent>
             </Popover> :
             <NavigationMenu>
               <NavigationMenuList className="flex gap-2">
                 <NavigationMenuItem>
-                  <Link to="/login">
-                    <NavigationMenuLink className="cursor-pointer">로그인</NavigationMenuLink>
-                  </Link>
+                    <NavigationMenuLink href="/login" className="cursor-pointer">로그인</NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="/signup">
-                    <NavigationMenuLink className="cursor-pointer">회원가입</NavigationMenuLink>
-                  </Link>
+                  <NavigationMenuLink href="/signup" className="cursor-pointer">회원가입</NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList> 
             </NavigationMenu>

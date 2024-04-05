@@ -47,6 +47,17 @@ const donkeyPost = async (URL, body) => {
     });
 }
 
+const donkeyPut = async (URL, body) => {
+    const accessToken = getAccessToken();
+    const refreshToken = getRefreshToken();
+
+    return axios.put(URL, body, {
+        headers: {
+            Authorization: JSON.stringify({accessToken, refreshToken})
+        }
+    })
+}
+
 /**
  * 
  * @returns { {commentId: String, nickname: String, commentCreatorIp: String || null , email: String, commentDate: "YYYY-MM-DD HH:MM:SS.XXX", commentContent: String, likeCount: number}[] } API returns
@@ -228,6 +239,14 @@ export const getNewAccessToken = mem(async () =>{
     .then(response => response.data)
     .then(json => setAccessToken(json.accessToken));
 }, {maxAge: 1000})
+
+/**
+ * @breif 토큰 유무로 로그인 상태 확인하므로 토큰 삭제만 진행
+ */
+export const logout = () =>{
+    removeAccessToken();
+    removeRefreshToken();
+}
 
 /**
  * @breif 현재 유저가 로그인한 상태인지 확인한다.

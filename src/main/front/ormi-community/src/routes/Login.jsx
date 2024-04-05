@@ -6,10 +6,13 @@ import { correctRegxEmail, correctRegxPwd } from "@/utils/patternMatcher";
 import { Link } from "react-router-dom";
 import { login } from "@/utils/API";
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "..";
+import { useContext } from "react";
 
 // 로그인 화면 컴포넌트
 export default function Login(){
     const navigate = useNavigate();
+    const {isLogin, setLoginUser} = useContext(GlobalContext)
 
     const doLogin = function(){
         const emailVal = document.getElementById("tBox_email").value;
@@ -33,8 +36,8 @@ export default function Login(){
 
         login(reqParam)
         .then(response => {
+            setLoginUser(true);
             //jwt 토큰 발급 확인
-            console.log(response);
             navigate("/");
         });
 
