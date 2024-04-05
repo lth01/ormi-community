@@ -68,5 +68,16 @@ public class JWTUtil {
         return claim;
     }
 
+    public String getUserName(String token) throws JwtException {
+        Map<String, Object> claim = null;
+        //11 버전
+        claim = Jwts.parserBuilder()
+                .setSigningKey(key.getBytes())
+                .build()
+                .parseClaimsJws(token) // 파싱 및 검증, 실패 시 에러
+                .getBody();
+
+        return (String) claim.get("email");
+    }
 
 }
