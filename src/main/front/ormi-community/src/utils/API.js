@@ -93,22 +93,6 @@ export async function fetchDocumentList(boardId, docPageNumber){
 }
 
 /**
- * @brief 현재 로그인한 유저의 수정 가능 정보를 불러옵니다.
- * @returns { {nickName: String, phoneNumber: String passwordHintQuestion: String, passwordHintAnswer: String, career1: String, career2: String, career3: String} }
- */
-export function fetchEditableUserInfo(){
-    return {
-        nickName : 'th',
-        phoneNumber: '+821037740456',
-        passwordHintQuestion: '1',
-        passwordHintAnswer: "answer",
-        career1: 'IT',
-        career2: '조선',
-        career3: '의료'
-    };
-}
-
-/**
  * @brief 게시판 생성 허가가 완료된 목록을 조회하는 API입니다.
  * @returns  { {boardId: UUID, boardName: String, industyrName: String, comName: String}[] }
  */
@@ -228,6 +212,11 @@ export function appendIndustry(industryName, industryComment){
 export function appendPasswordQuestion(passwordQuestion){
     // 비밀번호 질문 추가 API
     console.log("비밀번호 질문 추가 API 호출 완료");
+}
+
+export function editUserInfo(userEditInfo){
+    const editUserInfoURL = URL + `/member/modifyInfo`;
+    donkeyPut(editUserInfoURL, userEditInfo);
 }
 
 /**

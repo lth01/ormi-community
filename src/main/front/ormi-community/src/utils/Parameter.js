@@ -53,3 +53,7 @@ export function commentWriteReqParam(commentPassword, commentCreatorIp, commentC
 
    return reqParam;
 }
+
+export function editUserInfoReqParam(){
+
+}
