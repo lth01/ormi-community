@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,25 +27,25 @@ public class MemberController {
     }
 
     @PostMapping("/member/register") //회원가입
-    public ResponseEntity<MemberResponse> signup(@RequestBody AddMemberRequest request) {
-        MemberResponse response = memberService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<SuccessResult> signup(@RequestBody AddMemberRequest request) {
+        memberService.save(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResult("성공", "회원 정보가 성공적으로 저장 되었습니다."));
     }
 
     @PutMapping("/member/modifyInfo") //회원정보 수정 (프론트 연결 시 AuthenticationPrincipal 확인)
-    public ResponseEntity<MemberResponse> modify(@RequestBody ModifyInfoRequest request, Authentication authentication) {
+    public ResponseEntity<SuccessResult> modify(@RequestBody ModifyInfoRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = Optional.ofNullable(authentication.getName()).orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
-        MemberResponse response = memberService.update(email, request);
-        return ResponseEntity.ok().body(response);
+        memberService.update(email, request);
+        return ResponseEntity.ok().body(new SuccessResult("성공", "회원 정보가 성공적으로 수정 되었습니다."));
     }
 
     @PutMapping("/member/withdrawal")
-    public ResponseEntity<?> withdrawal(@RequestBody WithdrawalRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+    public ResponseEntity<?> withdrawal(@RequestBody WithdrawalRequest request) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = Optional.ofNullable(authentication.getName()).orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
         boolean result = memberService.withdrawal(email, request);
         if (result) {
-            //프론트에서 처리하는 것이 적절(ResponseEntity 과 충돌 우려)
-//            response.sendRedirect("/logout");
             return ResponseEntity.ok().body(new SuccessResult("성공", "정상적으로 탈퇴 되었습니다."));
         }
         else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResult("실패", "탈퇴 중 문제가 발생하였습니다."));
@@ -52,7 +53,8 @@ public class MemberController {
 
     //유저 정보 조회
     @GetMapping("/member/userinfo")
-    public ResponseEntity<UserInfoResponse> userInfo(Authentication authentication) {
+    public ResponseEntity<UserInfoResponse> userInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = Optional.ofNullable(authentication.getName()).orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
         return ResponseEntity.ok().body(memberService.userInfo(email));
     }

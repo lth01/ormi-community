@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -43,12 +45,16 @@ public class MemberService {
         PasswordQuestion question = passwordQuestionRepository.findById(request.getPasswordQuestionId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 질문 입니다."));
 
         //닉네임 유효성 검사
-        if(memberRepository.existsByNickname(request.getNickname())) {
+        if (memberRepository.existsByNickname(request.getNickname())) {
             throw new IllegalArgumentException("이미 등록된 닉네임 입니다.");
         }
         //이메일 유효성 검사
-        if(memberRepository.existsByEmail(request.getEmail())) {
+        if (memberRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("이미 등록된 이메일 입니다.");
+        }
+        //비밀번호 유효성 검사
+        if (validatePassword(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 올바르지 않습니다.");
         }
 
         //앞자리 한 글자로 변환
@@ -93,9 +99,12 @@ public class MemberService {
 
         //빈공간 및 같은 값은 수정 하지 않음.
         if(!(request.getNickname().isEmpty() || request.getNickname().isBlank() || request.getNickname().equals(member.getNickname()))) {
+            if (memberRepository.existsByNickname(request.getNickname())) throw new IllegalArgumentException("이미 등록된 닉네임 입니다.");
             member.setNickname(request.getNickname());
         }
         if(!(request.getPassword().isBlank() || request.getPassword().isEmpty() || encoder.matches(member.getPassword(), request.getPassword()))){
+            // 비밀번호 유효성 검사
+            if (validatePassword(request.getPassword())) throw new IllegalArgumentException("비밀번호가 올바르지 않습니다.");
             member.setPassword(encoder.encode(request.getPassword()));
         }
         if(!(request.getPhone().isBlank() || request.getPhone().isEmpty() || request.getPhone().equals(member.getPhone()))) {
@@ -148,5 +157,13 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 입니다."));
         List<InterestResponse> list = memberInterestsRepository.findAllByMember(member).orElseThrow(() -> new EntityNotFoundException("잘못된 접근입니다.")).stream().map(InterestResponse::new).toList();
         return new UserInfoResponse(member, list);
+    }
+
+    //비밀번호 유효성 검사 메서드
+    public boolean validatePassword(String password) {
+        String regex = "^(?=.\\d)(?=.[A-Z])(?=.[a-z])(?=.[^\\w\\d\\s:])([^\\s]){8,16}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
     }
 }

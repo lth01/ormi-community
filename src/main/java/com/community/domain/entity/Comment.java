@@ -52,7 +52,7 @@ public class Comment {
 
     //relation with doc_creator
     @ManyToOne
-    @JoinColumn(name = "comment_creator", nullable = false)
+    @JoinColumn(name = "comment_creator")
     private Member commentCreator;
 
     //relation with doc_modifier
