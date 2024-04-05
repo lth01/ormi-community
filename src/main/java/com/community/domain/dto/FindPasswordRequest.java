@@ -1,18 +1,15 @@
 package com.community.domain.dto;
 
-import com.community.domain.entity.Industry;
 import com.community.domain.entity.PasswordQuestion;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class ModifyInfoRequest {
+@NoArgsConstructor
+public class FindPasswordRequest {
     private String email;
-    private String nickname;
     private String passwordQuestionId;
     private String findPasswordAnswer;
-    private List<String> industriesId;
 }
