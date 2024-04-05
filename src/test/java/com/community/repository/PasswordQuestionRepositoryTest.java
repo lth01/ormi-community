@@ -2,7 +2,9 @@ package com.community.repository;
 
 import com.community.domain.entity.PasswordQuestion;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,11 +19,19 @@ class PasswordQuestionRepositoryTest {
 
     @Autowired
     public PasswordQuestionRepository passwordQuestionRepository;
+    private PasswordQuestion question;
+    @BeforeEach
+    public void setUp() {
+        question = new PasswordQuestion(UUID.randomUUID().toString(), "좋아하는 음식은?");
+    }
+
+    @AfterEach
+    public void clear() {
+        passwordQuestionRepository.delete(question);
+    }
 
     @Test
     public void save() {
-        PasswordQuestion question = new PasswordQuestion(UUID.randomUUID().toString(), "좋아하는 동물은?");
-        log.info("저장할 객체 : " + question.getQuestion());
         passwordQuestionRepository.save(question);
 
         PasswordQuestion savedQuestion = passwordQuestionRepository.findById(question.getPasswordQuestionId()).orElseThrow();
