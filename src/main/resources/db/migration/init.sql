@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS member (
 CREATE TABLE IF NOT EXISTS member_role ( -- 이름 변경 authorities -> member_role
     authority_id	        VARCHAR(36)	PRIMARY KEY,
     authority_name	        VARCHAR(100) NOT NULL
---    member_have             VARCHAR(36) NOT NULL --추가 // 다시 제거
 );
 
 -- 패스워드 질문 테이블
@@ -90,10 +89,12 @@ CREATE TABLE IF NOT EXISTS Review_Categories (
 -- 게시판 테이블
 CREATE TABLE IF NOT EXISTS board (
     board_id	            VARCHAR(36)	PRIMARY KEY, --"commu_" 삭제
-    industry_id	            VARCHAR(36) NOT NULL,
-    com_id	                VARCHAR(36) NOT NULL UNIQUE,
+    board_name              VARCHAR(20),
+    industry_id	            VARCHAR(36) ,
+    com_id	                VARCHAR(36) ,
     board_create_date	    TIMESTAMP DEFAULT NOW(), --"commu_" 삭제
     board_creator	        VARCHAR(36) NOT NULL, -- 운영진, "commu_" 삭제, 이름변경
+    commu_board_request_approve BOOLEAN,
     board_requester	        VARCHAR(36) NOT NULL -- 생성요청자 회원ID, 이름변경
 );
 
@@ -102,18 +103,13 @@ CREATE TABLE IF NOT EXISTS Document (
     doc_id	                VARCHAR(36)	PRIMARY KEY,
     board_id	            VARCHAR(36) NOT NULL, --"commu_" 삭제
     industry_id	            VARCHAR(36) NOT NULL,
-    com_id	                VARCHAR(36), -- NOT NULl 삭제
     doc_title	            VARCHAR(100) NOT NULL, -- name -> title 변경
     doc_content	            TEXT NOT NULL,
---    doc_writer	            VARCHAR(36)	NOT NULL, -- 삭제
-    doc_like	            VARCHAR(36) ,
-    doc_view_count	        VARCHAR(36)	,
     doc_create_date	        TIMESTAMP	DEFAULT NOW(),
     doc_creator	            VARCHAR(36)	NOT NULL, --작성자
     doc_mod_date	        TIMESTAMP	DEFAULT NOW(),
     doc_modifier	        VARCHAR(36)	,
     doc_visible	            BOOLEAN	NOT NULL DEFAULT true, -- NOT NULL 추가 해야 됨
-    report_id	            VARCHAR(36) -- key -> id로 변경
 );
 
 -- 댓글 테이블
@@ -121,17 +117,14 @@ CREATE TABLE IF NOT EXISTS comment (
     comment_id	            VARCHAR(36)	PRIMARY KEY,
     doc_id	                VARCHAR(36) NOT NULL,
     comment_password	    VARCHAR(30)	,
-    like_id         	    VARCHAR(36)	,
     comment_creator_ip	    VARCHAR(16)	,
     comment_content	        VARCHAR(200) NOT NULL,
     comment_create_date	    TIMESTAMP	DEFAULT NOW(),
-    comment_creator	        VARCHAR(36)	NULL,
+    comment_creator	        VARCHAR(36)	,
     comment_mod_date	    TIMESTAMP	DEFAULT NOW(),
-    comment_modifier	    VARCHAR(36)	NULL,
+    comment_modifier	    VARCHAR(36)	,
     comment_visible	        BOOLEAN	NOT NULL DEFAULT true, -- NOT NULL 추가 해야 됨
-    report_id	            VARCHAR(36)
---    industry_id	            VARCHAR(36) NOT NULL,--삭제
---    com_id	                VARCHAR(36) NOT NULL --삭제
+    anony_nickname          VARCHAR(20)
 );
 
 -- 좋아요 테이블
@@ -153,6 +146,7 @@ CREATE TABLE IF NOT EXISTS report (
     reporter_ip	            VARCHAR(36) , -- NOT NULL 제거
     report_date	            TIMESTAMP DEFAULT NOW(),
     report_judge	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨
+    report_type             BIGINT NOT NULL,
 --    report_visible	        BOOLEAN	NOT NULL DEFAULT FALSE, -- NOT NULL 추가 해야 됨 -- 삭제해야할 듯
     report_content	        VARCHAR(200) NOT NULL
 );

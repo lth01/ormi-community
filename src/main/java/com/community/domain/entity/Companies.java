@@ -17,9 +17,9 @@ public class Companies {
     @Column(name = "com_id")
     private String comId;
 
-    @Column(name = "reg_num")
+    @Column(name = "reg_num", unique = true, nullable = false)
     private String regNum;
 
-    @Column(name = "com_name")
+    @Column(name = "com_name", nullable = false)
     private String comName;
 }

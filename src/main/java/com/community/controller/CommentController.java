@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,39 +37,41 @@ public class CommentController {
 
     //댓글 생성
     @PostMapping("/comment/{doc_id}")
-    public ResponseEntity<CommentCommonResponse> saveComment(@PathVariable("doc_id") String docId, @RequestBody AddCommentRequest request, Authentication authentication, HttpServletRequest servletRequest) {
+    public ResponseEntity<SuccessResult> saveComment(@PathVariable("doc_id") String docId, @RequestBody AddCommentRequest request, HttpServletRequest servletRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //아이피 가져오기
         request.setCommentCreatorIp(servletRequest.getRemoteAddr());
         //접속 중인 사용자의 데이터 가져오기
         String email = "";
         if (authentication != null) {email = authentication.getName();}
-        CommentCommonResponse response = commentService.saveComment(email ,docId, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        commentService.saveComment(email ,docId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResult("성공", "댓글이 정상적으로 등록 되었습니다."));
     }
 
     //댓글 수정
     @PutMapping("/comment/{comment_id}")
-    public ResponseEntity<CommentCommonResponse> modifyComment(@PathVariable("comment_id") String commentId, @RequestBody ModifyCommentRequest request, Authentication authentication) {
+    public ResponseEntity<SuccessResult> modifyComment(@PathVariable("comment_id") String commentId, @RequestBody ModifyCommentRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = "";
         if (authentication != null) {email = authentication.getName();}
-        CommentCommonResponse response = commentService.updateComment(email, commentId, request);
-
-        return ResponseEntity.ok().body(response);
+        commentService.updateComment(email, commentId, request);
+        return ResponseEntity.ok().body(new SuccessResult("성공", "댓글이 정상적으로 수정 되었습니다."));
     }
 
     //댓글 삭제
     @DeleteMapping("/comment/{comment_id}")
-    public ResponseEntity<CommentCommonResponse> deleteComment(@PathVariable("comment_id") String commentId, @RequestBody DeleteCommentRequest request, Authentication authentication) {
+    public ResponseEntity<SuccessResult> deleteComment(@PathVariable("comment_id") String commentId, @RequestBody DeleteCommentRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = "";
         if (authentication != null) {email = authentication.getName();}
-        CommentCommonResponse response = commentService.deleteComment(email, commentId, request);
-        return ResponseEntity.ok().body(response);
+        commentService.deleteComment(email, commentId, request);
+        return ResponseEntity.ok().body(new SuccessResult("성공", "댓글이 정상적으로 삭제 되었습니다."));
     }
 
     //댓글 좋아요
     @PutMapping("/comment/{comment_id}/like")
-    public ResponseEntity<CommentCommonResponse> likeComment(@PathVariable("comment_id") String commentId) {
-        CommentCommonResponse response = commentService.increaseCommentLike(commentId);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<SuccessResult> likeComment(@PathVariable("comment_id") String commentId) {
+        commentService.increaseCommentLike(commentId);
+        return ResponseEntity.ok().body(new SuccessResult("성공", "좋아요가 성공적으로 적용 되었습니다."));
     }
 }

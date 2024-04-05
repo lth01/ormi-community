@@ -32,13 +32,12 @@ public class TokenCheckFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getRequestURI();
 
-        if (!path.startsWith("/document/manage") || (!path.startsWith("/member") && (path.contains("/modifyInfo") || path.contains("/withdrawal")))) {
+        if (!path.startsWith("/document/manage") || (!path.startsWith("/member") && !(path.contains("/modifyInfo") || path.contains("/withdrawal")))) {
             filterChain.doFilter(request,response);
             return;
         }

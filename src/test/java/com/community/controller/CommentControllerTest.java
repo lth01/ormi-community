@@ -59,6 +59,7 @@ public class CommentControllerTest {
     @Autowired
     private LikeItRepository likeItRepository;
 
+    private Member member;
 
     @BeforeEach
     public void setup() {
@@ -66,11 +67,12 @@ public class CommentControllerTest {
                 .webAppContextSetup(this.context)
                 .apply(springSecurity())
                 .build();
+        member = memberRepository.findByEmail("test2@test.com").orElseThrow();
     }
 
     @Test
     void showCommentAll() throws Exception {
-        Member member = memberRepository.findByEmail("test2@test.com").orElseThrow();
+
         Document document = documentRepository.findAllByDocCreator(member).orElseThrow().get(0);
 
         ResultActions resultActions = mockMvc.perform(get("/comment/list/" + document.getDocId()));
@@ -80,7 +82,6 @@ public class CommentControllerTest {
 
     @Test
     void saveComment() throws Exception {
-        Member member = memberRepository.findByEmail("test2@test.com").orElseThrow();
         Document document = documentRepository.findAllByDocCreator(member).orElseThrow().get(0);
         AddCommentRequest request = new AddCommentRequest(null, "127.0.0.1", "Test comment");
 
