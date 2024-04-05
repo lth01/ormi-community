@@ -39,7 +39,7 @@ public class Report {
     @Column(name = "report_type")
     private Long reportType;
     // 게시글 및 댓글, 리뷰 아이디
-    @Column(name = "report_thing")
+    @Column(name = "report_thing", nullable = false)
     private String reportThing;
 
     //relation with doc_creator(Member)
