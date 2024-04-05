@@ -21,8 +21,6 @@ export default function EditInformation(){
     const [industries, setIndustries] = useState([]);
     //비밀번호 찾기 질문
     const [passwordQuestions, setPasswordQuestions] = useState([]);
-    //성별
-    const [genders, setGenders] = useState([]);
 
     useEffect(() =>{
         console.log(isLogin, isLoginUser());
@@ -31,7 +29,7 @@ export default function EditInformation(){
             logout();
             navigate("/");
         }else{
-            Promise.all([fetchIndustryList(), fetchPasswordQuestion(), fetchGender()])
+            Promise.all([fetchIndustryList(), fetchPasswordQuestion()])
             .then((result) =>{
                 const industries = result[0];
                 const passwordQuestions = result[1];
@@ -39,7 +37,6 @@ export default function EditInformation(){
 
                 setIndustries(industries);
                 setPasswordQuestions(passwordQuestions);
-                setGenders(genders);
             });
         }
     },[]);
