@@ -6,18 +6,30 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Menu from "../Menu/Menu";
 import { getIcons } from "../../utils/getComponents";
 import { NavigationMenuLink, NavigationMenuList, NavigationMenu, NavigationMenuItem } from "../ui/navigation-menu";
+import { useEffect, useState } from "react";
+import { fetchUserInfo, isLoginUser } from "@/utils/API";
 function Header(){
-    //테스트용
-    const isLogin = true;
+    const [isAnonymous, setAnonymous] = useState(true);
+    const [userInfo, setUserInfo] = useState(null);
+    useEffect(() =>{
+      isLoginUser() ?
+      //유저 정보 조회 및 보관 
+      fetchUserInfo()
+      .then(data =>{
+        console.log(data);
+        setUserInfo(data);
+        setAnonymous(false);
+      }) :
+      setAnonymous(true);
+    },[]);
 
     return <header className="flex items-center justify-between px-4 py-2 border-b dark:border-gray-800">
         <Link className="flex items-center gap-2 text-lg font-semibold" to="/">
           <DonkeyLogo className="w-52 h-16"/>
         </Link>
         <div className="flex items-center gap-4">
-          <Input className="w-64" id="search" placeholder="Search topics or communities" type="search" />
           {
-            isLogin ?
+            !isAnonymous ?
             <Popover>
               <PopoverTrigger asChild>
                 <Avatar className="h-8 w-8">

@@ -59,6 +59,16 @@ export async function fetchDocComments(docId){
 }
 
 /**
+ * @returns { {nickname: String, email: String, {industryId: String, industryName: String}[] } }
+ */
+export async function fetchUserInfo(){
+    const userInfoURL = URL + `/member/userinfo`;
+
+    return donkeyGet(userInfoURL)
+    .then((response) => response.data);
+}
+
+/**
  * @breif 게시판id와 pageNumber로 게시글을 불러온다.
  * @param {String} boardId 
  * @param {number} docPageNumber 
