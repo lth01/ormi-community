@@ -2,18 +2,18 @@ import { createContext, useEffect } from 'react';
 import { useState } from 'react';
 
 const GlobalContext = createContext({
-  selectDocID: "",
-  setSelectDocID: () =>{},
+  selectBoardID: "",
+  setSelectBoardID: () =>{},
 });
 
-
 const ContextProvider = ({children}) =>{
-    const [selectDocID, setSelectDocID] = useState("");
+    const [selectBoardID, setSelectBoardID] = useState("");
+
 
     return (
         <GlobalContext.Provider value={{
-            selectDocID,
-            setSelectDocID
+            selectBoardID,
+            setSelectBoardID
         }}>
             {children}
         </GlobalContext.Provider>

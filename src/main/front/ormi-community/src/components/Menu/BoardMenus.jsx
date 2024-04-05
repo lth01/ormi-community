@@ -15,7 +15,7 @@ export default function BoardMenus(){
     const [menuList, setMenuList] = useState([]);
     
     // global state hook
-    const {selectDocID, setSelectDocID} = useContext(GlobalContext);
+    const {selectBoardID, setSelectBoardID} = useContext(GlobalContext);
 
 
     useEffect(() =>{
@@ -23,7 +23,7 @@ export default function BoardMenus(){
         .then(data =>{
             setBoardList(data);
             setMenuList(getBoardMenuComponents(data));
-            setSelectDocID(data.length > 0 ? data[0].boardId : "");
+            setSelectBoardID(data.length > 0 ? data[0].boardId : "");
         });
     }, []);
     

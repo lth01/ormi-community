@@ -13,6 +13,7 @@ import PlusIcon from "@/components/Icon/PlusIcon";
 import CompanyIcon from "@/components/Icon/Company";
 import IndustryIcon from "@/components/Icon/Company";
 import BoardMenu from "@/components/Menu/BoardMenu";
+import { Document } from "@/components/Document/Document";
 
 export function getIcons(svgStr){
     switch(svgStr){
@@ -69,4 +70,9 @@ export function getIcons(svgStr){
    */
   export function getBoardMenuComponents(boardMenuList){
     return boardMenuList.map((boardMenu) => <BoardMenu {...boardMenu}></BoardMenu>)
+  }
+
+  export function getDocumentComponents(documentList){
+    console.log(documentList);
+    return documentList.map((document) => <Document {...document}></Document>);
   }

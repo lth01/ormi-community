@@ -11,9 +11,11 @@ import Menu from "../Menu/Menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogTitle, AlertDialogTrigger, AlertDialogHeader } from "../ui/alert-dialog";
 import { getIcons } from "@/utils/getComponents";
 import { isLoginUser } from "@/utils/API";
+import { GenerateLiElUUID } from "@/utils/common";
 
 
-const Document = ({boardName, docInfo}) =>{
+const Document = (props) =>{
+    const {boardName, docId, docTitle, docContent, boardId, nickname, email} = props;
     const [showComment, setCommentVisibility] = useState(false);
     const [commentInfoList, setCommentInfos] = useState([]);
     const [isAnonymous, setLoginUser] = useState(true);
@@ -28,7 +30,7 @@ const Document = ({boardName, docInfo}) =>{
     }, []);
 
     useEffect(() =>{
-        fetchDocComments(docInfo ? docInfo?.docId : '9c99ad47-2ae2-498e-b7b8-24a03d3a3725')
+        fetchDocComments(docId)
         .then((data) => setCommentInfos(data));
     },[showComment]);
 
@@ -38,9 +40,9 @@ const Document = ({boardName, docInfo}) =>{
 
 
     return (
-        <Card>
-            <DocumentHeader></DocumentHeader>
-            <DocumentContent></DocumentContent>
+        <Card key={GenerateLiElUUID()}>
+            <DocumentHeader {...props}></DocumentHeader>
+            <DocumentContent {...props}></DocumentContent>
             <DocumentFooter toggleFunc={toggleVisibility}></DocumentFooter>           
             {
                 showComment ?
@@ -51,14 +53,13 @@ const Document = ({boardName, docInfo}) =>{
     );
 }
 
-const DocumentHeader = ({boardName, docInfo}) =>{
+const DocumentHeader = ({boardName, docTitle, nickname, email, docCreateDate}) =>{
     //docInfo는 인코딩 되어 저장하고있는다. 수정 버튼을 누르면 URL을 통해 데이터를 전달한다.
     return (
         <CardHeader className="p-4">
             <div className="flex flex-col">
                 <div className="flex justify-between items-center">
                     <span className="text-lg font-bold text-gray-400">
-                        삼성전자
                         {boardName}
                     </span>
                     {
@@ -104,16 +105,15 @@ const DocumentHeader = ({boardName, docInfo}) =>{
                         </Avatar>
                         <div className="grid gap-0.5">
                             {/* 게시글 제목 */}
-                            <span className="font-bold">충격 실화..</span>
+                            <span className="font-bold">{docTitle}</span>
                             <span className="text-xs text-gray-500 dark:text-gray-400">
-                                작성자: 탕탕(th123) 
+                                작성자: {nickname}({email}) 
                                 {/* {`${userInfo.nickName}(${userInfo.userId})`} */}
                             </span>
                         </div>
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                        2024-03-28
-                        {/* {YYYY-MM-DD} */}
+                        {docCreateDate}
                     </div>
                 </div>
             </div>
@@ -121,11 +121,11 @@ const DocumentHeader = ({boardName, docInfo}) =>{
     );
 }
 
-const DocumentContent = ({docInfo}) =>{
+const DocumentContent = ({docContent}) =>{
     return (
         <CardContent>
             <p className="w-full h-300 break-normal">
-                aweofjaw;eofja;owejfoawjefowajfo;
+                {docContent}
             </p>
         </CardContent>
     );
