@@ -1,6 +1,6 @@
 import HeartIcon from "../Icon/HeartIcon";
 import { forwardRef, useEffect, useState } from "react";
-import { GenerateLiElUUID } from "../../utils/keygenerator"
+import { GenerateLiElUUID } from "../../utils/common"
 
 // 게시판 목록 메뉴를 제외한 일반적인 메뉴를 표현
 const Menu = forwardRef((props, ref) => {

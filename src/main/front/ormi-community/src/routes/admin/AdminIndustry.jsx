@@ -4,7 +4,7 @@ import { appendIndustry, fetchIndustryList } from "@/utils/API";
 import { useState, useEffect } from "react";
 import IndustryArticle from "@/components/Industry/IndustryArticle";
 import { Button } from "@/components/ui/button";
-import { GenerateLiElUUID } from "@/utils/keygenerator";
+import { GenerateLiElUUID } from "@/utils/common";
 
 export default function AdminIndustry(){
     // 업종을 불러오는 code

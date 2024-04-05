@@ -1,6 +1,6 @@
 import LogoHeader from "@/components/Layout/LogoHeader";
 import { AdminMenus } from "@/components/Menu/AdminMenus";
-import { GenerateLiElUUID } from "@/utils/keygenerator";
+import { GenerateLiElUUID } from "@/utils/common";
 import { Outlet } from "react-router-dom"
 
 export default function Admin(){
