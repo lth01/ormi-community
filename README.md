@@ -2,8 +2,9 @@
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=AmazonAWS&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
 
+## 링크 추가해야됨
 
-> 취업과 회사에 대해 자유롭게 이야기 할 수 있는 커뮤니티 👉 [링크] [미완성!]
+> 취업과 회사에 대해 자유롭게 이야기 할 수 있는 커뮤니티 👉 [링크]
 
 ![image](https://github.com/lth01/ormi-community/assets/139758405/239dd0ee-e916-43e7-b13c-837c6c25ff25)
 
@@ -44,7 +45,7 @@
 
 ![image](https://github.com/lth01/ormi-community/assets/139758405/7e107ff8-d911-4130-af0a-343e60ecfd12)
 
-## ✨UI(화면) 설계서 [미완성!]
+## ✨UI(화면) 설계서 
 
 |                                                                                                                       |                                                                                                                   |
 |-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
@@ -136,14 +137,14 @@
 | userInfo_1     | GET     | /member/userinfo/{email}      | 이메일로 사용자 정보 조회|
 
 ### 📁 Document
-| 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
-|---------------------|---------|-------------------------------|--------------------------|
-| increaseDocumentLike| PUT     | /document/{document_id}/like  | 문서 좋아요 증가         |
-| modifyDocument      | PUT     | /document/manage/{document_id}| 문서 수정                |
-| deleteDocument      | DELETE  | /document/manage/{document_id}| 문서 삭제                |
-| saveDocument        | POST    | /document/manage              | 문서 저장                |
-| showOneDocument     | GET     | /document/{document_id}       | 특정 문서 조회           |
-| showAllDocument     | GET     | /document/list/{board_id}     | 게시판별 모든 문서 조회  |
+| 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION |
+|---------------------|---------|-------------------------------|---------------|
+| increaseDocumentLike| PUT     | /document/{document_id}/like  | 게시글 좋아요 증가    |
+| modifyDocument      | PUT     | /document/manage/{document_id}| 게시글 수정         |
+| deleteDocument      | DELETE  | /document/manage/{document_id}| 게시글 삭제         |
+| saveDocument        | POST    | /document/manage              | 게시글 저장         |
+| showOneDocument     | GET     | /document/{document_id}       | 특정 게시글 조회      |
+| showAllDocument     | GET     | /document/list/{board_id}     | 게시판별 모든 게시글 조회 |
 
 ### 📁 Comment
 | 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
@@ -153,13 +154,13 @@
 | deleteComment       | DELETE  | /comment/{comment_id}         | 댓글 삭제                |
 | likeComment         | PUT     | /comment/{comment_id}/like    | 댓글 좋아요 처리         |
 | saveComment         | POST    | /comment/{doc_id}             | 댓글 저장                |
-| showCommentAll      | GET     | /comment/list/{doc_id}        | 문서 ID로 모든 댓글 조회 |
+| showCommentAll      | GET     | /comment/list/{doc_id}        | 게시글 ID로 모든 댓글 조회 |
 
 ### 📁 Viewership
 | 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
 |---------------------|---------|-------------------------------|--------------------------|
-| searchViewershipCount| GET    | /viewership/{doc_id}          | 문서 조회수 조회         |
-| updateViewershipCount| PUT    | /viewership/{doc_id}          | 문서 조회수 업데이트     |
+| searchViewershipCount| GET    | /viewership/{doc_id}          | 게시글 조회수 조회         |
+| updateViewershipCount| PUT    | /viewership/{doc_id}          | 게시글 조회수 업데이트     |
 
 ### 📁 Like
 | 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
@@ -171,7 +172,7 @@
 | 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
 |---------------------|---------|-------------------------------|--------------------------|
 | acceptReport        | PUT     | /admin/report/accept/{report_id}| 신고 승인 처리        |
-| reportDocument      | POST    | /report/doc/{document_id}     | 문서 신고                |
+| reportDocument      | POST    | /report/doc/{document_id}     | 게시글 신고                |
 | reportComment       | POST    | /report/com/{comment_id}      | 댓글 신고                |
 | showAllReport       | GET     | /admin/report                 | 모든 신고 내역 조회      |
 
