@@ -206,7 +206,6 @@ export default function Signup(){
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                {/* value는 백엔드와 합의 필요 */}
                                 {
                                     passwordQuestions.map(passwordQuestion => <SelectItem key={passwordQuestion.passwordQuestionId} value={passwordQuestion.passwordQuestionId}>{passwordQuestion.passwordQuestion}</SelectItem>)
                                 }

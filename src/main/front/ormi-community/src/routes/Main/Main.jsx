@@ -3,20 +3,21 @@ import Menus from "@/components/Menu/Menus";
 import mainCharacter from "../../assets/image/mainCharacter.png";
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "@/index";
-import { fetchDocumentList } from "@/utils/API";
+import { fetchDocumentList, fetchUserInfo, isLoginUser } from "@/utils/API";
 import { getDocumentComponents } from "@/utils/getComponents";
 
 export default function Main(){
-   const {selectBoardID} = useContext(GlobalContext);
    const [documentList, setDocumentList] = useState([]);
+   //전역 변수 - 게시판 ID
+   const {selectBoardID} = useContext(GlobalContext);
 
     useEffect(()=>{
-      if(!selectBoardID) return ;
-      fetchDocumentList(selectBoardID)
-      .then(data => {
-        setDocumentList(getDocumentComponents(data));
-      });
-    },[selectBoardID]);
+        if(!selectBoardID) return ;
+        fetchDocumentList(selectBoardID)
+        .then(data => {
+          setDocumentList(getDocumentComponents(data));
+        });
+      },[selectBoardID]);
 
     return (
     <div className="flex flex-col h-screen">

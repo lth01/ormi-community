@@ -47,6 +47,17 @@ const donkeyPost = async (URL, body) => {
     });
 }
 
+const donkeyPut = async (URL, body) => {
+    const accessToken = getAccessToken();
+    const refreshToken = getRefreshToken();
+
+    return axios.put(URL, body, {
+        headers: {
+            Authorization: JSON.stringify({accessToken, refreshToken})
+        }
+    })
+}
+
 /**
  * 
  * @returns { {commentId: String, nickname: String, commentCreatorIp: String || null , email: String, commentDate: "YYYY-MM-DD HH:MM:SS.XXX", commentContent: String, likeCount: number}[] } API returns
@@ -55,6 +66,16 @@ export async function fetchDocComments(docId){
     const DocCommentURL = URL + `/comment/list/${docId}`;
 
     return donkeyGet(DocCommentURL)
+    .then((response) => response.data);
+}
+
+/**
+ * @returns { {nickname: String, email: String, {industryId: String, industryName: String}[] } }
+ */
+export async function fetchUserInfo(){
+    const userInfoURL = URL + `/member/userinfo`;
+
+    return donkeyGet(userInfoURL)
     .then((response) => response.data);
 }
 
@@ -69,22 +90,6 @@ export async function fetchDocumentList(boardId, docPageNumber){
 
     return donkeyGet(DocumentListURL)
     .then((response) => response.data);
-}
-
-/**
- * @brief 현재 로그인한 유저의 수정 가능 정보를 불러옵니다.
- * @returns { {nickName: String, phoneNumber: String passwordHintQuestion: String, passwordHintAnswer: String, career1: String, career2: String, career3: String} }
- */
-export function fetchEditableUserInfo(){
-    return {
-        nickName : 'th',
-        phoneNumber: '+821037740456',
-        passwordHintQuestion: '1',
-        passwordHintAnswer: "answer",
-        career1: 'IT',
-        career2: '조선',
-        career3: '의료'
-    };
 }
 
 /**
@@ -209,6 +214,12 @@ export function appendPasswordQuestion(passwordQuestion){
     console.log("비밀번호 질문 추가 API 호출 완료");
 }
 
+export async function editUserInfo(userEditInfo){
+    const editUserInfoURL = URL + `/member/modifyInfo`;
+    return donkeyPut(editUserInfoURL, userEditInfo)
+    .then(response => response.data);
+}
+
 /**
  * 다수의 API가 토큰 재발급을 의존할 경우를 대비한 메모미제이션
  */
@@ -218,6 +229,14 @@ export const getNewAccessToken = mem(async () =>{
     .then(response => response.data)
     .then(json => setAccessToken(json.accessToken));
 }, {maxAge: 1000})
+
+/**
+ * @breif 토큰 유무로 로그인 상태 확인하므로 토큰 삭제만 진행
+ */
+export const logout = () =>{
+    removeAccessToken();
+    removeRefreshToken();
+}
 
 /**
  * @breif 현재 유저가 로그인한 상태인지 확인한다.
