@@ -44,12 +44,13 @@ export function documentWriteReqParam(boardId, docTitle, docContent){
    return reqParam;
 }
 
-export function commentWriteReqParam(commentPassword, commentCreatorIp, commentContent){
+export function commentWriteReqParam(commentPassword, commentCreatorIp, commentContent, anonyNickname){
    const reqParam = {};
 
    reqParam.commentPassword = commentPassword;
    reqParam.commentCreatorIp = commentCreatorIp;
    reqParam.commentContent = commentContent;
+   reqParam.anonyNickname = anonyNickname || null;
 
    return reqParam;
 }

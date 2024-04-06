@@ -3,12 +3,12 @@ import HeartIcon from "../Icon/HeartIcon"
 import { useState, useEffect, useContext } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { likeIt, fetchLikeCount, writeComment } from "@/utils/API";
+import { likeIt, fetchLikeCount, writeComment, isExistUUID, uuidSave } from "@/utils/API";
 import AnonymousInputSection from "./AnonymousInputSection";
 import { commentWriteReqParam } from "@/utils/Parameter";
 import { GlobalContext } from "@/index";
 
-const Comment = ({commentInfoList, ownIP, docId}) => {
+const Comment = ({commentInfoList, ownIP, docId, reload, setReload}) => {
     //전역 변수 - 로그인 여부
     const {isLogin} = useContext(GlobalContext);
     const [nickname, setNickName] = useState("");
@@ -16,9 +16,12 @@ const Comment = ({commentInfoList, ownIP, docId}) => {
     const [content, setContent] = useState("");
 
     const doRegisterComment = async () => {
-        const reqParam = commentWriteReqParam(password, nickname, content);
+        const reqParam = commentWriteReqParam(password, ownIP || "", content, nickname);
         writeComment(reqParam, docId)
-        .then(data => console.log(data));
+        .then(() =>{
+            //컴포넌트 강제 새로고침
+            setReload(reload * -1);
+        });
     }
 
 
@@ -48,14 +51,24 @@ const Comment = ({commentInfoList, ownIP, docId}) => {
 
 /**
  * 
- * @param { {nickName: String, userId: String, commentDate: Date, comment: String, likeCount: number, likeAble: boolean} } userInfo 
+ * @param { {nickName: String, userId: String, commentDate: Date, comment: String, likeCount: number} } userInfo 
  * @returns 
  */
-const CommentItem = ({commentId, nickname, commentCreatorIp, email, commentDate, commentContent, likeAble = true}) =>{
+const CommentItem = ({commentId, nickname, commentCreatorIp, email, commentDate, commentContent}) =>{
     const shortNickName = getShortNickName(nickname);
     const [likeCount, setLikeCount] = useState(0);
+    const [likeAble, setLikeAble] = useState(!isExistUUID(commentId));
     const doLikeIt = () =>{
-        likeIt(commentId);
+        if(isExistUUID(commentId)){
+            alert("이미 좋아요한 댓글/게시글입니다.");
+            return ;
+        }
+        likeIt(commentId)
+        .then(() => {
+            uuidSave(commentId);
+            setLikeCount(likeCount + 1);
+            setLikeAble(false);
+        });
     }
 
     useEffect(() =>{
@@ -72,7 +85,7 @@ const CommentItem = ({commentId, nickname, commentCreatorIp, email, commentDate,
                     <AvatarFallback className="font-bold">{shortNickName}</AvatarFallback>
                 </Avatar>
                 <div>
-                    <p className="text-sm font-semibold">{`${nickname}(${email})`}</p>
+                    <p className="text-sm font-semibold">{`${nickname}(${email || "비회원"})`}</p>
                     <p className="text-xs text-gray-500">{commentDate}</p>
                     <p className="mt-1 text-sm">{commentContent}</p>
                     <div className="flex items-center mt-1 space-x-1 text-sm text-gray-500">

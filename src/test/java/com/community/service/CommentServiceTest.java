@@ -50,7 +50,7 @@ class CommentServiceTest {
     @Test
     void save() {
         Document document = documentRepository.findAll().get(0);
-        AddCommentRequest request = new AddCommentRequest(null, "127.0.0.1", "댓글 내용");
+        AddCommentRequest request = new AddCommentRequest(null, "127.0.0.1", "댓글 내용", null);
 
         CommentCommonResponse comment = commentService.saveComment("test@test.com",document.getDocId(),request);
 

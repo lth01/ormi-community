@@ -265,3 +265,15 @@ export const logout = () =>{
 export function isLoginUser(){
     return getAccessToken() ? true : false;
 }
+
+export function uuidSave(uuid){
+    let uuids = JSON.parse(localStorage.getItem("uuids")) || [];
+    localStorage.setItem("uuids", JSON.stringify([...uuids, uuid]));
+}
+
+export function isExistUUID(uuid){
+    let uuids = JSON.parse(localStorage.getItem("uuids")) || [];
+    uuids = uuids.filter(savedUUID => uuid == savedUUID);
+
+    return uuids.length > 0 ? true : false;
+}

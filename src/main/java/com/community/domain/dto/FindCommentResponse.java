@@ -30,7 +30,7 @@ public class FindCommentResponse {
         commentDate = comment.getCommentCreateDate().format(formatter);
         commentContent = comment.getCommentContent();
         if (comment.getCommentCreator() == null) {
-            String[] tmp = comment.getCommentCreatorIp().split("\\.");
+            String[] tmp = comment.getCommentCreatorIp().split(":");
             commentCreatorIp = tmp[0] + "." + tmp[1] + ".*.*";
             nickname = comment.getAnonyNickname();
         } else {

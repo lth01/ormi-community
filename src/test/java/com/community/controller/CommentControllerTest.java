@@ -83,7 +83,7 @@ public class CommentControllerTest {
     @Test
     void saveComment() throws Exception {
         Document document = documentRepository.findAllByDocCreator(member).orElseThrow().get(0);
-        AddCommentRequest request = new AddCommentRequest(null, "127.0.0.1", "Test comment");
+        AddCommentRequest request = new AddCommentRequest(null, "127.0.0.1", "Test comment", "");
 
 
         mockMvc.perform(post("/comment/" + document.getDocId())

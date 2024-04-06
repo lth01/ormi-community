@@ -21,6 +21,8 @@ const Document = (props) =>{
     const [showComment, setCommentVisibility] = useState(false);
     const [commentInfoList, setCommentInfos] = useState([]);
     const [ownIP, setOwnIP] = useState("");
+    //CommentList새로고침용
+    const [reload, setReload] = useState(-1);
 
     useEffect(() =>{
         fetchOwnIp()
@@ -32,7 +34,7 @@ const Document = (props) =>{
     useEffect(() =>{
         fetchDocComments(docId)
         .then((data) => setCommentInfos(data));
-    },[showComment]);
+    },[showComment, reload]);
 
     const toggleVisibility = () =>{
         setCommentVisibility(!showComment);
@@ -46,7 +48,7 @@ const Document = (props) =>{
             <DocumentFooter toggleFunc={toggleVisibility}></DocumentFooter>           
             {
                 showComment ?
-                <Comment commentInfoList={commentInfoList} ownIP={ownIP} docId={docId}></Comment> :
+                <Comment commentInfoList={commentInfoList} ownIP={ownIP} docId={docId} reload={reload} setReload={setReload}></Comment> :
                 <></>
             }
         </Card>
