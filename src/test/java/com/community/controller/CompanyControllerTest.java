@@ -3,6 +3,7 @@ package com.community.controller;
 import com.community.domain.entity.Companies;
 import com.community.repository.CompaniesRepository;
 import com.community.repository.ViewershipRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ class CompanyControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;
+    private Companies companies;
 
     @BeforeEach
     public void mockMvcSetUp(){
@@ -37,18 +39,21 @@ class CompanyControllerTest {
                 .webAppContextSetup(webApplicationContext)
                 .build();
 
-//        Companies companies = Companies.builder()
-//                .comId(UUID.randomUUID().toString())
-//                .comName("카카오")
-//                .regNum("1101111129497")
-//                .build();
-//        companiesRepository.save(companies);
+        companies = Companies.builder()
+                .comId(UUID.randomUUID().toString())
+                .comName("삼성전자")
+                .regNum("1301110006246")
+                .build();
+    }
+
+    @AfterEach
+    public void clear() {
+        companiesRepository.delete(companies);
     }
 
     @Test
     void bringCompanyDataById() throws Exception {
-
-        Companies companies = companiesRepository.findAll().get(0);
+        companiesRepository.save(companies);
 
         ResultActions resultActions = mockMvc.perform(get("/companydata/" + companies.getComId()));
 
@@ -57,7 +62,7 @@ class CompanyControllerTest {
 
     @Test
     void bringCompanyDataByName() throws Exception {
-        Companies companies = companiesRepository.findAll().get(0);
+        companiesRepository.save(companies);
 
         ResultActions resultActions = mockMvc.perform(get("/companydata/name/" + companies.getComName()));
 
