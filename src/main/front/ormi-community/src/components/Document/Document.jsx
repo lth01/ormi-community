@@ -46,7 +46,7 @@ const Document = (props) =>{
             <DocumentFooter toggleFunc={toggleVisibility}></DocumentFooter>           
             {
                 showComment ?
-                <Comment commentInfoList={commentInfoList} ownIP={ownIP}></Comment> :
+                <Comment commentInfoList={commentInfoList} ownIP={ownIP} docId={docId}></Comment> :
                 <></>
             }
         </Card>
