@@ -149,4 +149,26 @@ public class DocumentService {
         likeItRepository.updateLikeCount(count, document.getDocId());
         return new DocumentWriteResponse(document);
     }
+
+    @Transactional
+    public List<FindDocumentResponse> searchDocument(String keyword, Pageable pageable) {
+        if (keyword == null) {
+            throw new IllegalArgumentException("잘못된 입력 입니다.");
+        }
+        Slice<Document> slice = documentRepository.findByDocContentContaining(keyword,pageable);
+
+        List<Document> list = slice.getContent();
+        List<FindDocumentResponse> resultList = new ArrayList<>();
+
+        for (Document document : list) {
+            if (!document.getDocVisible()) continue;
+            Long viewCount = viewershipRepository.findById(document.getDocId()).get().getViewCount() + 1L;
+            Long likeCount = likeItRepository.findById(document.getDocId()).get().getLikeCount();
+
+            viewershipRepository.updateViewership(viewCount, document.getDocId());
+
+            resultList.add(new FindDocumentResponse(document, viewCount, likeCount));
+        }
+        return resultList;
+    }
 }

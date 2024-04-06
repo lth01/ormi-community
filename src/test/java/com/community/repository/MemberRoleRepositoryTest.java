@@ -1,10 +1,8 @@
 package com.community.repository;
 
-import com.community.domain.entity.Member;
 import com.community.domain.entity.MemberRole;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,25 +13,26 @@ import java.util.UUID;
 class MemberRoleRepositoryTest {
 
     @Autowired
-    public MemberRoleRepository authoritiesRepository;
+    public MemberRoleRepository memberRoleRepository;
 
     @Autowired
     public MemberRepository memberRepository;
 
-    @Test
-    public void save() {
-        MemberRole authorities = new MemberRole(UUID.randomUUID().toString(), "ADMIN");
+    private MemberRole authorities;
 
-        log.info(authorities.getMemberRoleName());
-
-        authoritiesRepository.save(authorities);
-        String str = authoritiesRepository.findById(authorities.getMemberRoleId()).orElseThrow().getMemberRoleName();
-        log.info(str);
-
-        Assertions.assertEquals(authorities.getMemberRoleName(), str);
+    @BeforeEach
+    public void setUp() {
+        authorities = new MemberRole(UUID.randomUUID().toString(), "USER");
+    }
+    @AfterEach
+    public void clear() {
+        memberRoleRepository.delete(authorities);
     }
     @Test
-    public void clearAll() {
-        authoritiesRepository.deleteAll();
+    public void save() {
+        memberRoleRepository.save(authorities);
+        String str = memberRoleRepository.findById(authorities.getMemberRoleId()).orElseThrow().getMemberRoleName();
+
+        Assertions.assertEquals(authorities.getMemberRoleName(), str);
     }
 }

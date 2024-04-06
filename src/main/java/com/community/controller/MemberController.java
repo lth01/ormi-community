@@ -71,4 +71,11 @@ public class MemberController {
     public ResponseEntity<FindPasswordResponse> findPassword(@RequestBody FindPasswordRequest request) {
         return ResponseEntity.ok().body(memberService.findPassword(request));
     }
+
+    //비밀번호 변경
+    @PostMapping("/member/changepassword")
+    public ResponseEntity<SuccessResult> changePassword(@RequestBody ChangePasswordRequest request) {
+        memberService.changePassword(request);
+        return ResponseEntity.ok().body(new SuccessResult("성공", "성공적으로 수정되었습니다."));
+    }
 }

@@ -43,7 +43,7 @@ public class CommentController {
         request.setCommentCreatorIp(servletRequest.getRemoteAddr());
         //접속 중인 사용자의 데이터 가져오기
         String email = "";
-        if (authentication != null) {email = authentication.getName();}
+        if (!authentication.getPrincipal().equals("ANONYMOUS_USER")) email = authentication.getName();
         commentService.saveComment(email ,docId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResult("성공", "댓글이 정상적으로 등록 되었습니다."));
     }
@@ -53,7 +53,7 @@ public class CommentController {
     public ResponseEntity<SuccessResult> modifyComment(@PathVariable("comment_id") String commentId, @RequestBody ModifyCommentRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = "";
-        if (authentication != null) {email = authentication.getName();}
+        if (!authentication.getPrincipal().equals("ANONYMOUS_USER")) {email = authentication.getName();}
         commentService.updateComment(email, commentId, request);
         return ResponseEntity.ok().body(new SuccessResult("성공", "댓글이 정상적으로 수정 되었습니다."));
     }
@@ -63,7 +63,7 @@ public class CommentController {
     public ResponseEntity<SuccessResult> deleteComment(@PathVariable("comment_id") String commentId, @RequestBody DeleteCommentRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = "";
-        if (authentication != null) {email = authentication.getName();}
+        if (!authentication.getPrincipal().equals("ANONYMOUS_USER")) {email = authentication.getName();}
         commentService.deleteComment(email, commentId, request);
         return ResponseEntity.ok().body(new SuccessResult("성공", "댓글이 정상적으로 삭제 되었습니다."));
     }

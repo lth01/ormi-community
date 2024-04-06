@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class ModifyInfoRequest {
-    private String email;
     private String nickname;
     private String passwordQuestionId;
     private String findPasswordAnswer;
