@@ -29,32 +29,35 @@ const donkeyGet = async (URL) => {
     const accessToken = getAccessToken();
     const refreshToken = getRefreshToken();
 
+    const headers = accessToken ?
+                    { Authorization: JSON.stringify({accessToken, refreshToken}) } :
+                    {};
+
     return axios.get(URL, {
-        headers: {
-            Authorization: JSON.stringify({accessToken, refreshToken})
-        }
+        headers: headers
     });
 }
 
 const donkeyPost = async (URL, body) => {
     const accessToken = getAccessToken();
     const refreshToken = getRefreshToken();
-
+    const headers = accessToken ?
+                    { Authorization: JSON.stringify({accessToken, refreshToken}) } :
+                    {};
     return axios.post(URL, body, {
-        headers: {
-            Authorization: JSON.stringify({accessToken, refreshToken})
-        }
+        headers: headers
     });
 }
 
 const donkeyPut = async (URL, body) => {
     const accessToken = getAccessToken();
     const refreshToken = getRefreshToken();
+    const headers = accessToken ?
+                    { Authorization: JSON.stringify({accessToken, refreshToken}) } :
+                    {};
 
     return axios.put(URL, body, {
-        headers: {
-            Authorization: JSON.stringify({accessToken, refreshToken})
-        }
+        headers: headers
     })
 }
 
@@ -153,6 +156,15 @@ export async function fetchOwnIp(){
 }
 
 /**
+ * @brief 좋아요 갯수 조회 API
+ */
+export async function fetchLikeCount(uuid){
+    const likeCountURL = URL + `/likeit/${uuid}`;
+    return donkeyGet(likeCountURL)
+    .then((response) => response.data);
+}
+
+/**
  * @param { signupReqParam }
  * @brief 회원가입 API 
  */
@@ -191,6 +203,12 @@ export async function writeDocument(docWriteReqParam){
         alert("로그인이 만료되었습니다. 다시 로그인해주세요");
         location.href = "/";
     });
+}
+
+export async function likeIt(uuid){
+    const likeItURL = URL + `/likeit/${uuid}`;
+    return donkeyPut(likeItURL)
+    .then((response) => response.data);
 }
 
 export async function writeComment(commentWriteReqParam, docId){
@@ -246,4 +264,16 @@ export const logout = () =>{
  */
 export function isLoginUser(){
     return getAccessToken() ? true : false;
+}
+
+export function uuidSave(uuid){
+    let uuids = JSON.parse(localStorage.getItem("uuids")) || [];
+    localStorage.setItem("uuids", JSON.stringify([...uuids, uuid]));
+}
+
+export function isExistUUID(uuid){
+    let uuids = JSON.parse(localStorage.getItem("uuids")) || [];
+    uuids = uuids.filter(savedUUID => uuid == savedUUID);
+
+    return uuids.length > 0 ? true : false;
 }

@@ -16,4 +16,5 @@ public class AddCommentRequest {
 
     private String commentContent;
 
+    private String anonyNickname;
 }

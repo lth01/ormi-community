@@ -84,6 +84,7 @@ public class CommentService {
                 .commentContent(request.getCommentContent())
                 .document(document)
                 .commentCreator(member == null? null : member)
+                .anonyNickname(member == null ? request.getAnonyNickname() : null)
                 .build();
 
         likeItRepository.save(likeIt);
