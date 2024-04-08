@@ -40,7 +40,8 @@ export default function Signup(){
             setIndustries(industries);
             setPasswordQuestions(passwordQuestions);
             setGenders(genders);
-        });
+        })
+        .catch(e => console.log(e));
     },[]);
 
     const doSignup = () =>{

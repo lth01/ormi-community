@@ -1,7 +1,7 @@
 import axios from 'axios';
 import mem from "mem";
 import { getAccessToken, getRefreshToken, removeAccessToken, removeRefreshToken, setAccessToken, setRefreshToken } from './Cookie';
-const URL = "http://localhost:8080";
+const URL = "http://13.209.187.24:8080";
 const ipCheckURL = "https://geolocation-db.com/json/";
 
 axios.interceptors.response.use(
@@ -202,7 +202,7 @@ export async function signup(signupReqParam){
  * @returns 로그인 결과 반환
  */
 export async function login(loginReqParam){
-    const loginURL = URL + "/login";
+    const loginURL = URL + "/api/login";
     //응답 데이터 : accessToken, refreshToken
     return donkeyPost(loginURL, loginReqParam)
     .then((response) => response.data) 
