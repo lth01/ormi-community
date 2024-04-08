@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,7 +66,7 @@ public class SecurityConfig {
         http.authenticationManager(authenticationManager);
 
         // LoginFilter --> /generateToken(변경 -> /api/login)를 호출하면 Login Filter가 실행
-        APILoginFilter apiLoginFilter = new APILoginFilter("/login");
+        APILoginFilter apiLoginFilter = new APILoginFilter("/api/login");
         apiLoginFilter.setAuthenticationManager(authenticationManager);
 
         // 필터 적용 위치 조정
@@ -100,9 +101,10 @@ public class SecurityConfig {
         //Swagger UI
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/v3/**","/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll())
         //CSRF 비활성화
-            .csrf(csrf -> csrf.disable())
+            .csrf(AbstractHttpConfigurer::disable)
         //로그인 성공 이후 main 페이지 이동
 //            .formLogin(login -> login.defaultSuccessUrl("/"))
+                .formLogin(AbstractHttpConfigurer::disable)
         //로그아웃 시 main 페이지 이동
             .logout(logout -> logout.logoutSuccessUrl("/")
                     .deleteCookies("JSESSIONID"))
