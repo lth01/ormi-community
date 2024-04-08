@@ -59,9 +59,19 @@ export function editUserInfoReqParam(nickname, passwordQuestionId, findPasswordA
    const reqParam = {};
 
    reqParam.nickname = nickname;
-   reqParam.passwordQuestionId = passwordQuestionId;
-   reqParam.findPasswordAnswer = findPasswordAnswer;
+   reqParam.passwordQuestionId = passwordQuestionId; reqParam.findPasswordAnswer = findPasswordAnswer;
    reqParam.industriesId = industriesId;
 
+   return reqParam;
+}
+
+export function appendBoardReqParam(boardName, industryId, comId, requesterEmail){
+   const reqParam = {};
+
+   reqParam.boardName = boardName;
+   reqParam.industryId = industryId;
+   reqParam.comId = comId;
+   reqParam.requesterEmail = requesterEmail;
+   
    return reqParam;
 }

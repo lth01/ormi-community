@@ -217,6 +217,12 @@ export async function writeComment(commentWriteReqParam, docId){
     .then((response) => response.data);
 }
 
+export async function appendBoard(appendBoardReqParam){
+    const appendBoardURL = URL + "/board";
+    return donkeyPost(appendBoardURL, appendBoardReqParam)
+    .then((response) => response.data);
+}
+
 export function acceptBoardPublicing(boardId, approve = true){
     //Accept API 호출
     console.log('API 호출완료!');

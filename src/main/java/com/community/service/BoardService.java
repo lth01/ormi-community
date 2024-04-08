@@ -44,7 +44,7 @@ public class BoardService {
         Optional<Companies> companies = companiesRepository.findById(body.getComId());
 
         //멤버가 실제 조회 되는지
-        Optional<Member> member = memberRepository.findById(body.getRequesterId());
+        Optional<Member> member = memberRepository.findByEmail(body.getRequesterEmail());
 
         //회사명은 빈값이면 안됨
         if(body.getBoardName().equals("")){

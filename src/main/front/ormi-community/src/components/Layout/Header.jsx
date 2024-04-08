@@ -12,6 +12,8 @@ import { GlobalContext } from "@/index";
 function Header(){
     //전역변수 - 로그인 여부
     const {isLogin} = useContext(GlobalContext);
+    //전역변수 - 닉네임
+    const {userInfo} = useContext(GlobalContext);
 
     return <header className="flex items-center justify-between px-4 py-2 border-b dark:border-gray-800">
         <Link className="flex items-center gap-2 text-lg font-semibold" to="/">
@@ -22,9 +24,9 @@ function Header(){
             isLogin ?
             <Popover>
               <PopoverTrigger asChild>
-                <Avatar className="h-8 w-8">
+                <Avatar className="h-10 w-10">
                   <AvatarImage alt="@shadcn" src="/placeholder-avatar.jpg" />
-                  <AvatarFallback>JP</AvatarFallback>
+                  <AvatarFallback>{userInfo?.nickname}</AvatarFallback>
                 </Avatar>
               </PopoverTrigger>
               <PopoverContent className="w-80 grid gap-2">

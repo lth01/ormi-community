@@ -6,18 +6,20 @@ import { fetchBoardList, writeDocument } from "@/utils/API";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { GenerateLiElUUID } from "@/utils/common";
 import { documentWriteReqParam } from "@/utils/Parameter";
+import { useNavigate } from "react-router-dom";
 
 /**
  * @brief 게시글 작성, 수정이 일어나는 컴포넌트. 수정일 경우, fetch하여 데이터를 가지고 온 다음 여기에 붙여넣을임
  * @returns 
  */
 export default function DocumentWrite(){
+    const nevigate = useNavigate();
     const [boardList, setBoardList] = useState([]);
     const [boardId, setBoardId] = useState("");
     const [tBox_title, setTitleVal] = useState("");
     const [tBox_content, setContentVal] = useState("");
+
     useEffect(() =>{
         fetchBoardList()
         .then(data => {setBoardList(data);});
@@ -28,7 +30,8 @@ export default function DocumentWrite(){
 
         writeDocument(reqParam)
         .then(data => {
-            console.log(data);
+            alert("정상적으로 작성되었습니다!");
+            nevigate("/");
         });
     };
     return (
@@ -57,7 +60,7 @@ export default function DocumentWrite(){
                     </LabelSection>
                     <div className="mt-4 w-full flex justify-end items-center gap-4">
                         <Button asChild className="cursor-pointer bg-white hover:bg-gray-400 hover:text-white hover:border-white border border-gray-400 text-black font-bold">
-                            <div>취소</div>
+                            <div onClick={() =>{nevigate(-1)}}>취소</div>
                         </Button>
                         <Button asChild className="cursor-pointer bg-violet-800 hover:bg-violet-600 font-bold">
                             <div onClick={doWrite}>저장하기</div>

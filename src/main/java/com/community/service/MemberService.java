@@ -115,20 +115,18 @@ public class MemberService {
 
         //관심 업종 저장
         List<MemberInterests> list = memberInterestsRepository.findAllByMember(member).orElse(new ArrayList<>());
-        for(String industryId : request.getIndustriesId()) {
-            int count = 0;
-            for(MemberInterests interests : list) {
-                if(interests.getIndustry().equals(industryId)) continue;
-                else if (list.size() + count > 3) memberInterestsRepository.delete(interests);
-                Industry industry = industryRepository.findById(industryId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 업종입니다."));
-                MemberInterests interest = new MemberInterests(
-                        UUID.randomUUID().toString(),
-                        industry,
-                        member);
-                memberInterestsRepository.save(interest);
-                count++;
-            }
+        for(MemberInterests interests : list){
+            memberInterestsRepository.delete(interests);
+        }
 
+        for(String industryId : request.getIndustriesId()){
+            if(industryId.equals("")) continue;
+            Industry industry = industryRepository.findById(industryId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 업종입니다."));
+            MemberInterests interest = new MemberInterests(
+                    UUID.randomUUID().toString(),
+                    industry,
+                    member);
+            memberInterestsRepository.save(interest);
         }
         return new MemberResponse(member);
     }

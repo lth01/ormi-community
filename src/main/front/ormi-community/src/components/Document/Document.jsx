@@ -5,7 +5,7 @@ import CommentCircleIcon from "../Icon/CommentCircleIcon";
 import HeartIcon from "../Icon/HeartIcon";
 import { Comment } from "../Comment/Comment";
 import { useState, useEffect, useContext } from "react";
-import { fetchDocComments, fetchOwnIp } from "@/utils/API";
+import { fetchDocComments, fetchLikeCount, fetchOwnIp, isExistUUID, uuidSave } from "@/utils/API";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Menu from "../Menu/Menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogTitle, AlertDialogTrigger, AlertDialogHeader } from "../ui/alert-dialog";
@@ -13,6 +13,7 @@ import { getIcons } from "@/utils/getComponents";
 import { isLoginUser } from "@/utils/API";
 import { GenerateLiElUUID } from "@/utils/common";
 import { GlobalContext } from "@/index";
+import { likeIt } from "@/utils/API";
 
 
 const Document = (props) =>{
@@ -45,7 +46,7 @@ const Document = (props) =>{
         <Card key={GenerateLiElUUID()}>
             <DocumentHeader {...props}></DocumentHeader>
             <DocumentContent {...props}></DocumentContent>
-            <DocumentFooter toggleFunc={toggleVisibility}></DocumentFooter>           
+            <DocumentFooter {...props} toggleFunc={toggleVisibility}></DocumentFooter>           
             {
                 showComment ?
                 <Comment commentInfoList={commentInfoList} ownIP={ownIP} docId={docId} reload={reload} setReload={setReload}></Comment> :
@@ -133,13 +134,34 @@ const DocumentContent = ({docContent}) =>{
     );
 }
 
-const DocumentFooter = ({docInfo, toggleFunc}) =>{
-    const userInfo = {};
+const DocumentFooter = ({docId, toggleFunc}) =>{
+    const [likeCount, setLikeCount] = useState(0);
+    const [likeAble, setLikeAble] = useState(!isExistUUID(docId));
+    const doLikeIt = () =>{
+        if(isExistUUID(docId)){
+            alert("이미 좋아요한 댓글/게시글입니다.");
+            return ;
+        }
+        likeIt(docId) 
+        .then(() =>{
+            uuidSave(docId);
+            setLikeCount(likeCount + 1);
+            setLikeAble(false);
+        });
+    }
+
+    useEffect(() =>{
+        fetchLikeCount(docId)
+        .then(data => {
+            setLikeCount(data.likeCount)
+        })
+    }, [likeCount]);
+
     return (
         <CardFooter className="border-t p-3 pl-4 flex gap-4 items-center">
             <div className="flex items-center mt-1 space-x-1 text-sm text-gray-500">
-                <HeartIcon className={`h-6 w-6 ${userInfo?.likeAble ? "" : "text-red-500 cursor-pointer"}`} />
-                <span>{userInfo?.likeCount}100</span>
+                <HeartIcon onClick={doLikeIt} className={`h-6 w-6 ${likeAble ? "" : "text-red-500 cursor-pointer"}`} />
+                <span>{likeCount}</span>
             </div>
             <div className="flex items-center mt-1 space-x-1 text-sm text-gray-500 cursor-pointer">
                 <CommentCircleIcon className={`h-6 w-6`} onClick={toggleFunc} />
