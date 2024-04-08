@@ -10,6 +10,8 @@ export default function Main(){
    const [documentList, setDocumentList] = useState([]);
    //전역 변수 - 게시판 ID
    const {selectBoardID} = useContext(GlobalContext);
+   //전역변수 - 새로고침
+   const {reload} = useContext(GlobalContext);
 
     useEffect(()=>{
         if(!selectBoardID) return ;
@@ -17,7 +19,7 @@ export default function Main(){
         .then(data => {
           setDocumentList(getDocumentComponents(data));
         });
-      },[selectBoardID]);
+      },[selectBoardID, reload]);
 
     return (
     <div className="flex flex-col h-screen">

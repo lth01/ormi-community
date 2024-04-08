@@ -7,6 +7,7 @@ import { likeIt, fetchLikeCount, writeComment, isExistUUID, uuidSave } from "@/u
 import AnonymousInputSection from "./AnonymousInputSection";
 import { commentWriteReqParam } from "@/utils/Parameter";
 import { GlobalContext } from "@/index";
+import { getShortNickName } from "@/utils/common";
 
 const Comment = ({commentInfoList, ownIP, docId, reload, setReload}) => {
     //전역 변수 - 로그인 여부
@@ -97,12 +98,6 @@ const CommentItem = ({commentId, nickname, commentCreatorIp, email, commentDate,
         </li>
       );
 };
-
-
-const getShortNickName = (nickName) =>{
-    if(!nickName || typeof nickName !== "string") return "";
-    return nickName.substring(0,nickName.length > 2 ? 2 : nickName.length);
-}
 
 export{
     Comment,

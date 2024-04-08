@@ -7,13 +7,16 @@ const GlobalContext = createContext({
   isLogin: false,
   setLoginUser: () =>{},
   userInfo: {},
-  setUserInfo: () =>{} 
+  setUserInfo: () =>{} ,
+  reload: -1 ,
+  setReload: () =>{}
 });
 
 const ContextProvider = ({children}) =>{
     const [selectBoardID, setSelectBoardID] = useState("");
     const [isLogin, setLoginUser] = useState(false);
     const [userInfo, setUserInfo] = useState({});
+    const [reload, setReload] = useState(-1);
 
     useEffect(() =>{
       setLoginUser(isLoginUser());
@@ -32,9 +35,11 @@ const ContextProvider = ({children}) =>{
             selectBoardID,
             isLogin,
             userInfo,
+            reload,
             setSelectBoardID,
             setLoginUser,
-            setUserInfo
+            setUserInfo,
+            setReload
         }}>
             {children}
         </GlobalContext.Provider>

@@ -128,13 +128,14 @@ public class DocumentService {
     public DocumentWriteResponse deleteDocument(String email, String documentId) {
         Document document =documentRepository.findById(documentId).orElseThrow(()->new EntityNotFoundException("게시글이 존재하지 않습니다."));
         if (document.getDocCreator().getEmail().equals(email)) {
-            documentRepository.delete(document);
             //게시글에 있던 댓글 모두 삭제
             try {
                 if (commentRepository.findAllByDocument(document).isPresent()) {
                     commentRepository.deleteAllByDocument(document);
                 }
             } catch (RuntimeException e) {}
+
+            documentRepository.delete(document);
             return new DocumentWriteResponse(document);
         }
         throw new RuntimeException("작성자 외에 삭제할 수 없습니다.");

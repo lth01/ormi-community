@@ -5,15 +5,15 @@ import CommentCircleIcon from "../Icon/CommentCircleIcon";
 import HeartIcon from "../Icon/HeartIcon";
 import { Comment } from "../Comment/Comment";
 import { useState, useEffect, useContext } from "react";
-import { fetchDocComments, fetchLikeCount, fetchOwnIp, isExistUUID, uuidSave } from "@/utils/API";
+import { fetchDocComments, fetchLikeCount, fetchOwnIp, isExistUUID, removeDocument, uuidSave } from "@/utils/API";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Menu from "../Menu/Menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogTitle, AlertDialogTrigger, AlertDialogHeader } from "../ui/alert-dialog";
 import { getIcons } from "@/utils/getComponents";
-import { isLoginUser } from "@/utils/API";
-import { GenerateLiElUUID } from "@/utils/common";
-import { GlobalContext } from "@/index";
+import { GenerateLiElUUID, getShortNickName } from "@/utils/common";
 import { likeIt } from "@/utils/API";
+import { GlobalContext } from "@/index";
+import { useNavigate } from "react-router-dom";
 
 
 const Document = (props) =>{
@@ -22,9 +22,10 @@ const Document = (props) =>{
     const [showComment, setCommentVisibility] = useState(false);
     const [commentInfoList, setCommentInfos] = useState([]);
     const [ownIP, setOwnIP] = useState("");
+    
     //CommentList새로고침용
     const [reload, setReload] = useState(-1);
-
+    
     useEffect(() =>{
         fetchOwnIp()
         .then(data => {
@@ -56,7 +57,44 @@ const Document = (props) =>{
     );
 }
 
-const DocumentHeader = ({boardName, docTitle, nickname, email, docCreateDate}) =>{
+const DocumentHeader = ({boardName, docTitle, nickname, email, docCreateDate, docId}) =>{
+    const nevigate = useNavigate();
+
+    const [isWriter, setWriter] = useState(false);
+    //전역 변수 - 유저 정보
+    const {userInfo} = useContext(GlobalContext);
+    //전역 변수 - 로그인 여부 
+    const {isLogin} = useContext(GlobalContext);
+    // 전역 변수 - 화면 새로고침
+    const {reload, setReload} = useContext(GlobalContext);
+    
+    useEffect(() =>{
+        const nowUserEmail = (userInfo?.email || "").split("@")[0];
+        setWriter(isLogin && nowUserEmail === email);
+    },[]);
+
+    const doEditDocInfo = () =>{
+        //게시글 작성자와 이메일이 일치하지 않는다면 수정이나 삭제 불가
+        if(!isWriter){
+            alert("게시글 수정은 게시글 작성자만 할 수 있어요!");
+            return ;
+        }
+
+        nevigate("/document",{state: {docId: docId}});
+    }
+
+    const doRemoveDoc = () => {
+        if(!isWriter){
+            alert("게시글 삭제는 게시글 작성자만 할 수 있어요!");
+            return ;
+        }
+
+        removeDocument(docId)
+        .then(data => {
+            setReload(-1 * reload);
+        });
+    }   
+
     //docInfo는 인코딩 되어 저장하고있는다. 수정 버튼을 누르면 URL을 통해 데이터를 전달한다.
     return (
         <CardHeader className="p-4">
@@ -67,8 +105,8 @@ const DocumentHeader = ({boardName, docTitle, nickname, email, docCreateDate}) =
                     </span>
                     {
                         // docInfo?.myDocumentation
-                        true
-                         ?
+                        isWriter
+                        ?
                         <Popover>
                             <PopoverTrigger asChild>
                                 <div>
@@ -76,7 +114,7 @@ const DocumentHeader = ({boardName, docTitle, nickname, email, docCreateDate}) =
                                 </div>
                             </PopoverTrigger>
                             <PopoverContent className="w-80 grid gap-2">
-                                <Menu href={`/docwrite#temp`} svg={getIcons("FileEdit")}>게시글 수정</Menu>
+                                <Menu beforeClicks={[doEditDocInfo]} svg={getIcons("FileEdit")}>게시글 수정</Menu>
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
                                         {/* 메뉴 컴포넌트만 단독으로 쓰면, 클릭해도 다이얼로그 안뜸.. Menu 내부 li컴포넌트가 props를 안써서 그런가봄.. */}
@@ -91,7 +129,7 @@ const DocumentHeader = ({boardName, docTitle, nickname, email, docCreateDate}) =
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
                                             <AlertDialogCancel>취소</AlertDialogCancel>
-                                            <AlertDialogAction onClick={() =>{console.log("삭제 데모")}}>삭제</AlertDialogAction>
+                                            <AlertDialogAction onClick={doRemoveDoc}>삭제</AlertDialogAction>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
                                 </AlertDialog>
@@ -104,7 +142,7 @@ const DocumentHeader = ({boardName, docTitle, nickname, email, docCreateDate}) =
                 <div className="mt-2 flex items-center justify-between">
                     <div className="flex gap-4">
                         <Avatar className="h-10 w-10">
-                        <AvatarFallback>ni</AvatarFallback>
+                        <AvatarFallback>{getShortNickName(nickname)}</AvatarFallback>
                         </Avatar>
                         <div className="grid gap-0.5">
                             {/* 게시글 제목 */}

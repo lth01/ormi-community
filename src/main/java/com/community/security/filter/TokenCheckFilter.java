@@ -37,20 +37,21 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (!path.startsWith("/document/manage") || (!path.startsWith("/member") && !(path.contains("/modifyInfo") || path.contains("/withdrawal")))) {
-            filterChain.doFilter(request,response);
-            return;
+        if(path.startsWith("/document/manage") || path.startsWith("/member/modifyInfo") || path.startsWith("/member/withdrawal")){
+            log.info("Token check filter.....................");
+            log.info("JWTUtil : " + jwtUtil);
+
+            try {
+                //토큰 검사 이후 다음 필터로 전송
+                validateAccessToken(request);
+                filterChain.doFilter(request,response);
+            } catch (AccessTokenException accessTokenException) {
+                accessTokenException.sendResponseError(response);
+            }
         }
-
-        log.info("Token check filter.....................");
-        log.info("JWTUtil : " + jwtUtil);
-
-        try {
-            //토큰 검사 이후 다음 필터로 전송
-            validateAccessToken(request);
+        else{
             filterChain.doFilter(request,response);
-        } catch (AccessTokenException accessTokenException) {
-            accessTokenException.sendResponseError(response);
+            return ;
         }
     }
 

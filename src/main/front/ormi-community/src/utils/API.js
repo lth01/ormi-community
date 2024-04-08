@@ -61,6 +61,21 @@ const donkeyPut = async (URL, body) => {
     })
 }
 
+const donkeyDelete = async (URL, body) => {
+    const accessToken = getAccessToken();
+    const refreshToken = getRefreshToken();
+    const headers = accessToken ?
+                    JSON.stringify({accessToken, refreshToken}) :
+                    "";
+
+    return axios.delete(URL, {
+        headers: {
+            "Authorization" : headers
+        },
+        data: body
+    });
+}
+
 /**
  * 
  * @returns { {commentId: String, nickname: String, commentCreatorIp: String || null , email: String, commentDate: "YYYY-MM-DD HH:MM:SS.XXX", commentContent: String, likeCount: number}[] } API returns
@@ -92,6 +107,13 @@ export async function fetchDocumentList(boardId, docPageNumber){
     const DocumentListURL = URL +  `/document/list/${boardId}?page=${docPageNumber || 0}`;
 
     return donkeyGet(DocumentListURL)
+    .then((response) => response.data);
+}
+
+export async function fetchDocument(docId){
+    const DocumentURL = URL + `/document/${docId}`;
+
+    return donkeyGet(DocumentURL)
     .then((response) => response.data);
 }
 
@@ -203,6 +225,13 @@ export async function writeDocument(docWriteReqParam){
         alert("로그인이 만료되었습니다. 다시 로그인해주세요");
         location.href = "/";
     });
+}
+
+export async function removeDocument(docId){
+    const removeDocumentURL = URL + `/document/manage/${docId}`;
+
+    return donkeyDelete(removeDocumentURL)
+    .then((response) => response.data);
 }
 
 export async function likeIt(uuid){

@@ -9,6 +9,7 @@ import { NavigationMenuLink, NavigationMenuList, NavigationMenu, NavigationMenuI
 import { useEffect, useState } from "react";
 import { fetchUserInfo, isLoginUser, logout } from "@/utils/API";
 import { GlobalContext } from "@/index";
+import { getShortNickName } from "@/utils/common";
 function Header(){
     //전역변수 - 로그인 여부
     const {isLogin} = useContext(GlobalContext);
@@ -26,7 +27,7 @@ function Header(){
               <PopoverTrigger asChild>
                 <Avatar className="h-10 w-10">
                   <AvatarImage alt="@shadcn" src="/placeholder-avatar.jpg" />
-                  <AvatarFallback>{userInfo?.nickname}</AvatarFallback>
+                  <AvatarFallback>{getShortNickName(userInfo?.nickname)}</AvatarFallback>
                 </Avatar>
               </PopoverTrigger>
               <PopoverContent className="w-80 grid gap-2">
