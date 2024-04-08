@@ -2,11 +2,10 @@
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=AmazonAWS&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
 
-## 링크 추가해야됨
 
 > 취업과 회사에 대해 자유롭게 이야기 할 수 있는 커뮤니티 👉 [링크]
 
-![image](https://github.com/lth01/ormi-community/assets/139758405/239dd0ee-e916-43e7-b13c-837c6c25ff25)
+![img.png](readme/mainImg.png)
 
 ## 📖Description
 
@@ -20,8 +19,8 @@
 
 
 
-### 1. **개발 환경**
-![image](https://github.com/lth01/ormi-community/assets/139758405/4deff64e-1583-4d0e-a7e7-ad671bfc54fc)
+### 1. 💾**개발 환경**
+![img.png](readme/DevelopmentEnvironment.png)
 
 - Java JDK 21, JavaScript
 - 프론트엔드 : React, HTML, tailwind
@@ -31,21 +30,23 @@
 - 배포환경 : AWS EC2, RDS
 - 협업도구 : GitHub, Notion, Miro, ERD Cloud, Figma
 
-### 2. **기능 정의서**
+### 2. 🤔**기능 정의서**
 
 - 초안
 
-![+ Mind Map](https://github.com/lth01/ormi-community/assets/139758405/651ec541-6ce0-4fbc-8e3a-0013cc1363c4)
+![img.png](readme/mindmap.png)
 
 - 완료
 
-![기능정의서](https://github.com/lth01/ormi-community/assets/139758405/f244595e-945e-4e5e-a2ad-2df2001d7ae5)
+![img.png](readme/FeatureSpecification.png)
 
-### 3. **개발 일정**
+### 3. 🔎**개발 일정**
 
-![image](https://github.com/lth01/ormi-community/assets/139758405/7e107ff8-d911-4130-af0a-343e60ecfd12)
+![img.png](readme/DevelopmentSchedule.png)
 
 ## ✨UI(화면) 설계서 
+
+- [피그마 링크 바로가기]([https://www.figma.com/file/UxckBh583uPenF9pmlpJUd/Untitled?type=design&node-id=0%3A1&mode=design&t=xacdis5Qkeh8AcrZ-1])
 
 |                                                                                                                       |                                                                                                                   |
 |-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
@@ -117,11 +118,11 @@
 ```
 
 ## 🏭System Structure
-![image](https://github.com/lth01/ormi-community/assets/139758405/51ad4061-ea3b-49dd-9913-b2f5def7cd06)
+![img.png](readme/SystemStructure.png)
 
 
 ## 🔐ERD Structure
-![Untitled (14)](https://github.com/lth01/ormi-community/assets/139758405/67c8fd44-54bc-4462-8c8b-d5a50c8da591)
+![img.png](readme/ERD.png)
 
 ## 🎈API 명세서
 
