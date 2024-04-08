@@ -1,13 +1,26 @@
 import { appendPasswordQuestion, fetchPasswordQuestion } from "@/utils/API";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import LabelSection from "@/components/Layout/LabelSection";
 import PasswordQuestionArticle from "@/components/Password/PasswordQuestionArticle";
+import { appendPasswordQuestionReqParam } from "@/utils/Parameter";
 
 export default function AdminPasswordQuestion(){
     const [passwordQuestion, setPasswordQuestion] = useState("");
     const [passwordQuestionList, setPasswordQuestionList] = useState([]);
+    const doAppendQuestion = () =>{
+        if(!passwordQuestion) return ;
+        
+        const reqParam = appendPasswordQuestionReqParam(passwordQuestion);
+
+        appendPasswordQuestion(reqParam)
+        .then(data =>{
+            alert("성공적으로 질문이 추가되었습니다.");
+            location.reload();
+        })
+    };
+
     useEffect(()=>{
         fetchPasswordQuestion()
         .then(data => setPasswordQuestionList(data));
@@ -22,7 +35,7 @@ export default function AdminPasswordQuestion(){
                     </LabelSection>
                 </div>
                 <Button className="bg-violet-800 mt-4 hover:bg-violet-600">
-                    <div onClick={()=>{appendPasswordQuestion(passwordQuestion)}}>추가하기</div>
+                    <div onClick={doAppendQuestion}>추가하기</div>
                 </Button>
             </article>
 

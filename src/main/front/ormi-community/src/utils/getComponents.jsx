@@ -73,6 +73,5 @@ export function getIcons(svgStr){
   }
 
   export function getDocumentComponents(documentList){
-    console.log(documentList);
     return documentList.map((document) => <Document {...document}></Document>);
   }

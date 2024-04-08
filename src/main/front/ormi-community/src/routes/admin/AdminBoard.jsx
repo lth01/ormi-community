@@ -8,13 +8,16 @@ export default function AdminBoard(){
     const [boardList, setBoardList] = useState([]);
     useEffect(() =>{
         fetchNotApproveBoardList()
-        // setBoardList(fetchNotApproveBoardList());
+        .then(data =>{
+            setBoardList(data);
+        });
     },[]);
 
     return (
-        <ul className="grid gap-4 p-4">
+        <ul className="grid gap-2">
+            {/* 화면 하단에는 현재 업종 리스트 */}
             {
-                // boardList.map((board) => <BoardAccept key={board.boardId} {...board}/>)
+                boardList.map((board) => <BoardAccept key={board.boardId} {...board}></BoardAccept>)
             }
         </ul>
     );

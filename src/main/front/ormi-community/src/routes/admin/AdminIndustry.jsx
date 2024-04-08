@@ -5,12 +5,24 @@ import { useState, useEffect } from "react";
 import IndustryArticle from "@/components/Industry/IndustryArticle";
 import { Button } from "@/components/ui/button";
 import { GenerateLiElUUID } from "@/utils/common";
+import { appendIndustryReqParam } from "@/utils/Parameter";
 
 export default function AdminIndustry(){
     // 업종을 불러오는 code
     const [industryList, setIndustries] = useState([]);
     const [industryName, setIndustryName] = useState("");
     const [industryComment, setIndustryComment] = useState("");
+
+    const doAppendIndustry = () =>{
+        const reqParam = appendIndustryReqParam(industryName, industryComment || "");
+
+        appendIndustry(reqParam)
+        .then(data =>{
+            alert("정상적으로 업종이 추가되었습니다.");
+            location.reload();
+        })
+    }
+
     useEffect(() =>{
         fetchIndustryList()
         .then(data => setIndustries(data));
@@ -23,14 +35,14 @@ export default function AdminIndustry(){
             <article className="p-4 flex justify-between items-end border rounded-md gap-2">
                 <div className="grid gap-2 w-full">
                     <LabelSection asChild label="업종명" className="font-bold">
-                        <Input type="text" value={industryName} onChange={(val) => setIndustryName(val)} className="w-full"></Input>
+                        <Input type="text" value={industryName} onChange={(ev) => setIndustryName(ev.target.value)} className="w-full"></Input>
                     </LabelSection>
                     <LabelSection asChild label="업종설명" className="font-bold">
-                        <Input type="text" value={industryComment} onChange={(val) => setIndustryComment(val)} className="w-full"></Input>
+                        <Input type="text" value={industryComment} onChange={(ev) => setIndustryComment(ev.target.value)} className="w-full"></Input>
                     </LabelSection>
                 </div>
                 <Button className="bg-violet-800 mt-4 hover:bg-violet-600">
-                    <div onClick={()=>{appendIndustry(industryName, industryComment)}}>업종 추가</div>
+                    <div onClick={doAppendIndustry}>업종 추가</div>
                 </Button>
             </article>
 

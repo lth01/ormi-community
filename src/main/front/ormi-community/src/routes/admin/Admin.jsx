@@ -1,6 +1,8 @@
 import LogoHeader from "@/components/Layout/LogoHeader";
 import { AdminMenus } from "@/components/Menu/AdminMenus";
+import { GlobalContext } from "@/index";
 import { GenerateLiElUUID } from "@/utils/common";
+import { useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom"
 
 export default function Admin(){

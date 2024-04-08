@@ -75,3 +75,29 @@ export function appendBoardReqParam(boardName, industryId, comId, requesterEmail
    
    return reqParam;
 }
+
+export function appendPasswordQuestionReqParam(passwordQuestion){
+   const reqParam = {};
+
+   reqParam.question = passwordQuestion;
+
+   return reqParam;
+}
+
+export function appendIndustryReqParam(industryName, industryComment){
+   const reqParam = {};
+
+   reqParam.industryName = industryName;
+   reqParam.industryComment = industryComment;
+
+   return reqParam;
+}
+
+export function acceptBoardPublicingReqParam(boardId){
+   const reqParam = {};
+
+   reqParam.boardId = boardId;
+   reqParam.approve = true;
+
+   return reqParam;
+}

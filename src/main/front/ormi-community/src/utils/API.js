@@ -104,7 +104,7 @@ export async function fetchUserInfo(){
  * @returns { {docId: String, docTitle: String, docContent : String, docCreateDate: YYYY-MM-DD HH:MM:SS.XXX, nickname: String || null, email: String, memberRoleName: USER, boardId: String, boardName: String, likeCount: number, viewCount: number} }
  */
 export async function fetchDocumentList(boardId, docPageNumber){
-    const DocumentListURL = URL +  `/document/list/${boardId}?page=${docPageNumber || 0}`;
+    const DocumentListURL = URL +  `/document/list/${boardId}?page=${docPageNumber}`;
 
     return donkeyGet(DocumentListURL)
     .then((response) => response.data);
@@ -252,19 +252,28 @@ export async function appendBoard(appendBoardReqParam){
     .then((response) => response.data);
 }
 
-export function acceptBoardPublicing(boardId, approve = true){
+export function acceptBoardPublicing(acceptBoardPublicingReqParam){
     //Accept API 호출
-    console.log('API 호출완료!');
+    const acceptBoardPublicingURL = URL + "/admin/board";
+
+    return donkeyPut(acceptBoardPublicingURL, acceptBoardPublicingReqParam)
+    .then((response) => response.data);
 }
 
-export function appendIndustry(industryName, industryComment){
+export async function appendIndustry(appendIndustryReqParam){
     // 업종 추가 API
-    console.log("API 호출 완료");
+    const appendIndustryURL = URL + `/admin/industry`;
+
+    return donkeyPost(appendIndustryURL, appendIndustryReqParam)
+    .then((response) => response.data);
 }
 
-export function appendPasswordQuestion(passwordQuestion){
     // 비밀번호 질문 추가 API
-    console.log("비밀번호 질문 추가 API 호출 완료");
+export async function appendPasswordQuestion(passwordQuestionReqParam){
+    const appendPasswordQuestionURL = URL + "/admin/passwordquestion";
+
+    return donkeyPost(appendPasswordQuestionURL, passwordQuestionReqParam)
+    .then((response) => response.data);
 }
 
 export async function editUserInfo(userEditInfo){
