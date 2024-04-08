@@ -44,6 +44,15 @@ export function documentWriteReqParam(boardId, docTitle, docContent){
    return reqParam;
 }
 
+export function documentEditReqParam(docTitle, docContent){
+   const reqParam = {};
+
+   reqParam.docTitle = docTitle;
+   reqParam.docContent = docContent;
+
+   return reqParam;
+}
+
 export function commentWriteReqParam(commentPassword, commentCreatorIp, commentContent, anonyNickname){
    const reqParam = {};
 
@@ -97,7 +106,26 @@ export function acceptBoardPublicingReqParam(boardId){
    const reqParam = {};
 
    reqParam.boardId = boardId;
-   reqParam.approve = true;
+   reqParam.approval = true;
+
+   return reqParam;
+}
+
+export function matchPasswordHintReqParam(email, passwordQuestionId, findPasswordAnswer){
+   const reqParam = {};
+
+   reqParam.email = email;
+   reqParam.passwordQuestionId = passwordQuestionId;
+   reqParam.findPasswordAnswer = findPasswordAnswer;
+
+   return reqParam;
+}
+
+export function pwdChangeReqParam(email, password){
+   const reqParam = {};
+
+   reqParam.email = email;
+   reqParam.password = password;
 
    return reqParam;
 }

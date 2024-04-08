@@ -216,12 +216,6 @@ export default function Signup(){
                 <LabelSection asChild isRequire label="비밀번호 찾기 응답" className="mt-2">
                    <Input id="tBox_password_hint" placeholder="비밀번호 찾기 응답을 입력해주세요."></Input> 
                 </LabelSection>
-                <div className="flex justify-start gap-2 items-center mt-4">
-                    <Checkbox id="chk_term" />
-                    <label htmlFor="chk_term">
-                        <span className="font-bold underline-offset-0 underline">필수약관</span>에 동의합니다.
-                    </label>
-                </div>
                 {/* 버튼은 onClick 콜백 동작 불가 */}
                 <Button asChild className="bg-violet-800 mt-4 w-full hover:bg-violet-600">
                     <div onClick={doSignup}>회원가입</div>

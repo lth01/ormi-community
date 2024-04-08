@@ -2,11 +2,11 @@ import LabelSection from "@/components/Layout/LabelSection";
 import LogoHeader from "@/components/Layout/LogoHeader";
 import { Select, SelectTrigger, SelectContent, SelectLabel, SelectItem, SelectGroup, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { fetchBoardList, fetchDocument, writeDocument } from "@/utils/API";
+import { editDocument, fetchBoardList, fetchDocument, writeDocument } from "@/utils/API";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { documentWriteReqParam } from "@/utils/Parameter";
+import { documentWriteReqParam, documentEditReqParam } from "@/utils/Parameter";
 import { useNavigate, useLocation } from "react-router-dom";
 
 /**
@@ -53,6 +53,16 @@ export default function DocumentWrite(){
         });
     };
 
+    const doEdit = () =>{
+        const reqParam = documentEditReqParam(tBox_title, tBox_content);
+
+        editDocument(reqParam, location.state.docId)
+        .then(data =>{
+            alert("정상적으로 수정되었습니다!");
+            nevigate("/");
+        });
+    }
+
     //게시글 정보를 component에 매칭한다.
     const loadWrittenInfo = (docInfo) =>{
         if(!docInfo) return ;
@@ -91,7 +101,7 @@ export default function DocumentWrite(){
                             <div onClick={() =>{nevigate(-1)}}>취소</div>
                         </Button>
                         <Button asChild className="cursor-pointer bg-violet-800 hover:bg-violet-600 font-bold">
-                            <div onClick={doWrite}>저장하기</div>
+                            <div onClick={() =>{location.state ? doEdit() : doWrite()}}>저장하기</div>
                         </Button>
                     </div>
                 </section>

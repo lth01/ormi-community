@@ -227,6 +227,13 @@ export async function writeDocument(docWriteReqParam){
     });
 }
 
+export async function editDocument(documentEditReqParam, docId){
+    const editDocumentURL = URL + `/document/manage/${docId}`;
+
+    return donkeyPut(editDocumentURL, documentEditReqParam)
+    .then((response) => response.data)
+}
+
 export async function removeDocument(docId){
     const removeDocumentURL = URL + `/document/manage/${docId}`;
 
@@ -257,6 +264,20 @@ export function acceptBoardPublicing(acceptBoardPublicingReqParam){
     const acceptBoardPublicingURL = URL + "/admin/board";
 
     return donkeyPut(acceptBoardPublicingURL, acceptBoardPublicingReqParam)
+    .then((response) => response.data);
+}
+
+export async function matchPasswordHint(matchPasswordHintReqParam){
+    const matchPasswordHintURL = URL + `/member/findpassword`;
+
+    return donkeyPost(matchPasswordHintURL, matchPasswordHintReqParam)
+    .then((response) => response.data);
+}
+
+export async function pwdChange(pwdChangeReqParam){
+    const pwdChangeURL = URL + "/member/changepassword";
+
+    return donkeyPost(pwdChangeURL, pwdChangeReqParam)
     .then((response) => response.data);
 }
 
@@ -298,6 +319,7 @@ export const getNewAccessToken = mem(async () =>{
 export const logout = () =>{
     removeAccessToken();
     removeRefreshToken();
+    location.reload();
 }
 
 /**
