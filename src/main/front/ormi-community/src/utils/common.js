@@ -1,5 +1,7 @@
+import {v4 as uuidv4 } from "uuid";
+
 export function GenerateLiElUUID(){
-    return crypto.randomUUID().replaceAll("-", "");
+    return uuidv4().replaceAll("-", "");
 }
 
 export function maskingIpAddress(ipAddress){
