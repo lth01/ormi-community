@@ -206,6 +206,21 @@
 | requestCreateBoard  | POST    | /board                        | 게시판 생성 요청         |
 | searchBoard         | GET     | /board/{isApprove}            | 승인된 게시판 조회       |
 
+## 🎞시연 영상
+
+https://github.com/lth01/ormi-community/assets/139758405/a0ee498f-a7e4-4640-a62e-661d693c177f
+
+https://github.com/lth01/ormi-community/assets/139758405/8b932928-b806-47aa-8b2b-f31235d78359
+
+https://github.com/lth01/ormi-community/assets/139758405/9ab64b24-33f5-48f2-9f5f-c7e4e7e796d2
+
+https://github.com/lth01/ormi-community/assets/139758405/2dad5efc-d509-4098-9f3b-79637befee37
+
+https://github.com/lth01/ormi-community/assets/139758405/f846baef-432b-4e98-9525-312e34f93f10
+
+https://github.com/lth01/ormi-community/assets/139758405/b959897c-04e2-4969-bff0-3e675c7735d3
+
+
 ## 🛠Coding Convention
 
 ### Java Convention
