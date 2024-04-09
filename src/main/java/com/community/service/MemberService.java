@@ -160,10 +160,10 @@ public class MemberService {
             throw new IllegalArgumentException("데이터가 비어 있습니다.");
         }
         Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 입니다."));
-        if (member.getPasswordQuestion().getPasswordQuestionId().equals(request.getPasswordQuestionId())) {
+        if (!member.getPasswordQuestion().getPasswordQuestionId().equals(request.getPasswordQuestionId())) {
             throw new IllegalArgumentException("가입정보와 입력하신 데이터가 상이합니다.");
         }
-        if (member.getFindPasswordAnswer().equals(request.getFindPasswordAnswer())) {
+        if (!member.getFindPasswordAnswer().equals(request.getFindPasswordAnswer())) {
             throw new IllegalArgumentException("가입정보와 입력하신 데이터가 상이합니다.");
         }
         return new FindPasswordResponse(request);
